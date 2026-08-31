@@ -242,12 +242,16 @@
     margin-bottom:4px;text-align:center}
   .login-sub{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;
     text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:26px}
-  .login-field{margin-bottom:14px}
+  .login-field{margin-bottom:14px;position:relative}
   .login-field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
     letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
   .login-field input{width:100%;background:var(--panel-2);border:1px solid var(--hair-hot);
     color:var(--ice);padding:11px 12px;font-family:'Barlow',sans-serif;font-size:15px}
   .login-field input:focus{outline:none;border-color:var(--cyan)}
+  .login-pass-toggle{position:absolute;right:10px;top:31px;background:none;border:0;color:var(--dim);
+    font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+    cursor:pointer;padding:4px}
+  .login-pass-toggle:hover{color:var(--cyan)}
   .login-btn{width:100%;margin-top:8px;background:var(--blue);border:0;color:#fff;
     font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     padding:13px;cursor:pointer;transition:background 200ms}
@@ -272,6 +276,7 @@
     <div class="login-field">
       <label>Password</label>
       <input type="password" id="loginPass" autocomplete="current-password">
+      <button type="button" class="login-pass-toggle" id="loginPassToggle">Show</button>
     </div>
     <button class="login-btn" id="loginBtn">Sign In</button>
     <div class="login-err" id="loginErr"></div>
@@ -605,6 +610,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   }
   loginBtn.addEventListener('click', trySignIn);
   document.getElementById('loginPass').addEventListener('keydown',function(e){ if(e.key==='Enter') trySignIn(); });
+  document.getElementById('loginPassToggle').addEventListener('click',function(){
+    var pf=document.getElementById('loginPass');
+    var showing = pf.type==='text';
+    pf.type = showing ? 'password' : 'text';
+    this.textContent = showing ? 'Show' : 'Hide';
+  });
   document.getElementById('loginEmail').addEventListener('keydown',function(e){ if(e.key==='Enter') trySignIn(); });
 
   document.getElementById('btnSignOut').addEventListener('click', async function(){
