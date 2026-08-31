@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Royale — Ops &amp; Finance</title>
+<title>Royale - Ops &amp; Finance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
   body{
     background:var(--void);color:var(--ice);
     font-family:'Inter',system-ui,-apple-system,sans-serif;
-    line-height:1.45;padding:18px 14px 92px;max-width:640px;margin:0 auto;position:relative;
+    line-height:1.45;padding:18px 14px 112px;max-width:640px;margin:0 auto;position:relative;
   }
   body::before{
     content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -41,8 +41,8 @@
   .save-pill.bad{color:var(--warn);opacity:1}
   .refresh{margin-top:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
 
-  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom)}
-  .tab{padding:14px 2px 19px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
+  .tab{padding:20px 4px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;min-height:64px}
   .tab.on{color:var(--cyan);box-shadow:inset 0 2px 0 var(--cyan)}
   .pane{display:none}
   .pane.on{display:block}
@@ -209,7 +209,7 @@
     .btn{padding:16px 6px;font-size:10px;letter-spacing:.1em}
     .submit{padding:16px}
     .mini{padding:9px 13px;font-size:9px}
-    .tab{padding:13px 1px 22px;font-size:8px;letter-spacing:.04em}
+    .tab{padding:20px 3px 26px;font-size:12px;letter-spacing:.01em;font-weight:500;min-height:64px}
     .field input,.field select,.field textarea{padding:12px 10px}
     .field-row{gap:8px}
     .edit,.del{padding-left:14px;font-size:16px}
@@ -226,7 +226,7 @@
   @media (max-width:360px){
     .gauge-figure{font-size:34px}
     .bk-grid{grid-template-columns:1fr 1fr}
-    .tab{font-size:7.5px}
+    .tab{font-size:11px;padding:18px 2px 24px;min-height:60px}
   }
   @media (prefers-reduced-motion:reduce){.gauge-fill,.gauge-edge{transition:none}}
 
@@ -268,7 +268,7 @@
 <div id="loginGate">
   <div class="login-card">
     <div class="login-word">Royale</div>
-    <div class="login-sub">Ops &amp; Finance — Private</div>
+    <div class="login-sub">Ops &amp; Finance - Private</div>
     <div class="login-field">
       <label>Email</label>
       <input type="email" id="loginEmail" autocomplete="username">
@@ -333,7 +333,7 @@
     <div class="feecalc" id="rFeeCalc">Fees will be worked out from the difference and logged as a cost.</div>
     <div class="field"><label>Date</label><input type="date" id="rDate"></div>
     <div class="field"><label>Type</label><select id="rType">
-      <option>Chauffeur — day</option><option>Chauffeur — hourly</option><option>Airport transfer</option>
+      <option>Chauffeur - day</option><option>Chauffeur - hourly</option><option>Airport transfer</option>
       <option>Self drive</option><option>Booking extension</option><option>Deposit</option><option>Other</option>
     </select></div>
     <div class="field"><label>Vehicle</label><select id="rCar">
@@ -629,7 +629,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   });
 
   async function checkSession(){
-    if(!sb){ showLogin('Database not connected — set it up in Supabase first'); return false; }
+    if(!sb){ showLogin('Database not connected - set it up in Supabase first'); return false; }
     var res=await sb.auth.getSession();
     if(res.data && res.data.session){ showApp(); return true; }
     showLogin();
@@ -683,7 +683,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function autoName(veh,src,type,svc){
     var f=FLEET[veh+'|'+(src==='external'?'external':'own')];
     var short=f?f.s.charAt(0)+f.s.slice(1).toLowerCase():veh;
-    if(type==='chauffeur') return short+' chauffeur'+(svc?' — '+svc.toLowerCase():'');
+    if(type==='chauffeur') return short+' chauffeur'+(svc?' - '+svc.toLowerCase():'');
     return short+' rental';
   }
   function fleet(b){
@@ -692,9 +692,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   }
 
   var SEED_BK=[
-    {id:"b7ext",customer:"Ed — Escalade extension",vehicle:"Cadillac Escalade",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-22",startTime:"",end:"2026-08-28",endTime:"",total:5000,collected:5000,received:4862,cost:0,notes:"Third and final week of Ed's chauffeur job."},
+    {id:"b7ext",customer:"Ed - Escalade extension",vehicle:"Cadillac Escalade",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-22",startTime:"",end:"2026-08-28",endTime:"",total:5000,collected:5000,received:4862,cost:0,notes:"Third and final week of Ed's chauffeur job."},
     {id:"b16",customer:"Brabus day hire",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-08-23",startTime:"",end:"2026-08-23",endTime:"",total:1400,collected:1400,cost:0,notes:"Purple Brabus, 1 day. Paid cash. 180 deposit fee logged under Costs."},
-    {id:"b22",customer:"Brabus chauffeur — 19 days",vehicle:"Brabus G-Wagon",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-29",startTime:"",end:"2026-09-16",endTime:"",total:25000,collected:25000,received:23900,cost:0,notes:"Paid in full upfront. Clashes with the 5 Sept and 8-15 Sept Brabus rentals."},
+    {id:"b22",customer:"Brabus chauffeur - 19 days",vehicle:"Brabus G-Wagon",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-29",startTime:"",end:"2026-09-16",endTime:"",total:25000,collected:25000,received:23900,cost:0,notes:"Paid in full upfront. Clashes with the 5 Sept and 8-15 Sept Brabus rentals."},
     {id:"b9",customer:"Brabus self-drive",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-09-05",startTime:"",end:"2026-09-05",endTime:"",total:1250,collected:125,cost:0,notes:"Check licence, ID, deposit."},
     {id:"b11",customer:"Brabus week rental",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-09-08",startTime:"",end:"2026-09-15",endTime:"",total:2500,collected:250,cost:0,notes:"AED 2,250 due on collection."},
     {id:"b17",customer:"V-Class Abu Dhabi transfer",vehicle:"Ben's V-Class",type:"chauffeur",service:"One way",source:"external",start:"2026-09-12",startTime:"",end:"2026-09-12",endTime:"",total:1700,collected:150,cost:null,notes:"Includes 200 Abu Dhabi surcharge. 1,550 due. Payout to Ben not recorded."},
@@ -703,15 +703,15 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   ];
 
   var SEED_RV=[
-    {id:"r1",amount:2929,type:"Chauffeur — hourly",car:"Ben's V-Class",note:"Airport pickup + 5hr + 10hr — collected this cycle, net of transfer fees",date:"2026-08-22"}
+    {id:"r1",amount:2929,type:"Chauffeur - hourly",car:"Ben's V-Class",note:"Airport pickup + 5hr + 10hr - collected this cycle, net of transfer fees",date:"2026-08-22"}
   ];
 
   var SEED_CO=[
-    {id:"fee-b7ext",amount:138,type:"Payment fees",linked:"b7ext",note:"Processing fees — Ed Escalade extension",date:"2026-08-22"},
-    {id:"c8",amount:1445,type:"Owner split",note:"Ben — three V-Class night bookings. 510 paid, 935 still owed.",date:"2026-08-22"},
+    {id:"fee-b7ext",amount:138,type:"Payment fees",linked:"b7ext",note:"Processing fees - Ed Escalade extension",date:"2026-08-22"},
+    {id:"c8",amount:1445,type:"Owner split",note:"Ben - three V-Class night bookings. 510 paid, 935 still owed.",date:"2026-08-22"},
     {id:"c5",amount:2000,type:"Content / shoot",note:"Videographer + editing for social",date:"2026-08-23"},
     {id:"c6",amount:180,type:"Deposit fee",note:"Brabus day hire",date:"2026-08-23"},
-    {id:"fee-b22",amount:1100,type:"Payment fees",linked:"b22",note:"Processing fees — 19-day Brabus chauffeur job",date:"2026-08-29"},
+    {id:"fee-b22",amount:1100,type:"Payment fees",linked:"b22",note:"Processing fees - 19-day Brabus chauffeur job",date:"2026-08-29"},
     {id:"c7",amount:300,type:"Fuel",note:"Chauffeur booking",date:"2026-08-30"}
   ];
 
@@ -727,7 +727,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function cyDays(){ return Math.round((cyEnd()-cyStart())/86400000); }
   function dayNo(){ return Math.max(1,Math.floor((new Date()-cyStart())/86400000)+1); }
   function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
-  function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'; }
+  function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'; }
   function today(){ return new Date().toISOString().slice(0,10); }
   function iso(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); }
   function endMs(b){ return new Date(b.end+'T'+(b.endTime||'23:59')).getTime(); }
@@ -746,7 +746,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         S.bookings=SEED_BK.slice(); S.costs=SEED_CO.slice();
         S.revenue=SEED_RV.slice(); S.personal=SEED_PR.slice();
       }
-      afterLoad(); flash('Offline — not connected',true); return;
+      afterLoad(); flash('Offline - not connected',true); return;
     }
     try{
       var keys=['bookings','costs','revenue','personal'];
@@ -759,7 +759,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       var st=await sb.from('settings').select('*').eq('id',1).maybeSingle();
       if(st.data){ S.target=+st.data.target||34000; S.budget=+st.data.budget||3000; }
 
-      // first run against an empty database — plant the starting data
+      // first run against an empty database - plant the starting data
       if(!S.bookings.length && !S.costs.length && !S.revenue.length){
         S.bookings=SEED_BK.slice(); S.costs=SEED_CO.slice();
         S.revenue=SEED_RV.slice(); S.personal=SEED_PR.slice();
@@ -770,7 +770,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     }catch(e){
       console.error(e);
       var c2=cacheRead(); if(c2) S=c2;
-      afterLoad(); flash('Load failed — using cache',true);
+      afterLoad(); flash('Load failed - using cache',true);
     }
   }
 
@@ -807,7 +807,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       if(!quiet) flash('Saved');
     }catch(e){
       console.error(e);
-      flash('Save failed — cached',true);
+      flash('Save failed - cached',true);
     }
   }
 
@@ -843,10 +843,10 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     var dist=net-tgt;
     var dv=document.getElementById('distVal');
-    dv.textContent=dist>0?fmt(dist):'— not yet at break-even';
+    dv.textContent=dist>0?fmt(dist):'- not yet at break-even';
     dv.className='val'+(dist>0?' good':'');
     var sv=document.getElementById('shareVal');
-    sv.textContent=dist>0?fmt(dist/2):'—';
+    sv.textContent=dist>0?fmt(dist/2):'-';
     sv.className='val'+(dist>0?' good':'');
 
     // recent revenue: bookings + manual, merged
@@ -880,7 +880,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var noTot=S.bookings.filter(function(b){ return !(+b.total)&&endMs(b)>now; });
     if(noTot.length) al.push(noTot.length+' upcoming booking'+(noTot.length>1?'s have':' has')+' no total price set.');
     var pOut=S.personal.filter(function(p){return p.kind==='expense'&&inCy(p.date);}).reduce(function(a,p){return a+p.amount;},0);
-    if(pOut/dayNo()>S.budget/cyDays()) al.push('Personal spending is ahead of budget — '+fmt(pOut/dayNo())+'/day against '+fmt(S.budget/cyDays())+' allowed.');
+    if(pOut/dayNo()>S.budget/cyDays()) al.push('Personal spending is ahead of budget - '+fmt(pOut/dayNo())+'/day against '+fmt(S.budget/cyDays())+' allowed.');
     document.getElementById('alertList').innerHTML=al.length
       ? al.map(function(a){return '<div class="alert">'+esc(a)+'</div>';}).join('')
       : '<div class="alert" style="color:var(--green)">Nothing needs attention.</div>';
@@ -973,7 +973,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     }
     document.getElementById('calGrid').innerHTML=html;
 
-    // key — only cars appearing this month
+    // key - only cars appearing this month
     var seen={}, mStart=iso(new Date(y,m,1)), mEnd=iso(new Date(y,m,dim));
     S.bookings.forEach(function(b){
       if(b.end<mStart||b.start>mEnd) return;
@@ -992,7 +992,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   function renderDay(){
     var ds=selDay||today();
-    document.getElementById('daySelLabel').textContent='Fleet status — '+lbl(ds);
+    document.getElementById('daySelLabel').textContent='Fleet status - '+lbl(ds);
     var on=bookingsOn(ds);
     var busy={};
     on.forEach(function(b){ busy[b.vehicle]=b; });
@@ -1022,7 +1022,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       var arr=v[k].slice().sort(function(a,b){return startMs(a)-startMs(b);});
       for(var i=1;i<arr.length;i++){
         if(startMs(arr[i])<endMs(arr[i-1]) && endMs(arr[i-1])>now){
-          out.push('Clash: '+k+' double-booked around '+lbl(arr[i].start)+' — '+arr[i-1].customer+' and '+arr[i].customer+'.');
+          out.push('Clash: '+k+' double-booked around '+lbl(arr[i].start)+' - '+arr[i-1].customer+' and '+arr[i].customer+'.');
         }
       }
     });
@@ -1147,7 +1147,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(raw===''||!a){ el.textContent='Leave blank if the full amount landed.'; el.className='feecalc'; return; }
     var fee=Math.max(0,a-(parseFloat(raw)||0));
     if(fee>0){
-      el.innerHTML='Fees <b>'+fmt(fee)+'</b> ('+((fee/a)*100).toFixed(1)+'%) — logged as a cost.';
+      el.innerHTML='Fees <b>'+fmt(fee)+'</b> ('+((fee/a)*100).toFixed(1)+'%) - logged as a cost.';
       el.className='feecalc hot';
     } else { el.textContent='No fees taken.'; el.className='feecalc'; }
   }
@@ -1230,7 +1230,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     else { id='b'+Date.now(); d.id=id; S.bookings.push(d); }
     var base=coll||d.total;
     upsertFee(id, d.received===null?0:Math.max(0,base-d.received),
-      'Processing fees — '+d.customer, d.start);
+      'Processing fees - '+d.customer, d.start);
     closeAll(); save(); render();
   });
 
@@ -1253,7 +1253,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(edit.rv){ id=edit.rv; S.revenue=S.revenue.map(function(r){return r.id===id?Object.assign({},r,d):r;}); }
     else { id='r'+Date.now(); d.id=id; S.revenue.push(d); }
     upsertFee(id, d.received===null?0:Math.max(0,a-d.received),
-      'Processing fees — '+(d.note||d.type), d.date);
+      'Processing fees - '+(d.note||d.type), d.date);
     closeAll(); save(); render();
   });
 
@@ -1384,7 +1384,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       document.getElementById('sbUrl').value=cfg.url;
       document.getElementById('sbKey').value=cfg.key;
     } else {
-      el.textContent='Not connected — changes are saved to this device only.';
+      el.textContent='Not connected - changes are saved to this device only.';
       el.className='feecalc hot';
     }
   }
