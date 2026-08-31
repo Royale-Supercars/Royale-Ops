@@ -387,10 +387,15 @@
       <div class="field"><label>Vehicle</label><select id="bVeh">
         <option>Brabus G-Wagon</option><option>Cadillac Escalade</option>
         <option>Ben's V-Class</option><option>George's V-Class</option>
+        <option value="__other__">Other...</option>
       </select></div>
       <div class="field"><label>Car is</label><select id="bSrc">
         <option value="own">Ours</option><option value="external">Borrowed</option>
       </select></div>
+    </div>
+    <div class="field" id="bVehOtherWrap" style="display:none">
+      <label>Vehicle name</label>
+      <input type="text" id="bVehOther" placeholder="Type the car name">
     </div>
 
     <div class="field"><label>Booking type</label><select id="bType">
@@ -1069,6 +1074,31 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var s=document.getElementById(id);
     for(var i=0;i<s.options.length;i++){ if(s.options[i].value===v||s.options[i].text===v){s.selectedIndex=i;return;} }
   }
+
+  // Vehicle field: supports picking "Other..." to type in a car that isn't
+  // in the preset list yet.
+  function getVehicleValue(){
+    var sel=document.getElementById('bVeh');
+    if(sel.value==='__other__') return document.getElementById('bVehOther').value.trim();
+    return sel.value;
+  }
+  function setVehicleField(name){
+    setSel('bVeh',name);
+    var sel=document.getElementById('bVeh');
+    var matched=false;
+    for(var i=0;i<sel.options.length;i++){ if(sel.options[i].value===name||sel.options[i].text===name){matched=true;break;} }
+    var wrap=document.getElementById('bVehOtherWrap');
+    if(!matched && name){
+      sel.value='__other__';
+      document.getElementById('bVehOther').value=name;
+      wrap.style.display='';
+    } else {
+      wrap.style.display='none';
+    }
+  }
+  document.getElementById('bVeh').addEventListener('change',function(){
+    document.getElementById('bVehOtherWrap').style.display=(this.value==='__other__')?'':'none';
+  });
   var edit={bk:null,co:null,rv:null,pi:null,po:null};
 
   // Creates, updates or removes the linked "Payment fees" cost for a booking
@@ -1186,8 +1216,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var coll=parseFloat(V('bColl'))||0;
     var borrowed=V('bSrc')==='external';
     var d={
-      customer:V('bCust').trim()||autoName(V('bVeh'),V('bSrc'),V('bType'),svc),
-      vehicle:V('bVeh'),source:V('bSrc'),type:V('bType'),service:svc,
+      customer:V('bCust').trim()||autoName(getVehicleValue(),V('bSrc'),V('bType'),svc),
+      vehicle:getVehicleValue(),source:V('bSrc'),type:V('bType'),service:svc,
       start:V('bStart')||today(),startTime:chauff?V('bStartT'):'',
       end:multi?(V('bEnd')||V('bStart')||today()):(V('bStart')||today()),endTime:'',
       total:tot||0,collected:coll,
@@ -1260,7 +1290,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if((el=ev.target.closest('[data-eb]'))){
       var b=S.bookings.filter(function(x){return x.id===el.dataset.eb;})[0]; if(!b) return;
       closeAll(); goTab('book');
-      setV('bCust',b.customer); setSel('bVeh',b.vehicle); setSel('bSrc',b.source); setSel('bType',b.type);
+      setV('bCust',b.customer); setVehicleField(b.vehicle); setSel('bSrc',b.source); setSel('bType',b.type);
       if(b.service) setSel('bSvc',b.service);
       setV('bStart',b.start); setV('bStartT',b.startTime); setV('bEnd',b.end);
       setV('bTotal',b.total); setV('bColl',b.collected);
