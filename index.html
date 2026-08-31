@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PurelyCleaningServices - Trusted Home Cleaning in Dubai</title>
+<meta name="description" content="Trusted, vetted home cleaning across Dubai and Arabian Ranches 3. Same cleaner every visit, eco-friendly products, transparent pricing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#1A3E3A;
+    --teal-dark:#0E211E;
+    --teal-deep:#0A1C19;
+    --sage:#A3ABA0;
+    --sage-light:#C7CDC3;
+    --sage-bg:#8E9A8D;
+    --cream:#F7F5F0;
+    --sand:#EFEAE1;
+    --white:#FFFFFF;
+    --ink:#1E2624;
+    --radius-s:10px;
+    --radius-m:18px;
+    --radius-l:28px;
+    --ease:cubic-bezier(.45,0,.2,1);
+    --ease-soft:cubic-bezier(.65,0,.35,1);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:var(--teal);
+    line-height:1.08;
+  }
+  .italic-accent{ font-style:italic; font-weight:400; color:var(--sage); }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+  .container{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  section{ padding:88px 0; position:relative; }
+  @media(max-width:768px){ section{ padding:52px 0; } .container{ padding:0 22px; } }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:15px;
+    padding:16px 30px; border-radius:100px; cursor:pointer;
+    border:1.5px solid transparent; transition:transform .5s var(--ease-soft), box-shadow .5s var(--ease-soft), background .4s var(--ease-soft), color .4s var(--ease-soft);
+    white-space:nowrap;
+  }
+  .btn-primary{ background:var(--teal); color:var(--white); }
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -10px rgba(26,62,58,.55); }
+  .btn-outline{ background:transparent; color:var(--teal); border-color:var(--teal); }
+  .btn-outline:hover{ background:var(--teal); color:var(--white); transform:translateY(-3px); }
+  .btn-light{ background:var(--white); color:var(--teal); }
+  .btn-light:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -10px rgba(0,0,0,.35); }
+  .btn-sm{ padding:11px 22px; font-size:13.5px; }
+  .btn svg{ width:16px; height:16px; }
+
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    padding:22px 0; transition:padding .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
+  }
+  header.scrolled{
+    padding:14px 0; background:rgba(247,245,240,.86); backdrop-filter:blur(14px);
+    box-shadow:0 1px 0 rgba(26,62,58,.08);
+  }
+  nav{ display:flex; align-items:center; justify-content:space-between; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand img{ height:34px; width:auto; }
+  .brand span{ font-family:'Fraunces',serif; font-weight:600; font-size:19px; color:var(--teal); }
+  .nav-links{ display:flex; align-items:center; gap:32px; }
+  .nav-links a{ font-size:14px; font-weight:500; color:var(--teal); position:relative; }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1.5px; background:var(--teal);
+    transition:width .3s var(--ease);
+  }
+  .nav-links a:hover::after{ width:100%; }
+  .nav-cta{ display:flex; align-items:center; gap:22px; }
+  .menu-toggle{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; }
+  .menu-toggle span{ width:24px; height:2px; background:var(--teal); border-radius:2px; }
+  @media(max-width:900px){
+    .nav-links{ display:none; }
+    .menu-toggle{ display:flex; }
+    .nav-cta .btn-outline{ display:none; }
+  }
+  .mobile-menu{
+    position:fixed; inset:0; background:var(--teal); z-index:200;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
+    transform:translateY(-100%); transition:transform .45s var(--ease);
+  }
+  .mobile-menu.open{ transform:translateY(0); }
+  .mobile-menu a{ font-family:'Fraunces',serif; font-size:26px; color:var(--white); font-weight:500; }
+  .mobile-menu .btn{ margin-top:10px; }
+  .mobile-menu a.btn-light{ color:var(--teal); font-family:'Poppins',sans-serif; font-size:15px; font-weight:600; }
+  .mobile-close{ position:absolute; top:26px; right:28px; background:none; border:none; color:var(--white); font-size:30px; cursor:pointer; line-height:1; }
+
+  .hero{
+    min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:150px 24px 90px; position:relative; overflow:hidden;
+  }
+  @media(max-width:900px){ .hero{ padding:130px 22px 60px; min-height:auto; } }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--sage); margin-bottom:22px;
+  }
+  .eyebrow::before{ content:''; width:22px; height:1.5px; background:var(--sage); }
+  .hero-logo{ height:56px; margin:0 auto 34px; display:block; }
+  .hero h1{ font-size:clamp(40px,7vw,80px); margin-bottom:26px; }
+  .hero p.lead{ font-size:18px; color:#4B5652; max-width:520px; margin-bottom:38px; }
+  .hero-actions{ display:flex; flex-wrap:wrap; gap:16px; }
+  .hero-content{ position:relative; z-index:2; max-width:800px; }
+
+  .hero-bg-photo{ position:absolute; inset:0; z-index:0; }
+  .hero-bg-photo video{
+    width:100%; height:100%; object-fit:cover; opacity:.58;
+    filter:grayscale(.4) contrast(1.05);
+  }
+  .hero-bg-color-tint{
+    position:absolute; inset:0; z-index:0; background:var(--teal); mix-blend-mode:color; opacity:.85;
+  }
+  .hero-bg-fade{
+    position:absolute; inset:0; z-index:1;
+    background:radial-gradient(ellipse at center, rgba(247,245,240,.55) 0%, rgba(247,245,240,.92) 65%, var(--cream) 100%);
+  }
+
+  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  /* Trust marquee */
+  .trust-bar{ background:var(--sage-bg); padding:24px 0; overflow:hidden; position:relative; }
+  .trust-track{ display:flex; width:max-content; animation:scrollTrust 28s linear infinite; }
+  .trust-track:hover{ animation-play-state:paused; }
+  @keyframes scrollTrust{ 0%{ transform:translateX(0);} 100%{ transform:translateX(-50%);} }
+  .trust-item{ display:flex; align-items:center; gap:12px; padding:0 40px; white-space:nowrap; }
+  .trust-item svg{ width:24px; height:24px; color:var(--white); flex-shrink:0; }
+  .trust-item span{ font-size:14.5px; font-weight:600; color:var(--white); }
+  .trust-sep{ width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.5); margin:0 4px; align-self:center; }
+
+  .section-head{ max-width:600px; margin-bottom:44px; }
+  .section-head.centered{ margin-left:auto; margin-right:auto; text-align:center; }
+  .section-head .eyebrow{ margin-bottom:16px; }
+  .section-head.centered .eyebrow{ justify-content:center; }
+  .section-head h2{ font-size:clamp(30px,4vw,44px); }
+  .section-head p{ color:#5B655F; font-size:16.5px; margin-top:18px; }
+
+  /* Services - flexible wrap so odd counts stay centered */
+  .services-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:26px; }
+  .service-card{
+    background:var(--cream); border-radius:var(--radius-m); overflow:hidden;
+    transition:transform .55s var(--ease-soft), box-shadow .55s var(--ease-soft);
+    border:1px solid rgba(26,62,58,.08);
+    flex:1 1 300px; max-width:340px;
+  }
+  .service-card:hover{ transform:translateY(-8px); box-shadow:0 30px 50px -25px rgba(14,33,30,.28); }
+  .service-card-image{ position:relative; height:150px; overflow:hidden; }
+  .service-card-image img{
+    width:100%; height:100%; object-fit:cover;
+    transition:transform .8s var(--ease-soft);
+  }
+  .service-card:hover .service-card-image img{ transform:scale(1.08); }
+  .service-card-image::after{
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(26,62,58,0) 40%, rgba(26,62,58,.55) 100%);
+  }
+  .service-card-body{ padding:24px 26px 30px; }
+  .service-card .icon-wrap{
+    width:50px; height:50px; border-radius:14px; background:var(--white);
+    display:flex; align-items:center; justify-content:center; margin-top:-45px; margin-bottom:18px;
+    position:relative; z-index:1; box-shadow:0 10px 20px -8px rgba(14,33,30,.3);
+  }
+  .service-card .icon-wrap svg{ width:26px; height:26px; color:var(--teal); }
+  .service-card h3{ font-size:21px; margin-bottom:12px; }
+  .service-card p{ color:#5B655F; font-size:14.5px; margin-bottom:20px; }
+  .service-card .learn{ font-size:13.5px; font-weight:600; color:var(--teal); display:inline-flex; align-items:center; gap:6px; }
+  .service-card .learn svg{ width:14px; height:14px; transition:transform .3s var(--ease); }
+  .service-card:hover .learn svg{ transform:translateX(4px); }
+
+  /* Property types strip - compact, not a full section */
+  .property-strip{ padding:6px 0 20px; }
+  .property-strip .inner{
+    display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 10px;
+    background:transparent; border-radius:100px; padding:18px 30px;
+  }
+  .property-strip .label{ font-size:13px; font-weight:600; color:var(--sage-bg); text-transform:uppercase; letter-spacing:.08em; margin-right:8px; }
+  .property-chip{
+    display:flex; align-items:center; gap:8px;
+    padding:8px 16px; border-radius:100px; background:var(--sand); cursor:default;
+    transition:background .5s var(--ease-soft);
+  }
+  .property-chip:hover{ background:var(--teal); }
+  .property-chip svg{ width:18px; height:18px; color:var(--teal); flex-shrink:0; transition:color .5s var(--ease-soft); }
+  .property-chip:hover svg{ color:var(--white); }
+  .property-chip span.chip-label{ font-size:13.5px; font-weight:600; color:var(--teal); white-space:nowrap; transition:color .5s var(--ease-soft); }
+  .property-chip:hover span.chip-label{ color:var(--white); }
+  .property-chip .chip-more{
+    max-width:0; opacity:0; overflow:hidden; white-space:nowrap; font-size:12.5px; font-weight:500; color:rgba(255,255,255,.9);
+    transition:max-width .6s var(--ease-soft), opacity .5s var(--ease-soft) .05s;
+  }
+  .property-chip:hover .chip-more{ max-width:220px; opacity:1; }
+  .property-chip .chip-more span{ padding-left:10px; display:inline-block; }
+  @media(max-width:640px){ .property-strip .inner{ border-radius:24px; } .property-strip .label{ width:100%; text-align:center; margin:0 0 4px; } }
+
+  /* Plans / subscriptions */
+  .plans-section{ background:var(--sand); }
+  .plans-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  @media(max-width:960px){ .plans-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:560px){ .plans-grid{ grid-template-columns:1fr; } }
+  .plan-card{
+    background:var(--white); border-radius:var(--radius-m); padding:26px 22px; position:relative;
+    border:1.5px solid transparent; transition:transform .55s var(--ease-soft), border-color .5s var(--ease-soft), box-shadow .55s var(--ease-soft);
+    display:flex; flex-direction:column; height:100%;
+  }
+  .plan-card:hover{ transform:translateY(-6px); box-shadow:0 26px 46px -26px rgba(14,33,30,.24); }
+  .plan-card.popular{ border-color:var(--teal); }
+  .plan-badge{
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--teal); color:var(--white);
+    font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:6px 14px; border-radius:100px;
+  }
+  .plan-card h3{ font-size:19px; margin-bottom:8px; }
+  .plan-card .freq{ font-size:13px; color:#6B756F; margin-bottom:18px; }
+  .plan-save{
+    display:inline-block; background:var(--sand); color:var(--teal); font-size:12.5px; font-weight:700;
+    padding:5px 12px; border-radius:100px; margin-bottom:18px;
+  }
+  .plan-card.popular .plan-save{ background:rgba(26,62,58,.08); }
+  .plan-card ul{ list-style:none; margin-bottom:24px; }
+  .plan-card ul li{ display:flex; align-items:center; gap:9px; font-size:13.5px; color:#4B5652; margin-bottom:10px; }
+  .plan-card ul li svg{ width:15px; height:15px; color:var(--sage-bg); flex-shrink:0; }
+  .week-dots{ display:flex; gap:6px; margin:14px 0 6px; }
+  .week-dots .wd{
+    width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:var(--sage-bg); border:1.5px solid rgba(163,171,160,.4);
+    transition:background .4s var(--ease-soft), color .4s var(--ease-soft), border-color .4s var(--ease-soft);
+  }
+  .week-dots .wd.on{ background:var(--teal); color:var(--white); border-color:var(--teal); }
+  .plan-card.popular .week-dots .wd.on{ background:var(--teal); }
+  .freq-note{ font-size:11.5px; color:#8B948E; margin:0 0 14px; font-style:italic; min-height:16px; }
+  .plan-card ul{ flex:0 0 auto; }
+  .plan-card > a.btn{ margin-top:auto; }
+
+  /* Wipe reveal signature section */
+  .wipe-section{ background:var(--teal-dark); color:var(--white); overflow:hidden; }
+  .wipe-grid{ display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:46px; }
+  @media(max-width:900px){ .wipe-grid{ grid-template-columns:1fr; } }
+  .wipe-section h2{ color:var(--white); font-size:clamp(30px,4.4vw,46px); margin-bottom:22px; }
+  .wipe-section p{ color:rgba(255,255,255,.68); font-size:16.5px; max-width:440px; }
+  .wipe-visual{ position:relative; border-radius:var(--radius-l); overflow:hidden; aspect-ratio:4/3.4; box-shadow:0 40px 90px -30px rgba(0,0,0,.5); }
+  .wipe-visual img{ width:100%; height:100%; object-fit:cover; }
+  .wipe-clean-layer{
+    position:absolute; inset:0; background:linear-gradient(120deg, rgba(163,171,160,.25), rgba(26,62,58,.05));
+    clip-path:polygon(0 0, 0 0, 0 100%, 0 100%); transition:clip-path 1.4s var(--ease);
+  }
+  .wipe-visual.wiped .wipe-clean-layer{ clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+  .wipe-label{
+    position:absolute; bottom:26px; left:26px; background:rgba(255,255,255,.92); color:var(--teal);
+    padding:10px 18px; border-radius:100px; font-size:13px; font-weight:600;
+    opacity:0; transform:translateY(10px); transition:opacity .6s var(--ease) .6s, transform .6s var(--ease) .6s;
+  }
+  .wipe-visual.wiped .wipe-label{ opacity:1; transform:translateY(0); }
+
+  /* How it works - map route style */
+  .route-wrap{ position:relative; margin-bottom:-6px; }
+  .route-svg{ width:100%; height:auto; display:block; }
+  .route-svg .route-path{
+    fill:none; stroke:var(--sage-light); stroke-width:3; stroke-dasharray:2 10; stroke-linecap:round;
+    stroke-dashoffset:600; transition:stroke-dashoffset 1.6s var(--ease);
+  }
+  .route-wrap.in .route-svg .route-path{ stroke-dashoffset:0; }
+  .route-svg circle.marker-bg{ fill:var(--cream); }
+  .route-svg circle.marker{ fill:var(--teal); }
+  .route-svg text{ font-family:'Fraunces',serif; font-weight:600; fill:var(--white); font-size:26px; }
+  @media(max-width:900px){ .route-wrap{ display:none; } }
+  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+  @media(max-width:900px){ .steps{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:560px){ .steps{ grid-template-columns:1fr; } }
+  .step{ text-align:center; }
+  @media(max-width:900px){ .step{ text-align:left; } }
+  .step .step-num-mobile{ display:none; font-family:'Fraunces',serif; font-weight:600; font-size:34px; color:var(--sage-light); margin-bottom:10px; }
+  @media(max-width:900px){ .step .step-num-mobile{ display:block; } }
+  .step h3{ font-size:18px; margin-bottom:10px; }
+  .step p{ font-size:14px; color:#5B655F; }
+
+  .area-section{ background:var(--sand); }
+  .area-grid{ display:grid; grid-template-columns:1fr 1fr; gap:46px; align-items:center; }
+  @media(max-width:900px){ .area-grid{ grid-template-columns:1fr; } }
+  .area-card{ background:var(--cream); border-radius:var(--radius-l); padding:34px; position:relative; overflow:hidden; }
+  .pin-badge{
+    display:inline-flex; align-items:center; gap:8px; background:var(--teal); color:var(--white);
+    padding:8px 16px; border-radius:100px; font-size:12.5px; font-weight:600; margin-bottom:20px;
+  }
+  .pin-badge svg{ width:14px; height:14px; }
+  .area-list{ list-style:none; margin-top:26px; display:flex; flex-direction:column; gap:14px; }
+  .area-list li{ display:flex; align-items:center; gap:12px; font-size:14.5px; color:var(--teal); font-weight:500; }
+  .area-list li svg{ width:18px; height:18px; color:var(--sage); flex-shrink:0; }
+  .area-list li.muted{ color:#8B948E; font-weight:400; }
+
+  .checker{ margin-top:32px; max-width:420px; }
+  .checker-input-row{ display:flex; gap:10px; position:relative; }
+  .checker input{
+    flex:1; padding:15px 20px; border-radius:100px; border:1.5px solid rgba(26,62,58,.16);
+    font-family:'Poppins',sans-serif; font-size:14.5px; color:var(--teal); background:var(--white);
+    outline:none; transition:border-color .4s var(--ease-soft), box-shadow .4s var(--ease-soft);
+  }
+  .checker input:focus{ border-color:var(--teal); box-shadow:0 0 0 4px rgba(26,62,58,.08); }
+  .checker input::placeholder{ color:#A3ABA0; }
+  .checker-suggestions{
+    position:absolute; top:calc(100% + 8px); left:0; right:0; background:var(--white);
+    border-radius:16px; box-shadow:0 20px 40px -18px rgba(14,33,30,.28); overflow:hidden;
+    max-height:0; opacity:0; transition:max-height .4s var(--ease-soft), opacity .3s var(--ease-soft);
+    z-index:20; pointer-events:none;
+  }
+  .checker-suggestions.open{ max-height:230px; opacity:1; overflow-y:auto; pointer-events:auto; }
+  .checker-suggestions button{
+    display:block; width:100%; text-align:left; padding:12px 20px; background:none; border:none;
+    font-family:'Poppins',sans-serif; font-size:14px; color:var(--teal); cursor:pointer;
+    transition:background .25s var(--ease-soft);
+  }
+  .checker-suggestions button:hover, .checker-suggestions button.active{ background:var(--sand); }
+  .checker-result{
+    margin-top:16px; max-height:0; opacity:0; overflow:hidden;
+    transition:max-height .55s var(--ease-soft), opacity .45s var(--ease-soft);
+  }
+  .checker-result.show{ max-height:200px; opacity:1; }
+  .checker-result-inner{
+    background:var(--sand); border-radius:16px; padding:18px 20px; display:flex; align-items:flex-start; gap:12px;
+  }
+  .checker-result-inner svg{ width:22px; height:22px; color:var(--teal); flex-shrink:0; margin-top:1px; }
+  .checker-result-text{ font-size:14px; color:var(--teal); font-weight:500; line-height:1.5; }
+  .checker-result-text strong{ font-family:'Fraunces',serif; font-weight:600; }
+  .checker-cta{ margin-top:12px; }
+
+  .offer-section{ background:var(--teal); color:var(--white); text-align:center; position:relative; overflow:hidden; padding:64px 0; }
+  .offer-bg-photo{
+    position:absolute; inset:0; z-index:0; overflow:hidden;
+  }
+  .offer-bg-photo img{
+    width:100%; height:100%; object-fit:cover;
+    animation:kenBurns 36s ease-in-out infinite;
+    will-change:transform;
+    transform-origin:center center;
+  }
+  @keyframes kenBurns{
+    0%{ transform:scale(1) translate(0,0); }
+    50%{ transform:scale(1.1) translate(-1.2%, -1.2%); }
+    100%{ transform:scale(1) translate(0,0); }
+  }
+  .offer-bg-tint{ position:absolute; inset:0; z-index:1; background:rgba(14,33,30,.82); }
+  .droplet-bg{ position:absolute; opacity:.05; pointer-events:none; z-index:1; }
+  .offer-section .container{ position:relative; z-index:2; }
+  .offer-badge{ display:inline-block; background:rgba(255,255,255,.14); color:var(--white); padding:7px 18px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:.04em; }
+  .offer-section h2{ color:var(--white); font-size:clamp(26px,3.6vw,38px); max-width:640px; margin:0 auto 12px; }
+  .offer-section p{ color:rgba(255,255,255,.72); font-size:15px; max-width:460px; margin:0 auto 26px; }
+  .offer-price{ font-family:'Fraunces',serif; font-size:clamp(42px,6vw,64px); font-weight:600; line-height:1; margin:14px 0 4px; }
+  .offer-price sup{ font-size:.32em; font-weight:500; }
+  .offer-note{ font-size:12.5px; color:rgba(255,255,255,.55); margin-bottom:20px; }
+
+  .faq-list{ max-width:760px; margin:0 auto; }
+  .faq-item{ border-bottom:1px solid rgba(26,62,58,.14); }
+  .faq-q{
+    width:100%; text-align:left; background:none; border:none; padding:26px 4px;
+    display:flex; align-items:center; justify-content:space-between; cursor:pointer;
+    font-family:'Poppins',sans-serif; font-size:17px; font-weight:500; color:var(--teal);
+  }
+  .faq-q .plus{
+    width:26px; height:26px; border-radius:50%; border:1.5px solid var(--teal); flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; position:relative; transition:transform .4s var(--ease), background .3s;
+  }
+  .faq-q .plus::before, .faq-q .plus::after{ content:''; position:absolute; background:var(--teal); transition:transform .3s var(--ease), opacity .3s; }
+  .faq-q .plus::before{ width:11px; height:1.5px; }
+  .faq-q .plus::after{ width:1.5px; height:11px; }
+  .faq-item.open .faq-q .plus{ background:var(--teal); transform:rotate(180deg); }
+  .faq-item.open .faq-q .plus::before, .faq-item.open .faq-q .plus::after{ background:var(--white); }
+  .faq-item.open .faq-q .plus::after{ opacity:0; }
+  .faq-a{ max-height:0; overflow:hidden; transition:max-height .5s var(--ease); }
+  .faq-a p{ padding:0 4px 26px; color:#5B655F; font-size:15px; max-width:600px; }
+
+  footer{ background:var(--teal-deep); color:rgba(255,255,255,.6); padding:70px 0 34px; }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:50px; }
+  .footer-brand{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+  .footer-brand img{ height:30px; }
+  .footer-brand span{ font-family:'Fraunces',serif; font-size:18px; color:var(--white); font-weight:600; }
+  .footer-tag{ font-size:14px; color:var(--sage-light); max-width:280px; }
+  .footer-cols{ display:flex; gap:80px; flex-wrap:wrap; }
+  .footer-col h4{ font-size:12.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.4); margin-bottom:18px; font-weight:600; }
+  .footer-col a{ display:block; font-size:14.5px; margin-bottom:12px; color:rgba(255,255,255,.75); transition:color .3s; }
+  .footer-col a:hover{ color:var(--white); }
+  .footer-bottom{ border-top:1px solid rgba(255,255,255,.1); padding-top:26px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:rgba(255,255,255,.4); }
+
+  .wa-float{
+    position:fixed; bottom:26px; right:26px; z-index:90; background:var(--teal); color:var(--white);
+    width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    box-shadow:0 16px 36px -12px rgba(14,33,30,.55); transition:transform .35s var(--ease);
+  }
+  .wa-float:hover{ transform:scale(1.08); }
+  .wa-float svg{ width:26px; height:26px; }
+
+  :focus-visible{ outline:2.5px solid var(--teal); outline-offset:3px; }
+  @media (prefers-reduced-motion: reduce){
+    *:not(.trust-track){ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="container">
+    <nav>
+      <a href="#top" class="brand">
+        <img src="assets/image-1.png" alt="PurelyCleaningServices logo">
+        <span>PurelyCleaningServices</span>
+      </a>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#plans">Plans</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#area">Service area</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-cta">
+        <a href="#offer" class="btn btn-outline">Join the waitlist</a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
+  <a href="#services">Services</a>
+  <a href="#plans">Plans</a>
+  <a href="#how-it-works">How it works</a>
+  <a href="#area">Service area</a>
+  <a href="#faq">FAQ</a>
+  <a href="#offer" class="btn btn-light">Join the waitlist</a>
+</div>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="hero-bg-photo">
+      <video autoplay muted loop playsinline>
+        <source src="assets/video-1.webm" type="video/webm">
+        <source src="assets/video-2.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-bg-color-tint"></div>
+    <div class="hero-bg-fade"></div>
+    <div class="hero-content reveal in">
+      <h1>A cleaner home,<br><span class="italic-accent">without the chase.</span></h1>
+      <p class="lead" style="margin-left:auto; margin-right:auto;">Trusted, vetted home cleaning across Dubai. Same cleaner every visit, eco-friendly products, no shortcuts, ever.</p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a href="#offer" class="btn btn-primary">Join the waitlist
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn btn-outline">See how it works</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST MARQUEE -->
+  <div class="trust-bar">
+    <div class="trust-track" id="trustTrack">
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span>Vetted &amp; background-checked</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-3z"/></svg><span>Fully insured cleans</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparent pricing</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg><span>Dubai-based &amp; local</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-7a4 4 0 014-4h8a4 4 0 014 4v7"/><path d="M9 21V12h6v9"/></svg><span>Same cleaner every visit</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c-4 3-6 6-6 9a6 6 0 0012 0c0-3-2-6-6-9z"/></svg><span>Eco-friendly products only</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 01-11.7 7.9L4 21l1.6-5.3A8.5 8.5 0 1121 11.5z"/></svg><span>Book instantly on WhatsApp</span></div><div class="trust-sep"></div>
+      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span>Vetted &amp; background-checked</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-3z"/></svg><span>Fully insured cleans</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparent pricing</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg><span>Dubai-based &amp; local</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-7a4 4 0 014-4h8a4 4 0 014 4v7"/><path d="M9 21V12h6v9"/></svg><span>Same cleaner every visit</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c-4 3-6 6-6 9a6 6 0 0012 0c0-3-2-6-6-9z"/></svg><span>Eco-friendly products only</span></div><div class="trust-sep"></div>
+<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 01-11.7 7.9L4 21l1.6-5.3A8.5 8.5 0 1121 11.5z"/></svg><span>Book instantly on WhatsApp</span></div><div class="trust-sep"></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section id="services" style="background:var(--white);">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">What we do</div>
+        <h2>Every service, done properly.</h2>
+        <p>Five ways to keep your space exactly how you want it. Message us for a tailored quote, every home is different.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-card-image"><img src="assets/image-2.jpg" alt="Regular Cleaning"></div>
+          <div class="service-card-body">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v4H4zM6 8v12h12V8"/><path d="M10 12h4"/></svg></div>
+          <h3>Regular Cleaning</h3>
+          <p>Weekly or bi-weekly maintenance that keeps your home consistently spotless, on a schedule that suits you.</p>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Regular%20Cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+<div class="service-card reveal">
+          <div class="service-card-image"><img src="assets/image-3.jpg" alt="Deep Cleaning"></div>
+          <div class="service-card-body">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l7-14 3 6 3-4 3 12H4z"/></svg></div>
+          <h3>Deep Cleaning</h3>
+          <p>A thorough, top-to-bottom reset for the corners regular cleaning doesn't reach. Perfect for a proper refresh.</p>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Deep%20Cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+<div class="service-card reveal">
+          <div class="service-card-image"><img src="assets/image-4.jpg" alt="Holiday Home Turnover"></div>
+          <div class="service-card-body">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18"/><path d="M12 3v18"/><circle cx="12" cy="12" r="9"/></svg></div>
+          <h3>Holiday Home Turnover</h3>
+          <p>Fast, reliable turnarounds between guests, so every check-in feels like the first.</p>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Holiday%20Home%20Turnover%20cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+<div class="service-card reveal">
+          <div class="service-card-image"><img src="assets/image-5.jpg" alt="Move-In / Move-Out"></div>
+          <div class="service-card-body">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-7 9 7"/><path d="M5 9v11h14V9"/></svg></div>
+          <h3>Move-In / Move-Out</h3>
+          <p>A spotless handover, every time, whether you're welcoming a new home or leaving one behind.</p>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20a%20Move-In%20/%20Move-Out%20clean." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+<div class="service-card reveal">
+          <div class="service-card-image"><img src="assets/image-6.jpg" alt="Post-Renovation Clean"></div>
+          <div class="service-card-body">
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3l7 7-8.5 8.5a3 3 0 01-4.2 0l-2.8-2.8a3 3 0 010-4.2L14 3z"/><path d="M6 21H3v-3"/></svg></div>
+          <h3>Post-Renovation Clean</h3>
+          <p>Dust, debris, and residue cleared properly after building or renovation work, so your space is truly ready.</p>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20a%20Post-Renovation%20Clean." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container property-strip">
+      <div class="inner reveal">
+        <span class="label">We clean</span>
+        <div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 20V12h6v8"/></svg><span class="chip-label">Studios</span><span class="chip-more"><span>Compact & efficient</span></span></div>
+<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V6l8-3 8 3v15"/><path d="M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg><span class="chip-label">Apartments</span><span class="chip-more"><span>Any size, any floor</span></span></div>
+<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21V10l6-5 6 5v11"/><path d="M9 21v-6h4v6"/><path d="M15 21v-8l6 3v5"/></svg><span class="chip-label">Townhouses</span><span class="chip-more"><span>Multi-level care</span></span></div>
+<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-6h6v6"/></svg><span class="chip-label">Villas</span><span class="chip-more"><span>Full property service</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS / SUBSCRIPTIONS -->
+  <section id="plans" class="plans-section">
+    <div class="container">
+      <div class="section-head centered reveal">
+        <div class="eyebrow">Recurring plans</div>
+        <h2>Set it, and forget it.</h2>
+        <p>Choose a rhythm that fits your home. The same cleaner, every single time, no re-briefing required.</p>
+      </div>
+      <div class="plans-grid">
+        <div class="plan-card popular reveal">
+          <span class="plan-badge">Most Popular</span>
+          <h3>Weekly</h3>
+          <div class="freq">4 visits / month</div>
+          <div class="week-dots"><span class="wd">M</span>
+<span class="wd">T</span>
+<span class="wd on">W</span>
+<span class="wd">T</span>
+<span class="wd">F</span>
+<span class="wd">S</span>
+<span class="wd">S</span></div>
+          <div class="freq-note">&nbsp;</div>
+          <span class="plan-save">Save up to 20%</span>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Priority booking slots</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Best for busy households</li></ul>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Weekly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-primary btn-sm">Choose this plan</a>
+        </div>
+<div class="plan-card reveal">
+          
+          <h3>Fortnightly</h3>
+          <div class="freq">2 visits / month</div>
+          <div class="week-dots"><span class="wd">M</span>
+<span class="wd">T</span>
+<span class="wd on">W</span>
+<span class="wd">T</span>
+<span class="wd">F</span>
+<span class="wd">S</span>
+<span class="wd">S</span></div>
+          <div class="freq-note">Active weeks only</div>
+          <span class="plan-save">Save up to 12%</span>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Great for steady upkeep</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Flexible day selection</li></ul>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Fortnightly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
+        </div>
+<div class="plan-card reveal">
+          
+          <h3>Twice a Week</h3>
+          <div class="freq">8 visits / month</div>
+          <div class="week-dots"><span class="wd on">M</span>
+<span class="wd">T</span>
+<span class="wd">W</span>
+<span class="wd on">T</span>
+<span class="wd">F</span>
+<span class="wd">S</span>
+<span class="wd">S</span></div>
+          <div class="freq-note">&nbsp;</div>
+          <span class="plan-save">Save up to 25%</span>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Ideal for larger homes</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Maximum consistency</li></ul>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Twice%20a%20Week%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
+        </div>
+<div class="plan-card reveal">
+          
+          <h3>Monthly</h3>
+          <div class="freq">1 visit / month</div>
+          <div class="week-dots"><span class="wd">M</span>
+<span class="wd">T</span>
+<span class="wd on">W</span>
+<span class="wd">T</span>
+<span class="wd">F</span>
+<span class="wd">S</span>
+<span class="wd">S</span></div>
+          <div class="freq-note">One week per month</div>
+          <span class="plan-save">Standard rate</span>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>A lighter-touch refresh</li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>No long-term commitment</li></ul>
+          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Monthly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how-it-works">
+    <div class="container">
+      <div class="section-head reveal">
+        <div class="eyebrow">How it works</div>
+        <h2>Booking takes about a minute.</h2>
+      </div>
+      <div class="route-wrap reveal" id="routeWrap">
+        <svg class="route-svg" viewBox="0 0 1000 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path class="route-path" d="M125,80 C250,80 250,30 375,30 C500,30 500,80 625,80 C750,80 750,30 875,30"/>
+          <g>
+            <circle class="marker-bg" cx="125" cy="80" r="26"/><circle class="marker" cx="125" cy="80" r="24"/><text x="125" y="90" text-anchor="middle">01</text>
+            <circle class="marker-bg" cx="375" cy="30" r="26"/><circle class="marker" cx="375" cy="30" r="24"/><text x="375" y="40" text-anchor="middle">02</text>
+            <circle class="marker-bg" cx="625" cy="80" r="26"/><circle class="marker" cx="625" cy="80" r="24"/><text x="625" y="90" text-anchor="middle">03</text>
+            <circle class="marker-bg" cx="875" cy="30" r="26"/><circle class="marker" cx="875" cy="30" r="24"/><text x="875" y="40" text-anchor="middle">04</text>
+          </g>
+        </svg>
+      </div>
+      <div class="steps">
+        <div class="step reveal">
+          <span class="step-num-mobile">01</span>
+          <h3>Message us</h3>
+          <p>Send your area and what you need on WhatsApp.</p>
+        </div>
+        <div class="step reveal" style="--i:1">
+          <span class="step-num-mobile">02</span>
+          <h3>Get a quote</h3>
+          <p>A clear, upfront price, no hidden fees, ever.</p>
+        </div>
+        <div class="step reveal" style="--i:2">
+          <span class="step-num-mobile">03</span>
+          <h3>Book a time</h3>
+          <p>Pick a slot that actually works for your schedule.</p>
+        </div>
+        <div class="step reveal" style="--i:3">
+          <span class="step-num-mobile">04</span>
+          <h3>Enjoy your clean</h3>
+          <p>The same vetted cleaner, done properly, every time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE AREA -->
+  <section id="area" class="area-section">
+    <div class="container area-grid">
+      <div class="reveal">
+        <div class="area-card">
+          <span class="pin-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/><circle cx="12" cy="10" r="2.4"/></svg>
+            Now serving
+          </span>
+          <h3 style="font-size:26px; margin-bottom:8px;">All of Dubai</h3>
+          <p style="color:#5B655F; font-size:14.5px;">Wherever you are in the city, we're covering it, from downtown apartments to villa communities on the outskirts.</p>
+          <ul class="area-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Downtown Dubai &amp; Business Bay</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Dubai Marina &amp; JBR</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Arabian Ranches, Damac Hills &amp; JVC</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Palm Jumeirah &amp; wider Dubai</li>
+          </ul>
+        </div>
+      </div>
+      <div class="reveal" style="--i:1">
+        <div class="eyebrow">Service area</div>
+        <h2>One standard, across the city.</h2>
+        <p style="color:#5B655F; font-size:16.5px; margin-top:18px; max-width:420px;">No matter which part of Dubai you're in, every booking gets the same vetted team, the same eco-friendly products, and the same attention to detail.</p>
+        <div class="checker" id="areaChecker">
+          <div class="checker-input-row">
+            <input type="text" id="areaInput" placeholder="Enter your area, e.g. Dubai Marina" autocomplete="off">
+            <div class="checker-suggestions" id="areaSuggestions"></div>
+          </div>
+          <div class="checker-result" id="areaResult">
+            <div class="checker-result-inner">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+              <div class="checker-result-text" id="areaResultText"></div>
+            </div>
+            <a href="#" id="areaCtaLink" target="_blank" rel="noopener" class="btn btn-primary btn-sm checker-cta">Book your first clean
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFER / WAITLIST -->
+  <section id="offer" class="offer-section">
+    <div class="offer-bg-photo">
+      <img src="assets/image-7.jpg" alt="">
+    </div>
+    <div class="offer-bg-tint"></div>
+    <svg class="droplet-bg" style="opacity:.08; width:600px; bottom:-140px; left:-140px; z-index:1;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M100 20 C70 70, 40 100, 40 130 C40 165, 68 185, 100 185 C132 185, 160 165, 160 130 C160 100, 130 70, 100 20 Z" stroke="#FFFFFF" stroke-width="3"/>
+    </svg>
+    <div class="container">
+      <div class="offer-badge reveal">LAUNCHING SOON, LIMITED SLOTS</div>
+      <div class="offer-price reveal" style="--i:1">AED 99<sup>/first clean</sup></div>
+      <div class="offer-note reveal" style="--i:2">3-hour minimum, capped intro slots for our first customers</div>
+      <h2 class="reveal" style="--i:3">Be first in line when we open bookings.</h2>
+      <p class="reveal" style="--i:4">We're onboarding our team carefully so every early clean gets it right. Join the waitlist and we'll message you the moment slots open.</p>
+      <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20join%20the%20PurelyCleaningServices%20waitlist" target="_blank" rel="noopener" class="btn btn-light reveal" style="--i:5">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.6-.7c.2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.9-.1 1.6z"/></svg>
+        Join the waitlist on WhatsApp
+      </a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="background:var(--white);">
+    <div class="container">
+      <div class="section-head centered reveal">
+        <div class="eyebrow">Questions</div>
+        <h2>Everything you need to know.</h2>
+      </div>
+      <div class="faq-list reveal">
+        <div class="faq-item">
+          <button class="faq-q">Which areas do you cover?<span class="plus"></span></button>
+          <div class="faq-a"><p>We cover all of Dubai, from downtown apartments to villa communities on the outskirts. Message us your area on WhatsApp and we'll confirm right away.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">What types of homes do you clean?<span class="plus"></span></button>
+          <div class="faq-a"><p>Studios, apartments, townhouses, and villas, all sizes. Every home gets the same standard of clean.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Are your cleaners vetted?<span class="plus"></span></button>
+          <div class="faq-a"><p>Yes. Every cleaner is background-checked and trained before they're ever sent to a client's home.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Do you bring your own supplies?<span class="plus"></span></button>
+          <div class="faq-a"><p>Yes, eco-friendly, non-toxic products and equipment are included in every booking, no need to provide anything yourself.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Can I cancel or reschedule?<span class="plus"></span></button>
+          <div class="faq-a"><p>Yes, free of charge up to 24 hours before your booking.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">How do I book?<span class="plus"></span></button>
+          <div class="faq-a"><p>Everything runs through WhatsApp, message us your area and what you need, and we'll take it from there.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <img src="assets/image-8.png" alt="PurelyCleaningServices">
+          <span>PurelyCleaningServices</span>
+        </div>
+        <p class="footer-tag">Clean Homes. Pure Living. Trusted home cleaning across Dubai.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="#services">Services</a>
+          <a href="#plans">Plans</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#area">Service area</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="footer-col">
+          <h4>Connect</h4>
+          <a href="https://wa.me/971585820766" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://www.instagram.com/purelycleaningservicesdxb/" target="_blank" rel="noopener">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>(c) 2026 PurelyCleaningServices. All rights reserved.</span>
+      <span>Dubai, UAE</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/971585820766" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.6-.7c.2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.9-.1 1.6z"/></svg>
+</a>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const menuToggle = document.getElementById('menuToggle');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileClose = document.getElementById('mobileClose');
+  menuToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
+  mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  const routeWrap = document.getElementById('routeWrap');
+  const routeIo = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) { routeWrap.classList.add('in'); routeIo.unobserve(entry.target); } });
+  }, { threshold: 0.3 });
+  routeIo.observe(routeWrap);
+
+  // Area coverage checker
+  const DUBAI_AREAS = [
+    "Downtown Dubai", "Dubai Marina", "Jumeirah Beach Residence (JBR)", "Business Bay",
+    "Palm Jumeirah", "Jumeirah Village Circle (JVC)", "Jumeirah Village Triangle (JVT)",
+    "Dubai Hills Estate", "Arabian Ranches", "Arabian Ranches 2", "Arabian Ranches 3",
+    "Damac Hills", "Damac Hills 2", "The Springs", "The Meadows", "The Lakes",
+    "Emirates Hills", "Al Barsha", "Al Barsha South", "Mirdif", "Dubai Silicon Oasis",
+    "Motor City", "Dubai Sports City", "Discovery Gardens", "Al Furjan", "The Greens",
+    "The Views", "Jumeirah Islands", "Jumeirah Park", "Jumeirah", "Umm Suqeim",
+    "Al Sufouh", "Dubai Media City", "Dubai Internet City", "Knowledge Village",
+    "Deira", "Bur Dubai", "Al Karama", "Al Satwa", "Al Quoz",
+    "Dubai Investments Park (DIP)", "Remraam", "Town Square", "Mudon", "Villanova",
+    "Dubai South", "International City", "Dubailand", "Al Warqa", "Nadd Al Sheba",
+    "Meydan", "DIFC", "Culture Village", "Dubai Creek Harbour", "Al Jaddaf"
+  ];
+
+  const areaInput = document.getElementById('areaInput');
+  const areaSuggestions = document.getElementById('areaSuggestions');
+  const areaResult = document.getElementById('areaResult');
+  const areaResultText = document.getElementById('areaResultText');
+  const areaCtaLink = document.getElementById('areaCtaLink');
+
+  function closeSuggestions() {
+    areaSuggestions.classList.remove('open');
+    setTimeout(() => { if (!areaSuggestions.classList.contains('open')) areaSuggestions.innerHTML = ''; }, 400);
+  }
+
+  function renderSuggestions(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) { closeSuggestions(); return; }
+    const matches = DUBAI_AREAS.filter(a => a.toLowerCase().includes(q)).slice(0, 5);
+    if (matches.length === 0) { closeSuggestions(); return; }
+    areaSuggestions.innerHTML = matches.map(a => `<button type="button">${a}</button>`).join('');
+    areaSuggestions.classList.add('open');
+    areaSuggestions.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        areaInput.value = btn.textContent;
+        closeSuggestions();
+        confirmArea(btn.textContent);
+        areaInput.blur();
+      });
+    });
+  }
+
+  function confirmArea(name) {
+    if (!name || !name.trim()) return;
+    const clean = name.trim();
+    areaResultText.innerHTML = `Great news, we cover <strong>${clean}</strong>. Let's get your first clean booked in.`;
+    areaCtaLink.href = 'https://wa.me/971585820766?text=Hi%21%20I%20am%20in%20__AREA__%20and%20would%20like%20to%20book%20my%20first%20clean.'.replace('__AREA__', encodeURIComponent(clean));
+    areaResult.classList.add('show');
+  }
+
+  if (areaInput) {
+    areaInput.addEventListener('input', () => {
+      areaResult.classList.remove('show');
+      renderSuggestions(areaInput.value);
+    });
+    areaInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); closeSuggestions(); confirmArea(areaInput.value); areaInput.blur(); }
+    });
+    areaInput.addEventListener('focus', () => { if (areaInput.value && !areaResult.classList.contains('show')) renderSuggestions(areaInput.value); });
+    document.addEventListener('click', (e) => {
+      if (!document.getElementById('areaChecker').contains(e.target)) { closeSuggestions(); }
+    });
+  }
+
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(openItem => {
+        if (openItem !== item) { openItem.classList.remove('open'); openItem.querySelector('.faq-a').style.maxHeight = null; }
+      });
+      item.classList.toggle('open', !isOpen);
+      a.style.maxHeight = !isOpen ? a.scrollHeight + 'px' : null;
+    });
+  });
+</script>
+
+</body>
+</html>
