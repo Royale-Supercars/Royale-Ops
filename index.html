@@ -1,931 +1,1368 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PurelyCleaningServices - Trusted Home Cleaning in Dubai</title>
-<meta name="description" content="Trusted, vetted home cleaning across Dubai and Arabian Ranches 3. Same cleaner every visit, eco-friendly products, transparent pricing.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royale — Ops &amp; Finance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --teal:#1A3E3A;
-    --teal-dark:#0E211E;
-    --teal-deep:#0A1C19;
-    --sage:#A3ABA0;
-    --sage-light:#C7CDC3;
-    --sage-bg:#8E9A8D;
-    --cream:#F7F5F0;
-    --sand:#EFEAE1;
-    --white:#FFFFFF;
-    --ink:#1E2624;
-    --radius-s:10px;
-    --radius-m:18px;
-    --radius-l:28px;
-    --ease:cubic-bezier(.45,0,.2,1);
-    --ease-soft:cubic-bezier(.65,0,.35,1);
+    --void:#04070E; --panel:#080E1B; --panel-2:#0C1626; --panel-3:#122036;
+    --hair:rgba(96,164,236,.15); --hair-hot:rgba(96,164,236,.34);
+    --ice:#DEEAF8; --blue:#2F7FF0; --cyan:#4FDCF7;
+    --dim:#5E7793; --dimmer:#3E5470; --warn:#E0705A; --amber:#E8A54B; --green:#3FB98A;
   }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{-webkit-tap-highlight-color:rgba(79,220,247,.12);overscroll-behavior-y:contain}
+  input,select,textarea{font-size:16px}  /* keeps iOS from zooming on focus */
   body{
-    font-family:'Poppins',sans-serif;
-    color:var(--ink);
-    background:var(--cream);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    background:var(--void);color:var(--ice);
+    font-family:'Barlow',system-ui,-apple-system,sans-serif;
+    line-height:1.45;padding:18px 14px 92px;max-width:640px;margin:0 auto;position:relative;
   }
-  h1,h2,h3,.display{
-    font-family:'Fraunces',serif;
-    font-weight:600;
-    letter-spacing:-0.01em;
-    color:var(--teal);
-    line-height:1.08;
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse 130% 55% at 50% -8%, rgba(47,127,240,.16), transparent 68%),
+      repeating-linear-gradient(0deg, rgba(96,164,236,.03) 0 1px, transparent 1px 44px),
+      repeating-linear-gradient(90deg, rgba(96,164,236,.03) 0 1px, transparent 1px 44px);
   }
-  .italic-accent{ font-style:italic; font-weight:400; color:var(--sage); }
-  a{ color:inherit; text-decoration:none; }
-  img{ max-width:100%; display:block; }
-  .container{ max-width:1180px; margin:0 auto; padding:0 32px; }
-  section{ padding:88px 0; position:relative; }
-  @media(max-width:768px){ section{ padding:52px 0; } .container{ padding:0 22px; } }
+  body > *{position:relative;z-index:1}
 
-  .btn{
-    display:inline-flex; align-items:center; gap:10px;
-    font-family:'Poppins',sans-serif; font-weight:600; font-size:15px;
-    padding:16px 30px; border-radius:100px; cursor:pointer;
-    border:1.5px solid transparent; transition:transform .5s var(--ease-soft), box-shadow .5s var(--ease-soft), background .4s var(--ease-soft), color .4s var(--ease-soft);
-    white-space:nowrap;
-  }
-  .btn-primary{ background:var(--teal); color:var(--white); }
-  .btn-primary:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -10px rgba(26,62,58,.55); }
-  .btn-outline{ background:transparent; color:var(--teal); border-color:var(--teal); }
-  .btn-outline:hover{ background:var(--teal); color:var(--white); transform:translateY(-3px); }
-  .btn-light{ background:var(--white); color:var(--teal); }
-  .btn-light:hover{ transform:translateY(-3px); box-shadow:0 14px 30px -10px rgba(0,0,0,.35); }
-  .btn-sm{ padding:11px 22px; font-size:13.5px; }
-  .btn svg{ width:16px; height:16px; }
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim)}
 
-  header{
-    position:fixed; top:0; left:0; right:0; z-index:100;
-    padding:22px 0; transition:padding .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease);
-  }
-  header.scrolled{
-    padding:14px 0; background:rgba(247,245,240,.86); backdrop-filter:blur(14px);
-    box-shadow:0 1px 0 rgba(26,62,58,.08);
-  }
-  nav{ display:flex; align-items:center; justify-content:space-between; }
-  .brand{ display:flex; align-items:center; gap:12px; }
-  .brand img{ height:34px; width:auto; }
-  .brand span{ font-family:'Fraunces',serif; font-weight:600; font-size:19px; color:var(--teal); }
-  .nav-links{ display:flex; align-items:center; gap:32px; }
-  .nav-links a{ font-size:14px; font-weight:500; color:var(--teal); position:relative; }
-  .nav-links a::after{
-    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1.5px; background:var(--teal);
-    transition:width .3s var(--ease);
-  }
-  .nav-links a:hover::after{ width:100%; }
-  .nav-cta{ display:flex; align-items:center; gap:22px; }
-  .menu-toggle{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; padding:6px; }
-  .menu-toggle span{ width:24px; height:2px; background:var(--teal); border-radius:2px; }
-  @media(max-width:900px){
-    .nav-links{ display:none; }
-    .menu-toggle{ display:flex; }
-    .nav-cta .btn-outline{ display:none; }
-  }
-  .mobile-menu{
-    position:fixed; inset:0; background:var(--teal); z-index:200;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;
-    transform:translateY(-100%); transition:transform .45s var(--ease);
-  }
-  .mobile-menu.open{ transform:translateY(0); }
-  .mobile-menu a{ font-family:'Fraunces',serif; font-size:26px; color:var(--white); font-weight:500; }
-  .mobile-menu .btn{ margin-top:10px; }
-  .mobile-menu a.btn-light{ color:var(--teal); font-family:'Poppins',sans-serif; font-size:15px; font-weight:600; }
-  .mobile-close{ position:absolute; top:26px; right:28px; background:none; border:none; color:var(--white); font-size:30px; cursor:pointer; line-height:1; }
+  .masthead{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:13px;border-bottom:1px solid var(--hair)}
+  .wordmark{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px;letter-spacing:.36em;text-transform:uppercase;text-shadow:0 0 22px rgba(79,220,247,.4)}
+  .save-pill{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;margin-top:5px;height:12px;opacity:0;transition:opacity 260ms;text-align:right}
+  .save-pill.ok{color:var(--cyan);opacity:1}
+  .save-pill.bad{color:var(--warn);opacity:1}
+  .refresh{margin-top:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
 
-  .hero{
-    min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; padding:150px 24px 90px; position:relative; overflow:hidden;
-  }
-  @media(max-width:900px){ .hero{ padding:130px 22px 60px; min-height:auto; } }
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; letter-spacing:.14em;
-    text-transform:uppercase; color:var(--sage); margin-bottom:22px;
-  }
-  .eyebrow::before{ content:''; width:22px; height:1.5px; background:var(--sage); }
-  .hero-logo{ height:56px; margin:0 auto 34px; display:block; }
-  .hero h1{ font-size:clamp(40px,7vw,80px); margin-bottom:26px; }
-  .hero p.lead{ font-size:18px; color:#4B5652; max-width:520px; margin-bottom:38px; }
-  .hero-actions{ display:flex; flex-wrap:wrap; gap:16px; }
-  .hero-content{ position:relative; z-index:2; max-width:800px; }
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom)}
+  .tab{padding:14px 2px 19px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase}
+  .tab.on{color:var(--cyan);box-shadow:inset 0 2px 0 var(--cyan)}
+  .pane{display:none}
+  .pane.on{display:block}
 
-  .hero-bg-photo{ position:absolute; inset:0; z-index:0; }
-  .hero-bg-photo video{
-    width:100%; height:100%; object-fit:cover; opacity:.58;
-    filter:grayscale(.4) contrast(1.05);
-  }
-  .hero-bg-color-tint{
-    position:absolute; inset:0; z-index:0; background:var(--teal); mix-blend-mode:color; opacity:.85;
-  }
-  .hero-bg-fade{
-    position:absolute; inset:0; z-index:1;
-    background:radial-gradient(ellipse at center, rgba(247,245,240,.55) 0%, rgba(247,245,240,.92) 65%, var(--cream) 100%);
-  }
+  .gauge-block{padding:22px 0 20px;border-bottom:1px solid var(--hair)}
+  .gauge-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:15px;gap:12px}
+  .gauge-label{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px}
+  .gauge-figure{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:50px;line-height:.84;font-variant-numeric:tabular-nums;text-shadow:0 0 34px rgba(47,127,240,.5)}
+  .gauge-figure .cur{font-size:17px;font-weight:500;color:var(--dim);letter-spacing:.12em;margin-right:7px;vertical-align:6px}
+  .gauge-target{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);text-align:right;letter-spacing:.13em;text-transform:uppercase;line-height:1.9}
+  .gauge-target b{color:var(--ice);font-weight:500;display:block;font-size:13px;letter-spacing:.04em}
+  .gauge-target input{background:transparent;border:0;border-bottom:1px dashed var(--hair-hot);color:var(--ice);font-family:'IBM Plex Mono',monospace;font-size:13px;width:72px;text-align:right}
+  .gauge-target input:focus{outline:none;border-bottom-color:var(--cyan)}
+  .gauge{position:relative;height:34px;background:var(--panel);border:1px solid var(--hair-hot);overflow:hidden}
+  .gauge-fill{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#1B4FA8,var(--blue) 62%,var(--cyan));box-shadow:0 0 26px rgba(47,127,240,.62);transition:width 900ms cubic-bezier(.16,.84,.34,1)}
+  .gauge-segs{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 calc(2.5% - 2px),var(--void) calc(2.5% - 2px) 2.5%)}
+  .gauge-edge{position:absolute;top:0;bottom:0;width:2px;left:0;background:var(--cyan);box-shadow:0 0 16px 2px rgba(79,220,247,.9);transition:left 900ms cubic-bezier(.16,.84,.34,1)}
+  .gauge-foot{display:flex;justify-content:space-between;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  .gauge-foot b{color:var(--cyan);font-weight:500}
 
-  .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
-  .reveal.in{ opacity:1; transform:translateY(0); }
+  .summary{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--hair)}
+  .summary.three{grid-template-columns:repeat(3,1fr)}
+  .cell{padding:16px 0 18px;border-right:1px solid var(--hair);padding-left:10px}
+  .cell:first-child{padding-left:0}
+  .cell:last-child{border-right:0}
+  .cell .eyebrow{display:block;margin-bottom:6px;font-size:9px;letter-spacing:.14em}
+  .amount{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:23px;font-variant-numeric:tabular-nums;line-height:1}
+  .amount.out{color:var(--dimmer)}
+  .amount.net{color:var(--cyan)}
+  .amount.warn{color:var(--warn)}
 
-  /* Trust marquee */
-  .trust-bar{ background:var(--sage-bg); padding:24px 0; overflow:hidden; position:relative; }
-  .trust-track{ display:flex; width:max-content; animation:scrollTrust 28s linear infinite; }
-  .trust-track:hover{ animation-play-state:paused; }
-  @keyframes scrollTrust{ 0%{ transform:translateX(0);} 100%{ transform:translateX(-50%);} }
-  .trust-item{ display:flex; align-items:center; gap:12px; padding:0 40px; white-space:nowrap; }
-  .trust-item svg{ width:24px; height:24px; color:var(--white); flex-shrink:0; }
-  .trust-item span{ font-size:14.5px; font-weight:600; color:var(--white); }
-  .trust-sep{ width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.5); margin:0 4px; align-self:center; }
+  .strip{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--hair);gap:12px}
+  .strip .val{font-family:'IBM Plex Mono',monospace;font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .strip .val.over{color:var(--warn)}
+  .strip .val.good{color:var(--green)}
+  .strip .val.amber{color:var(--amber)}
 
-  .section-head{ max-width:600px; margin-bottom:44px; }
-  .section-head.centered{ margin-left:auto; margin-right:auto; text-align:center; }
-  .section-head .eyebrow{ margin-bottom:16px; }
-  .section-head.centered .eyebrow{ justify-content:center; }
-  .section-head h2{ font-size:clamp(30px,4vw,44px); }
-  .section-head p{ color:#5B655F; font-size:16.5px; margin-top:18px; }
+  .alerts{margin-top:20px;background:var(--panel-2);border:1px solid var(--hair);border-left:2px solid var(--amber);padding:16px 15px}
+  .alerts .eyebrow{display:block;margin-bottom:10px;color:var(--amber)}
+  .alert{font-size:13.5px;padding:8px 0;border-bottom:1px solid rgba(96,164,236,.1);line-height:1.5}
+  .alert:last-child{border-bottom:0}
 
-  /* Services - flexible wrap so odd counts stay centered */
-  .services-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:26px; }
-  .service-card{
-    background:var(--cream); border-radius:var(--radius-m); overflow:hidden;
-    transition:transform .55s var(--ease-soft), box-shadow .55s var(--ease-soft);
-    border:1px solid rgba(26,62,58,.08);
-    flex:1 1 300px; max-width:340px;
-  }
-  .service-card:hover{ transform:translateY(-8px); box-shadow:0 30px 50px -25px rgba(14,33,30,.28); }
-  .service-card-image{ position:relative; height:150px; overflow:hidden; }
-  .service-card-image img{
-    width:100%; height:100%; object-fit:cover;
-    transition:transform .8s var(--ease-soft);
-  }
-  .service-card:hover .service-card-image img{ transform:scale(1.08); }
-  .service-card-image::after{
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(26,62,58,0) 40%, rgba(26,62,58,.55) 100%);
-  }
-  .service-card-body{ padding:24px 26px 30px; }
-  .service-card .icon-wrap{
-    width:50px; height:50px; border-radius:14px; background:var(--white);
-    display:flex; align-items:center; justify-content:center; margin-top:-45px; margin-bottom:18px;
-    position:relative; z-index:1; box-shadow:0 10px 20px -8px rgba(14,33,30,.3);
-  }
-  .service-card .icon-wrap svg{ width:26px; height:26px; color:var(--teal); }
-  .service-card h3{ font-size:21px; margin-bottom:12px; }
-  .service-card p{ color:#5B655F; font-size:14.5px; margin-bottom:20px; }
-  .service-card .learn{ font-size:13.5px; font-weight:600; color:var(--teal); display:inline-flex; align-items:center; gap:6px; }
-  .service-card .learn svg{ width:14px; height:14px; transition:transform .3s var(--ease); }
-  .service-card:hover .learn svg{ transform:translateX(4px); }
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0 4px}
+  .actions.one{grid-template-columns:1fr}
+  .btn{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:14px 8px;cursor:pointer;background:var(--panel-2);color:var(--ice);border:1px solid var(--hair-hot)}
+  .btn:hover{background:var(--panel-3)}
+  .btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .btn.rev.on{background:#1D6B4F;border-color:#1D6B4F}
 
-  /* Property types strip - compact, not a full section */
-  .property-strip{ padding:6px 0 20px; }
-  .property-strip .inner{
-    display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 10px;
-    background:transparent; border-radius:100px; padding:18px 30px;
-  }
-  .property-strip .label{ font-size:13px; font-weight:600; color:var(--sage-bg); text-transform:uppercase; letter-spacing:.08em; margin-right:8px; }
-  .property-chip{
-    display:flex; align-items:center; gap:8px;
-    padding:8px 16px; border-radius:100px; background:var(--sand); cursor:default;
-    transition:background .5s var(--ease-soft);
-  }
-  .property-chip:hover{ background:var(--teal); }
-  .property-chip svg{ width:18px; height:18px; color:var(--teal); flex-shrink:0; transition:color .5s var(--ease-soft); }
-  .property-chip:hover svg{ color:var(--white); }
-  .property-chip span.chip-label{ font-size:13.5px; font-weight:600; color:var(--teal); white-space:nowrap; transition:color .5s var(--ease-soft); }
-  .property-chip:hover span.chip-label{ color:var(--white); }
-  .property-chip .chip-more{
-    max-width:0; opacity:0; overflow:hidden; white-space:nowrap; font-size:12.5px; font-weight:500; color:rgba(255,255,255,.9);
-    transition:max-width .6s var(--ease-soft), opacity .5s var(--ease-soft) .05s;
-  }
-  .property-chip:hover .chip-more{ max-width:220px; opacity:1; }
-  .property-chip .chip-more span{ padding-left:10px; display:inline-block; }
-  @media(max-width:640px){ .property-strip .inner{ border-radius:24px; } .property-strip .label{ width:100%; text-align:center; margin:0 0 4px; } }
+  .form{display:none;margin-top:13px;background:var(--panel-2);border:1px solid var(--hair);padding:17px 15px 19px}
+  .form.open{display:block}
+  .form.editing{border-color:var(--cyan)}
+  .form .eyebrow{display:block;margin-bottom:13px}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+  .field input,.field select,.field textarea{width:100%;background:var(--void);border:1px solid var(--hair);color:var(--ice);font-family:'Barlow',sans-serif;font-size:16px;padding:10px}
+  .field input[type=number]{font-family:'IBM Plex Mono',monospace}
+  .field textarea{resize:vertical;min-height:54px;font-size:15px}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--cyan)}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .check{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .check input{width:18px;height:18px;accent-color:var(--blue)}
+  .check label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .submit{width:100%;margin-top:4px;padding:13px;cursor:pointer;background:var(--blue);border:0;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
+  .submit.rev{background:#1D6B4F}
+  .cancel{display:none;width:100%;margin-top:8px;padding:11px;cursor:pointer;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+  .cancel.on{display:block}
 
-  /* Plans / subscriptions */
-  .plans-section{ background:var(--sand); }
-  .plans-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
-  @media(max-width:960px){ .plans-grid{ grid-template-columns:repeat(2,1fr); } }
-  @media(max-width:560px){ .plans-grid{ grid-template-columns:1fr; } }
-  .plan-card{
-    background:var(--white); border-radius:var(--radius-m); padding:26px 22px; position:relative;
-    border:1.5px solid transparent; transition:transform .55s var(--ease-soft), border-color .5s var(--ease-soft), box-shadow .55s var(--ease-soft);
-    display:flex; flex-direction:column; height:100%;
+  .feecalc{
+    font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;
+    color:var(--dim);background:var(--void);border:1px solid var(--hair);
+    padding:9px 10px;margin-bottom:12px;line-height:1.5;
   }
-  .plan-card:hover{ transform:translateY(-6px); box-shadow:0 26px 46px -26px rgba(14,33,30,.24); }
-  .plan-card.popular{ border-color:var(--teal); }
-  .plan-badge{
-    position:absolute; top:-13px; left:50%; transform:translateX(-50%); background:var(--teal); color:var(--white);
-    font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; padding:6px 14px; border-radius:100px;
-  }
-  .plan-card h3{ font-size:19px; margin-bottom:8px; }
-  .plan-card .freq{ font-size:13px; color:#6B756F; margin-bottom:18px; }
-  .plan-save{
-    display:inline-block; background:var(--sand); color:var(--teal); font-size:12.5px; font-weight:700;
-    padding:5px 12px; border-radius:100px; margin-bottom:18px;
-  }
-  .plan-card.popular .plan-save{ background:rgba(26,62,58,.08); }
-  .plan-card ul{ list-style:none; margin-bottom:24px; }
-  .plan-card ul li{ display:flex; align-items:center; gap:9px; font-size:13.5px; color:#4B5652; margin-bottom:10px; }
-  .plan-card ul li svg{ width:15px; height:15px; color:var(--sage-bg); flex-shrink:0; }
-  .week-dots{ display:flex; gap:6px; margin:14px 0 6px; }
-  .week-dots .wd{
-    width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:10px; font-weight:700; color:var(--sage-bg); border:1.5px solid rgba(163,171,160,.4);
-    transition:background .4s var(--ease-soft), color .4s var(--ease-soft), border-color .4s var(--ease-soft);
-  }
-  .week-dots .wd.on{ background:var(--teal); color:var(--white); border-color:var(--teal); }
-  .plan-card.popular .week-dots .wd.on{ background:var(--teal); }
-  .freq-note{ font-size:11.5px; color:#8B948E; margin:0 0 14px; font-style:italic; min-height:16px; }
-  .plan-card ul{ flex:0 0 auto; }
-  .plan-card > a.btn{ margin-top:auto; }
+  .feecalc.hot{color:var(--amber);border-color:rgba(232,165,75,.4)}
+  .feecalc b{color:var(--ice);font-weight:500}
 
-  /* Wipe reveal signature section */
-  .wipe-section{ background:var(--teal-dark); color:var(--white); overflow:hidden; }
-  .wipe-grid{ display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:46px; }
-  @media(max-width:900px){ .wipe-grid{ grid-template-columns:1fr; } }
-  .wipe-section h2{ color:var(--white); font-size:clamp(30px,4.4vw,46px); margin-bottom:22px; }
-  .wipe-section p{ color:rgba(255,255,255,.68); font-size:16.5px; max-width:440px; }
-  .wipe-visual{ position:relative; border-radius:var(--radius-l); overflow:hidden; aspect-ratio:4/3.4; box-shadow:0 40px 90px -30px rgba(0,0,0,.5); }
-  .wipe-visual img{ width:100%; height:100%; object-fit:cover; }
-  .wipe-clean-layer{
-    position:absolute; inset:0; background:linear-gradient(120deg, rgba(163,171,160,.25), rgba(26,62,58,.05));
-    clip-path:polygon(0 0, 0 0, 0 100%, 0 100%); transition:clip-path 1.4s var(--ease);
-  }
-  .wipe-visual.wiped .wipe-clean-layer{ clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-  .wipe-label{
-    position:absolute; bottom:26px; left:26px; background:rgba(255,255,255,.92); color:var(--teal);
-    padding:10px 18px; border-radius:100px; font-size:13px; font-weight:600;
-    opacity:0; transform:translateY(10px); transition:opacity .6s var(--ease) .6s, transform .6s var(--ease) .6s;
-  }
-  .wipe-visual.wiped .wipe-label{ opacity:1; transform:translateY(0); }
+  .section{padding:22px 0 4px}
+  .section > .eyebrow{display:block;margin-bottom:11px}
 
-  /* How it works - map route style */
-  .route-wrap{ position:relative; margin-bottom:-6px; }
-  .route-svg{ width:100%; height:auto; display:block; }
-  .route-svg .route-path{
-    fill:none; stroke:var(--sage-light); stroke-width:3; stroke-dasharray:2 10; stroke-linecap:round;
-    stroke-dashoffset:600; transition:stroke-dashoffset 1.6s var(--ease);
-  }
-  .route-wrap.in .route-svg .route-path{ stroke-dashoffset:0; }
-  .route-svg circle.marker-bg{ fill:var(--cream); }
-  .route-svg circle.marker{ fill:var(--teal); }
-  .route-svg text{ font-family:'Fraunces',serif; font-weight:600; fill:var(--white); font-size:26px; }
-  @media(max-width:900px){ .route-wrap{ display:none; } }
-  .steps{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
-  @media(max-width:900px){ .steps{ grid-template-columns:1fr 1fr; } }
-  @media(max-width:560px){ .steps{ grid-template-columns:1fr; } }
-  .step{ text-align:center; }
-  @media(max-width:900px){ .step{ text-align:left; } }
-  .step .step-num-mobile{ display:none; font-family:'Fraunces',serif; font-weight:600; font-size:34px; color:var(--sage-light); margin-bottom:10px; }
-  @media(max-width:900px){ .step .step-num-mobile{ display:block; } }
-  .step h3{ font-size:18px; margin-bottom:10px; }
-  .step p{ font-size:14px; color:#5B655F; }
+  .bk{background:var(--panel-2);border:1px solid var(--hair);border-left:3px solid var(--dim);padding:14px 14px 12px;margin-bottom:10px}
+  .bk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .bk-name{font-size:16px;font-weight:600;line-height:1.2}
+  .bk-veh{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+  .bk-tot{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:24px;font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
+  .bk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;padding-top:11px;border-top:1px solid rgba(96,164,236,.1)}
+  .bk-k{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dimmer)}
+  .bk-v{font-family:'IBM Plex Mono',monospace;font-size:13px;font-variant-numeric:tabular-nums;margin-top:2px}
+  .bk-v.due{color:var(--amber)}
+  .bk-v.prof{color:var(--green)}
+  .bk-v.miss{color:var(--amber);font-size:10px}
+  .bk-note{font-size:13px;color:var(--dim);margin-top:10px;line-height:1.5}
+  .bk-acts{display:flex;gap:8px;margin-top:11px}
+  .mini{background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:6px 11px;cursor:pointer}
+  .mini:hover{color:var(--ice);border-color:var(--hair-hot)}
+  .mini.danger:hover{color:var(--warn);border-color:var(--warn)}
 
-  .area-section{ background:var(--sand); }
-  .area-grid{ display:grid; grid-template-columns:1fr 1fr; gap:46px; align-items:center; }
-  @media(max-width:900px){ .area-grid{ grid-template-columns:1fr; } }
-  .area-card{ background:var(--cream); border-radius:var(--radius-l); padding:34px; position:relative; overflow:hidden; }
-  .pin-badge{
-    display:inline-flex; align-items:center; gap:8px; background:var(--teal); color:var(--white);
-    padding:8px 16px; border-radius:100px; font-size:12.5px; font-weight:600; margin-bottom:20px;
-  }
-  .pin-badge svg{ width:14px; height:14px; }
-  .area-list{ list-style:none; margin-top:26px; display:flex; flex-direction:column; gap:14px; }
-  .area-list li{ display:flex; align-items:center; gap:12px; font-size:14.5px; color:var(--teal); font-weight:500; }
-  .area-list li svg{ width:18px; height:18px; color:var(--sage); flex-shrink:0; }
-  .area-list li.muted{ color:#8B948E; font-weight:400; }
+  /* calendar */
+  .cal-nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0 14px;border-bottom:1px solid var(--hair)}
+  .cal-title{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:22px;letter-spacing:.06em;text-transform:uppercase}
+  .cal-arrow{background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:14px;padding:6px 14px;cursor:pointer}
+  .cal-arrow:hover{color:var(--cyan);border-color:var(--hair-hot)}
+  .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-top:14px}
+  .cal-dow span{font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dimmer);text-align:center;padding-bottom:5px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cal-day{background:var(--panel);border:1px solid var(--hair);min-height:56px;padding:3px;cursor:pointer;overflow:hidden;transition:background 120ms}
+  .cal-day:hover{background:var(--panel-2)}
+  .cal-day.pad{background:transparent;border-color:transparent;cursor:default}
+  .cal-day.today{border-color:var(--cyan);box-shadow:inset 0 0 12px rgba(79,220,247,.16)}
+  .cal-day.sel{background:var(--panel-3);border-color:var(--cyan)}
+  .cal-num{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--dim);display:block;margin-bottom:2px}
+  .cal-day.today .cal-num{color:var(--cyan)}
+  .chip{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:.04em;padding:1.5px 2px;margin-bottom:1.5px;border-radius:1px;color:#04070E;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 7px currentColor;filter:saturate(1.15)}
+  .chip-more{font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--dim)}
+  .key{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .key-item{display:flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+  .key-dot{width:9px;height:9px;border-radius:1px;flex-shrink:0;box-shadow:0 0 8px currentColor}
+  .avail{display:grid;grid-template-columns:1fr;gap:6px;margin-top:12px}
+  .avail-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--panel-2);border:1px solid var(--hair);border-left:3px solid var(--dim)}
+  .avail-name{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+  .avail-st{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase}
+  .avail-st.free{color:var(--green)}
+  .avail-st.busy{color:var(--amber)}
 
-  .checker{ margin-top:32px; max-width:420px; }
-  .checker-input-row{ display:flex; gap:10px; position:relative; }
-  .checker input{
-    flex:1; padding:15px 20px; border-radius:100px; border:1.5px solid rgba(26,62,58,.16);
-    font-family:'Poppins',sans-serif; font-size:14.5px; color:var(--teal); background:var(--white);
-    outline:none; transition:border-color .4s var(--ease-soft), box-shadow .4s var(--ease-soft);
-  }
-  .checker input:focus{ border-color:var(--teal); box-shadow:0 0 0 4px rgba(26,62,58,.08); }
-  .checker input::placeholder{ color:#A3ABA0; }
-  .checker-suggestions{
-    position:absolute; top:calc(100% + 8px); left:0; right:0; background:var(--white);
-    border-radius:16px; box-shadow:0 20px 40px -18px rgba(14,33,30,.28); overflow:hidden;
-    max-height:0; opacity:0; transition:max-height .4s var(--ease-soft), opacity .3s var(--ease-soft);
-    z-index:20; pointer-events:none;
-  }
-  .checker-suggestions.open{ max-height:230px; opacity:1; overflow-y:auto; pointer-events:auto; }
-  .checker-suggestions button{
-    display:block; width:100%; text-align:left; padding:12px 20px; background:none; border:none;
-    font-family:'Poppins',sans-serif; font-size:14px; color:var(--teal); cursor:pointer;
-    transition:background .25s var(--ease-soft);
-  }
-  .checker-suggestions button:hover, .checker-suggestions button.active{ background:var(--sand); }
-  .checker-result{
-    margin-top:16px; max-height:0; opacity:0; overflow:hidden;
-    transition:max-height .55s var(--ease-soft), opacity .45s var(--ease-soft);
-  }
-  .checker-result.show{ max-height:200px; opacity:1; }
-  .checker-result-inner{
-    background:var(--sand); border-radius:16px; padding:18px 20px; display:flex; align-items:flex-start; gap:12px;
-  }
-  .checker-result-inner svg{ width:22px; height:22px; color:var(--teal); flex-shrink:0; margin-top:1px; }
-  .checker-result-text{ font-size:14px; color:var(--teal); font-weight:500; line-height:1.5; }
-  .checker-result-text strong{ font-family:'Fraunces',serif; font-weight:600; }
-  .checker-cta{ margin-top:12px; }
+  .row{display:flex;align-items:baseline;gap:10px;padding:12px 0;border-bottom:1px solid var(--hair)}
+  .row:last-child{border-bottom:0}
+  .row-main{flex:1;min-width:0}
+  .row-name{font-size:15px;font-weight:500;word-break:break-word}
+  .row-meta{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:3px}
+  .row-amt{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .row-amt.out{color:var(--dimmer)}
+  .edit{background:none;border:0;color:var(--dimmer);cursor:pointer;font-size:14px;padding:0 0 0 10px}
+  .edit:hover{color:var(--cyan)}
+  .del{background:none;border:0;color:var(--dimmer);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:15px;padding:0 0 0 8px}
+  .del:hover{color:var(--warn)}
+  .empty{font-size:13.5px;color:var(--dimmer);padding:11px 0}
 
-  .offer-section{ background:var(--teal); color:var(--white); text-align:center; position:relative; overflow:hidden; padding:64px 0; }
-  .offer-bg-photo{
-    position:absolute; inset:0; z-index:0; overflow:hidden;
-  }
-  .offer-bg-photo img{
-    width:100%; height:100%; object-fit:cover;
-    animation:kenBurns 36s ease-in-out infinite;
-    will-change:transform;
-    transform-origin:center center;
-  }
-  @keyframes kenBurns{
-    0%{ transform:scale(1) translate(0,0); }
-    50%{ transform:scale(1.1) translate(-1.2%, -1.2%); }
-    100%{ transform:scale(1) translate(0,0); }
-  }
-  .offer-bg-tint{ position:absolute; inset:0; z-index:1; background:rgba(14,33,30,.82); }
-  .droplet-bg{ position:absolute; opacity:.05; pointer-events:none; z-index:1; }
-  .offer-section .container{ position:relative; z-index:2; }
-  .offer-badge{ display:inline-block; background:rgba(255,255,255,.14); color:var(--white); padding:7px 18px; border-radius:100px; font-size:12px; font-weight:600; letter-spacing:.04em; }
-  .offer-section h2{ color:var(--white); font-size:clamp(26px,3.6vw,38px); max-width:640px; margin:0 auto 12px; }
-  .offer-section p{ color:rgba(255,255,255,.72); font-size:15px; max-width:460px; margin:0 auto 26px; }
-  .offer-price{ font-family:'Fraunces',serif; font-size:clamp(42px,6vw,64px); font-weight:600; line-height:1; margin:14px 0 4px; }
-  .offer-price sup{ font-size:.32em; font-weight:500; }
-  .offer-note{ font-size:12.5px; color:rgba(255,255,255,.55); margin-bottom:20px; }
+  .toggle-log{width:100%;margin-top:18px;padding:12px;cursor:pointer;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase}
+  .logwrap{display:none}
+  .logwrap.open{display:block}
 
-  .faq-list{ max-width:760px; margin:0 auto; }
-  .faq-item{ border-bottom:1px solid rgba(26,62,58,.14); }
-  .faq-q{
-    width:100%; text-align:left; background:none; border:none; padding:26px 4px;
-    display:flex; align-items:center; justify-content:space-between; cursor:pointer;
-    font-family:'Poppins',sans-serif; font-size:17px; font-weight:500; color:var(--teal);
-  }
-  .faq-q .plus{
-    width:26px; height:26px; border-radius:50%; border:1.5px solid var(--teal); flex-shrink:0;
-    display:flex; align-items:center; justify-content:center; position:relative; transition:transform .4s var(--ease), background .3s;
-  }
-  .faq-q .plus::before, .faq-q .plus::after{ content:''; position:absolute; background:var(--teal); transition:transform .3s var(--ease), opacity .3s; }
-  .faq-q .plus::before{ width:11px; height:1.5px; }
-  .faq-q .plus::after{ width:1.5px; height:11px; }
-  .faq-item.open .faq-q .plus{ background:var(--teal); transform:rotate(180deg); }
-  .faq-item.open .faq-q .plus::before, .faq-item.open .faq-q .plus::after{ background:var(--white); }
-  .faq-item.open .faq-q .plus::after{ opacity:0; }
-  .faq-a{ max-height:0; overflow:hidden; transition:max-height .5s var(--ease); }
-  .faq-a p{ padding:0 4px 26px; color:#5B655F; font-size:15px; max-width:600px; }
+  .note{margin-top:22px;font-size:12.5px;color:var(--dim);line-height:1.6;border-top:1px solid var(--hair);padding-top:14px}
+  .note b{color:var(--ice);font-weight:500}
 
-  footer{ background:var(--teal-deep); color:rgba(255,255,255,.6); padding:70px 0 34px; }
-  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:40px; margin-bottom:50px; }
-  .footer-brand{ display:flex; align-items:center; gap:12px; margin-bottom:14px; }
-  .footer-brand img{ height:30px; }
-  .footer-brand span{ font-family:'Fraunces',serif; font-size:18px; color:var(--white); font-weight:600; }
-  .footer-tag{ font-size:14px; color:var(--sage-light); max-width:280px; }
-  .footer-cols{ display:flex; gap:80px; flex-wrap:wrap; }
-  .footer-col h4{ font-size:12.5px; text-transform:uppercase; letter-spacing:.1em; color:rgba(255,255,255,.4); margin-bottom:18px; font-weight:600; }
-  .footer-col a{ display:block; font-size:14.5px; margin-bottom:12px; color:rgba(255,255,255,.75); transition:color .3s; }
-  .footer-col a:hover{ color:var(--white); }
-  .footer-bottom{ border-top:1px solid rgba(255,255,255,.1); padding-top:26px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13px; color:rgba(255,255,255,.4); }
-
-  .wa-float{
-    position:fixed; bottom:26px; right:26px; z-index:90; background:var(--teal); color:var(--white);
-    width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    box-shadow:0 16px 36px -12px rgba(14,33,30,.55); transition:transform .35s var(--ease);
+  @media (max-width:430px){
+    body{padding:14px 11px 96px}
+    .gauge-figure{font-size:40px}
+    .gauge-target{font-size:8.5px;letter-spacing:.08em}
+    .gauge-target b{font-size:12px}
+    .gauge-target input{width:64px;font-size:12px}
+    .gauge-foot{font-size:9px;letter-spacing:.05em}
+    /* four totals stack 2x2 instead of squeezing into one row */
+    .summary{grid-template-columns:1fr 1fr}
+    .summary .cell{padding:14px 0 15px;padding-left:10px;border-bottom:1px solid var(--hair)}
+    .summary .cell:nth-child(odd){padding-left:0}
+    .summary .cell:nth-child(even){border-right:0}
+    .summary .cell:nth-last-child(-n+2){border-bottom:0}
+    .summary.three{grid-template-columns:repeat(3,1fr)}
+    .summary.three .cell{border-bottom:0;padding-left:8px}
+    .amount{font-size:22px}
+    .strip{padding:11px 0}
+    .strip .eyebrow{font-size:9px;letter-spacing:.14em}
+    .strip .val{font-size:13px}
+    /* bigger tap targets */
+    .btn{padding:16px 6px;font-size:10px;letter-spacing:.1em}
+    .submit{padding:16px}
+    .mini{padding:9px 13px;font-size:9px}
+    .tab{padding:13px 1px 22px;font-size:8px;letter-spacing:.04em}
+    .field input,.field select,.field textarea{padding:12px 10px}
+    .field-row{gap:8px}
+    .edit,.del{padding-left:14px;font-size:16px}
+    .cal-day{min-height:52px;padding:2px}
+    .cal-num{font-size:8.5px}
+    .chip{font-size:6.5px}
+    .bk{padding:13px 12px 11px}
+    .bk-name{font-size:15px}
+    .bk-tot{font-size:22px}
+    .bk-grid{gap:6px}
+    .row-name{font-size:14.5px}
+    .note{font-size:12px}
   }
-  .wa-float:hover{ transform:scale(1.08); }
-  .wa-float svg{ width:26px; height:26px; }
-
-  :focus-visible{ outline:2.5px solid var(--teal); outline-offset:3px; }
-  @media (prefers-reduced-motion: reduce){
-    *:not(.trust-track){ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  @media (max-width:360px){
+    .gauge-figure{font-size:34px}
+    .bk-grid{grid-template-columns:1fr 1fr}
+    .tab{font-size:7.5px}
   }
+  @media (prefers-reduced-motion:reduce){.gauge-fill,.gauge-edge{transition:none}}
+
+  /* ---------- login gate ---------- */
+  #loginGate{position:fixed;inset:0;z-index:500;background:var(--void);
+    display:flex;align-items:center;justify-content:center;padding:20px}
+  #loginGate::before{content:'';position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(ellipse 130% 55% at 50% -8%, rgba(47,127,240,.16), transparent 68%)}
+  .login-card{position:relative;z-index:1;width:100%;max-width:340px;
+    background:var(--panel);border:1px solid var(--hair-hot);padding:30px 26px}
+  .login-word{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:22px;
+    letter-spacing:.36em;text-transform:uppercase;text-shadow:0 0 22px rgba(79,220,247,.4);
+    margin-bottom:4px;text-align:center}
+  .login-sub{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:26px}
+  .login-field{margin-bottom:14px}
+  .login-field label{display:block;font-family:'IBM Plex Mono',monospace;font-size:9px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .login-field input{width:100%;background:var(--panel-2);border:1px solid var(--hair-hot);
+    color:var(--ice);padding:11px 12px;font-family:'Barlow',sans-serif;font-size:15px}
+  .login-field input:focus{outline:none;border-color:var(--cyan)}
+  .login-btn{width:100%;margin-top:8px;background:var(--blue);border:0;color:#fff;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    padding:13px;cursor:pointer;transition:background 200ms}
+  .login-btn:hover{background:#1B4FA8}
+  .login-btn:disabled{opacity:.5;cursor:default}
+  .login-err{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--warn);
+    text-align:center;margin-top:14px;min-height:14px}
+  body.authed #loginGate{display:none}
+  body:not(.authed) .masthead,body:not(.authed) .pane,body:not(.authed) .tabs{display:none!important}
 </style>
 </head>
 <body>
 
-<header id="siteHeader">
-  <div class="container">
-    <nav>
-      <a href="#top" class="brand">
-        <img src="assets/image-1.png" alt="PurelyCleaningServices logo">
-        <span>PurelyCleaningServices</span>
-      </a>
-      <div class="nav-links">
-        <a href="#services">Services</a>
-        <a href="#plans">Plans</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#area">Service area</a>
-        <a href="#faq">FAQ</a>
-      </div>
-      <div class="nav-cta">
-        <a href="#offer" class="btn btn-outline">Join the waitlist</a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
-      </div>
-    </nav>
+<div id="loginGate">
+  <div class="login-card">
+    <div class="login-word">Royale</div>
+    <div class="login-sub">Ops &amp; Finance — Private</div>
+    <div class="login-field">
+      <label>Email</label>
+      <input type="email" id="loginEmail" autocomplete="username">
+    </div>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn">Sign In</button>
+    <div class="login-err" id="loginErr"></div>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wordmark">Royale</div>
+  <div style="text-align:right">
+    <div class="eyebrow" id="cycleLabel">Loading&hellip;</div>
+    <div class="save-pill" id="saveState"></div>
+    <button class="refresh" id="btnRefresh">&#8635; Refresh</button>
+    <button class="refresh" id="btnSignOut" style="margin-left:6px">Sign Out</button>
   </div>
 </header>
 
-<div class="mobile-menu" id="mobileMenu">
-  <button class="mobile-close" id="mobileClose" aria-label="Close menu">&times;</button>
-  <a href="#services">Services</a>
-  <a href="#plans">Plans</a>
-  <a href="#how-it-works">How it works</a>
-  <a href="#area">Service area</a>
-  <a href="#faq">FAQ</a>
-  <a href="#offer" class="btn btn-light">Join the waitlist</a>
+<!-- ===== DASHBOARD ===== -->
+<div class="pane on" id="pane-dash">
+  <section class="gauge-block">
+    <div class="gauge-head">
+      <div>
+        <div class="gauge-label">Net &mdash; after payouts &amp; costs</div>
+        <div class="gauge-figure"><span class="cur">AED</span><span id="netFig">0</span></div>
+      </div>
+      <div class="gauge-target">Fixed base<b>AED <input type="number" id="targetInput" value="34000"></b></div>
+    </div>
+    <div class="gauge"><div class="gauge-fill" id="fill"></div><div class="gauge-edge" id="edge"></div><div class="gauge-segs"></div></div>
+    <div class="gauge-foot"><div><b id="pctTxt">0%</b> covered</div><div id="remainTxt">&mdash;</div></div>
+  </section>
+
+  <section class="summary">
+    <div class="cell"><span class="eyebrow">Revenue</span><div class="amount" id="revTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Payouts</span><div class="amount out" id="payTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Costs</span><div class="amount out" id="cosTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Net</span><div class="amount net" id="netTot">0</div></div>
+  </section>
+
+  <div class="strip"><span class="eyebrow">Cash collected</span><span class="val good" id="collVal">&mdash;</span></div>
+  <div class="strip"><span class="eyebrow">Still owed to you</span><span class="val amber" id="owedVal">&mdash;</span></div>
+  <div class="strip"><span class="eyebrow">Distributable after fixed base</span><span class="val" id="distVal">&mdash;</span></div>
+  <div class="strip"><span class="eyebrow">Your share at 50%</span><span class="val" id="shareVal">&mdash;</span></div>
+
+  <div class="actions">
+    <button class="btn rev" id="btnRev">+ Revenue</button>
+    <button class="btn" id="btnCost">+ Expense</button>
+  </div>
+
+  <div class="form" id="formRev">
+    <span class="eyebrow" id="revFormTitle">Other revenue</span>
+    <div class="field-row">
+      <div class="field"><label>Charged (AED)</label><input type="number" id="rAmt" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Received in bank</label><input type="number" id="rRecv" inputmode="decimal" placeholder="Same if no fees"></div>
+    </div>
+    <div class="feecalc" id="rFeeCalc">Fees will be worked out from the difference and logged as a cost.</div>
+    <div class="field"><label>Date</label><input type="date" id="rDate"></div>
+    <div class="field"><label>Type</label><select id="rType">
+      <option>Chauffeur — day</option><option>Chauffeur — hourly</option><option>Airport transfer</option>
+      <option>Self drive</option><option>Booking extension</option><option>Deposit</option><option>Other</option>
+    </select></div>
+    <div class="field"><label>Vehicle</label><select id="rCar">
+      <option>Not vehicle-related</option><option>Brabus G-Wagon</option><option>Cadillac Escalade</option>
+      <option>Ben's V-Class</option><option>George's V-Class</option>
+    </select></div>
+    <div class="field"><label>Details</label><textarea id="rNote" placeholder="Client, what it was for"></textarea></div>
+    <button class="submit rev" id="saveRev">Save revenue</button>
+    <button class="cancel" id="cancel-saveRev">Cancel edit</button>
+  </div>
+
+  <div class="form" id="formCost">
+    <span class="eyebrow" id="costFormTitle">New business cost</span>
+    <div class="field-row">
+      <div class="field"><label>Amount (AED)</label><input type="number" id="cAmt" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Date</label><input type="date" id="cDate"></div>
+    </div>
+    <div class="field"><label>Type</label><select id="cType">
+      <option>Car payment</option><option>Driver salary</option><option>Driver day fee</option>
+      <option>Fuel</option><option>Salik / tolls</option><option>Payment fees</option>
+      <option>Marketing / ads</option><option>Content / shoot</option><option>Maintenance</option>
+      <option>Cleaning</option><option>Deposit fee</option><option>Other</option>
+    </select></div>
+    <div class="field"><label>Details</label><textarea id="cNote" placeholder="What it covered, who it went to"></textarea></div>
+    <button class="submit" id="saveCost">Save cost</button>
+    <button class="cancel" id="cancel-saveCost">Cancel edit</button>
+  </div>
+
+  <section class="section"><span class="eyebrow">Recent revenue</span><div id="recentRev"></div></section>
+  <section class="section"><span class="eyebrow">Recent expenses</span><div id="recentExp"></div></section>
+  <section class="section"><span class="eyebrow">Out right now</span><div id="outToday"></div></section>
+
+  <div class="alerts"><span class="eyebrow">Needs attention</span><div id="alertList"></div></div>
+
+  <p class="note">
+    Cycle runs <b>22nd to 22nd</b>; a booking counts in the cycle it <b>starts</b>.
+    Revenue here combines bookings with anything logged manually &mdash; don't log a booking twice.
+  </p>
 </div>
 
-<main id="top">
+<!-- ===== BOOKINGS ===== -->
+<div class="pane" id="pane-book">
+  <div class="actions one"><button class="btn" id="btnBk">+ New booking</button></div>
 
-  <section class="hero">
-    <div class="hero-bg-photo">
-      <video autoplay muted loop playsinline>
-        <source src="assets/video-1.webm" type="video/webm">
-        <source src="assets/video-2.mp4" type="video/mp4">
-      </video>
+  <div class="form" id="formBk">
+    <span class="eyebrow" id="bkFormTitle">New booking</span>
+
+    <div class="field"><label>Customer</label><input type="text" id="bCust" placeholder="Leave blank to name it automatically"></div>
+
+    <div class="field-row">
+      <div class="field"><label>Vehicle</label><select id="bVeh">
+        <option>Brabus G-Wagon</option><option>Cadillac Escalade</option>
+        <option>Ben's V-Class</option><option>George's V-Class</option>
+      </select></div>
+      <div class="field"><label>Car is</label><select id="bSrc">
+        <option value="own">Ours</option><option value="external">Borrowed</option>
+      </select></div>
     </div>
-    <div class="hero-bg-color-tint"></div>
-    <div class="hero-bg-fade"></div>
-    <div class="hero-content reveal in">
-      <h1>A cleaner home,<br><span class="italic-accent">without the chase.</span></h1>
-      <p class="lead" style="margin-left:auto; margin-right:auto;">Trusted, vetted home cleaning across Dubai. Same cleaner every visit, eco-friendly products, no shortcuts, ever.</p>
-      <div class="hero-actions" style="justify-content:center;">
-        <a href="#offer" class="btn btn-primary">Join the waitlist
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-        <a href="#how-it-works" class="btn btn-outline">See how it works</a>
+
+    <div class="field"><label>Booking type</label><select id="bType">
+      <option value="rental">Rental</option><option value="chauffeur">Chauffeur</option>
+    </select></div>
+
+    <div id="chauffRow" style="display:none">
+      <div class="field-row">
+        <div class="field"><label>Service</label><select id="bSvc">
+          <option>One way</option><option>Two way</option><option>5 hours</option>
+          <option>10 hours</option><option>Multiple day</option>
+        </select></div>
+        <div class="field"><label>Pickup time</label><input type="time" id="bStartT"></div>
       </div>
     </div>
-  </section>
 
-  <!-- TRUST MARQUEE -->
-  <div class="trust-bar">
-    <div class="trust-track" id="trustTrack">
-      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span>Vetted &amp; background-checked</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-3z"/></svg><span>Fully insured cleans</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparent pricing</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg><span>Dubai-based &amp; local</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-7a4 4 0 014-4h8a4 4 0 014 4v7"/><path d="M9 21V12h6v9"/></svg><span>Same cleaner every visit</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c-4 3-6 6-6 9a6 6 0 0012 0c0-3-2-6-6-9z"/></svg><span>Eco-friendly products only</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 01-11.7 7.9L4 21l1.6-5.3A8.5 8.5 0 1121 11.5z"/></svg><span>Book instantly on WhatsApp</span></div><div class="trust-sep"></div>
-      <div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span>Vetted &amp; background-checked</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6l7-3z"/></svg><span>Fully insured cleans</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>Transparent pricing</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/></svg><span>Dubai-based &amp; local</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21v-7a4 4 0 014-4h8a4 4 0 014 4v7"/><path d="M9 21V12h6v9"/></svg><span>Same cleaner every visit</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3c-4 3-6 6-6 9a6 6 0 0012 0c0-3-2-6-6-9z"/></svg><span>Eco-friendly products only</span></div><div class="trust-sep"></div>
-<div class="trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.5 8.5 0 01-11.7 7.9L4 21l1.6-5.3A8.5 8.5 0 1121 11.5z"/></svg><span>Book instantly on WhatsApp</span></div><div class="trust-sep"></div>
+    <div class="field-row">
+      <div class="field"><label id="startLbl">Date</label><input type="date" id="bStart"></div>
+      <div class="field" id="endWrap"><label>End date</label><input type="date" id="bEnd"></div>
     </div>
+
+    <div class="field-row">
+      <div class="field"><label>Customer charged</label><input type="number" id="bTotal" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Paid so far</label><input type="number" id="bColl" inputmode="decimal" placeholder="0"></div>
+    </div>
+
+    <div class="field"><label>Received in bank</label><input type="number" id="bRecv" inputmode="decimal" placeholder="Blank if the full amount landed"></div>
+
+    <div class="field" id="borrowRow" style="display:none"><label>We pay the owner</label><input type="number" id="bCost" inputmode="decimal" placeholder="0"></div>
+
+    <div class="feecalc" id="bFeeCalc">Fill in the amounts and the fees and profit work themselves out.</div>
+
+    <button class="submit" id="saveBk">Save booking</button>
+    <button class="cancel" id="cancel-saveBk">Cancel edit</button>
   </div>
 
-  <!-- SERVICES -->
-  <section id="services" style="background:var(--white);">
-    <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">What we do</div>
-        <h2>Every service, done properly.</h2>
-        <p>Five ways to keep your space exactly how you want it. Message us for a tailored quote, every home is different.</p>
-      </div>
-      <div class="services-grid">
-        <div class="service-card reveal">
-          <div class="service-card-image"><img src="assets/image-2.jpg" alt="Regular Cleaning"></div>
-          <div class="service-card-body">
-          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v4H4zM6 8v12h12V8"/><path d="M10 12h4"/></svg></div>
-          <h3>Regular Cleaning</h3>
-          <p>Weekly or bi-weekly maintenance that keeps your home consistently spotless, on a schedule that suits you.</p>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Regular%20Cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-<div class="service-card reveal">
-          <div class="service-card-image"><img src="assets/image-3.jpg" alt="Deep Cleaning"></div>
-          <div class="service-card-body">
-          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 20l7-14 3 6 3-4 3 12H4z"/></svg></div>
-          <h3>Deep Cleaning</h3>
-          <p>A thorough, top-to-bottom reset for the corners regular cleaning doesn't reach. Perfect for a proper refresh.</p>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Deep%20Cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-<div class="service-card reveal">
-          <div class="service-card-image"><img src="assets/image-4.jpg" alt="Holiday Home Turnover"></div>
-          <div class="service-card-body">
-          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h18"/><path d="M12 3v18"/><circle cx="12" cy="12" r="9"/></svg></div>
-          <h3>Holiday Home Turnover</h3>
-          <p>Fast, reliable turnarounds between guests, so every check-in feels like the first.</p>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20Holiday%20Home%20Turnover%20cleaning." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-<div class="service-card reveal">
-          <div class="service-card-image"><img src="assets/image-5.jpg" alt="Move-In / Move-Out"></div>
-          <div class="service-card-body">
-          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l9-7 9 7"/><path d="M5 9v11h14V9"/></svg></div>
-          <h3>Move-In / Move-Out</h3>
-          <p>A spotless handover, every time, whether you're welcoming a new home or leaving one behind.</p>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20a%20Move-In%20/%20Move-Out%20clean." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-<div class="service-card reveal">
-          <div class="service-card-image"><img src="assets/image-6.jpg" alt="Post-Renovation Clean"></div>
-          <div class="service-card-body">
-          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 3l7 7-8.5 8.5a3 3 0 01-4.2 0l-2.8-2.8a3 3 0 010-4.2L14 3z"/><path d="M6 21H3v-3"/></svg></div>
-          <h3>Post-Renovation Clean</h3>
-          <p>Dust, debris, and residue cleared properly after building or renovation work, so your space is truly ready.</p>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20a%20quote%20for%20a%20Post-Renovation%20Clean." target="_blank" rel="noopener" class="learn">Get a quote <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container property-strip">
-      <div class="inner reveal">
-        <span class="label">We clean</span>
-        <div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 20V12h6v8"/></svg><span class="chip-label">Studios</span><span class="chip-more"><span>Compact & efficient</span></span></div>
-<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V6l8-3 8 3v15"/><path d="M9 21v-6h6v6"/><path d="M9 9h.01M15 9h.01M9 13h.01M15 13h.01"/></svg><span class="chip-label">Apartments</span><span class="chip-more"><span>Any size, any floor</span></span></div>
-<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21V10l6-5 6 5v11"/><path d="M9 21v-6h4v6"/><path d="M15 21v-8l6 3v5"/></svg><span class="chip-label">Townhouses</span><span class="chip-more"><span>Multi-level care</span></span></div>
-<div class="property-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l9-8 9 8"/><path d="M5 10v11h14V10"/><path d="M9 21v-6h6v6"/></svg><span class="chip-label">Villas</span><span class="chip-more"><span>Full property service</span></span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PLANS / SUBSCRIPTIONS -->
-  <section id="plans" class="plans-section">
-    <div class="container">
-      <div class="section-head centered reveal">
-        <div class="eyebrow">Recurring plans</div>
-        <h2>Set it, and forget it.</h2>
-        <p>Choose a rhythm that fits your home. The same cleaner, every single time, no re-briefing required.</p>
-      </div>
-      <div class="plans-grid">
-        <div class="plan-card popular reveal">
-          <span class="plan-badge">Most Popular</span>
-          <h3>Weekly</h3>
-          <div class="freq">4 visits / month</div>
-          <div class="week-dots"><span class="wd">M</span>
-<span class="wd">T</span>
-<span class="wd on">W</span>
-<span class="wd">T</span>
-<span class="wd">F</span>
-<span class="wd">S</span>
-<span class="wd">S</span></div>
-          <div class="freq-note">&nbsp;</div>
-          <span class="plan-save">Save up to 20%</span>
-          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Priority booking slots</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Best for busy households</li></ul>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Weekly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-primary btn-sm">Choose this plan</a>
-        </div>
-<div class="plan-card reveal">
-          
-          <h3>Fortnightly</h3>
-          <div class="freq">2 visits / month</div>
-          <div class="week-dots"><span class="wd">M</span>
-<span class="wd">T</span>
-<span class="wd on">W</span>
-<span class="wd">T</span>
-<span class="wd">F</span>
-<span class="wd">S</span>
-<span class="wd">S</span></div>
-          <div class="freq-note">Active weeks only</div>
-          <span class="plan-save">Save up to 12%</span>
-          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Great for steady upkeep</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Flexible day selection</li></ul>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Fortnightly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
-        </div>
-<div class="plan-card reveal">
-          
-          <h3>Twice a Week</h3>
-          <div class="freq">8 visits / month</div>
-          <div class="week-dots"><span class="wd on">M</span>
-<span class="wd">T</span>
-<span class="wd">W</span>
-<span class="wd on">T</span>
-<span class="wd">F</span>
-<span class="wd">S</span>
-<span class="wd">S</span></div>
-          <div class="freq-note">&nbsp;</div>
-          <span class="plan-save">Save up to 25%</span>
-          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Ideal for larger homes</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Maximum consistency</li></ul>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Twice%20a%20Week%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
-        </div>
-<div class="plan-card reveal">
-          
-          <h3>Monthly</h3>
-          <div class="freq">1 visit / month</div>
-          <div class="week-dots"><span class="wd">M</span>
-<span class="wd">T</span>
-<span class="wd on">W</span>
-<span class="wd">T</span>
-<span class="wd">F</span>
-<span class="wd">S</span>
-<span class="wd">S</span></div>
-          <div class="freq-note">One week per month</div>
-          <span class="plan-save">Standard rate</span>
-          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>Same cleaner every visit</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>A lighter-touch refresh</li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>No long-term commitment</li></ul>
-          <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20set%20up%20the%20Monthly%20cleaning%20plan." target="_blank" rel="noopener" class="btn btn-outline btn-sm">Choose this plan</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section id="how-it-works">
-    <div class="container">
-      <div class="section-head reveal">
-        <div class="eyebrow">How it works</div>
-        <h2>Booking takes about a minute.</h2>
-      </div>
-      <div class="route-wrap reveal" id="routeWrap">
-        <svg class="route-svg" viewBox="0 0 1000 110" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <path class="route-path" d="M125,80 C250,80 250,30 375,30 C500,30 500,80 625,80 C750,80 750,30 875,30"/>
-          <g>
-            <circle class="marker-bg" cx="125" cy="80" r="26"/><circle class="marker" cx="125" cy="80" r="24"/><text x="125" y="90" text-anchor="middle">01</text>
-            <circle class="marker-bg" cx="375" cy="30" r="26"/><circle class="marker" cx="375" cy="30" r="24"/><text x="375" y="40" text-anchor="middle">02</text>
-            <circle class="marker-bg" cx="625" cy="80" r="26"/><circle class="marker" cx="625" cy="80" r="24"/><text x="625" y="90" text-anchor="middle">03</text>
-            <circle class="marker-bg" cx="875" cy="30" r="26"/><circle class="marker" cx="875" cy="30" r="24"/><text x="875" y="40" text-anchor="middle">04</text>
-          </g>
-        </svg>
-      </div>
-      <div class="steps">
-        <div class="step reveal">
-          <span class="step-num-mobile">01</span>
-          <h3>Message us</h3>
-          <p>Send your area and what you need on WhatsApp.</p>
-        </div>
-        <div class="step reveal" style="--i:1">
-          <span class="step-num-mobile">02</span>
-          <h3>Get a quote</h3>
-          <p>A clear, upfront price, no hidden fees, ever.</p>
-        </div>
-        <div class="step reveal" style="--i:2">
-          <span class="step-num-mobile">03</span>
-          <h3>Book a time</h3>
-          <p>Pick a slot that actually works for your schedule.</p>
-        </div>
-        <div class="step reveal" style="--i:3">
-          <span class="step-num-mobile">04</span>
-          <h3>Enjoy your clean</h3>
-          <p>The same vetted cleaner, done properly, every time.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICE AREA -->
-  <section id="area" class="area-section">
-    <div class="container area-grid">
-      <div class="reveal">
-        <div class="area-card">
-          <span class="pin-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z"/><circle cx="12" cy="10" r="2.4"/></svg>
-            Now serving
-          </span>
-          <h3 style="font-size:26px; margin-bottom:8px;">All of Dubai</h3>
-          <p style="color:#5B655F; font-size:14.5px;">Wherever you are in the city, we're covering it, from downtown apartments to villa communities on the outskirts.</p>
-          <ul class="area-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Downtown Dubai &amp; Business Bay</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Dubai Marina &amp; JBR</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Arabian Ranches, Damac Hills &amp; JVC</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Palm Jumeirah &amp; wider Dubai</li>
-          </ul>
-        </div>
-      </div>
-      <div class="reveal" style="--i:1">
-        <div class="eyebrow">Service area</div>
-        <h2>One standard, across the city.</h2>
-        <p style="color:#5B655F; font-size:16.5px; margin-top:18px; max-width:420px;">No matter which part of Dubai you're in, every booking gets the same vetted team, the same eco-friendly products, and the same attention to detail.</p>
-        <div class="checker" id="areaChecker">
-          <div class="checker-input-row">
-            <input type="text" id="areaInput" placeholder="Enter your area, e.g. Dubai Marina" autocomplete="off">
-            <div class="checker-suggestions" id="areaSuggestions"></div>
-          </div>
-          <div class="checker-result" id="areaResult">
-            <div class="checker-result-inner">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
-              <div class="checker-result-text" id="areaResultText"></div>
-            </div>
-            <a href="#" id="areaCtaLink" target="_blank" rel="noopener" class="btn btn-primary btn-sm checker-cta">Book your first clean
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OFFER / WAITLIST -->
-  <section id="offer" class="offer-section">
-    <div class="offer-bg-photo">
-      <img src="assets/image-7.jpg" alt="">
-    </div>
-    <div class="offer-bg-tint"></div>
-    <svg class="droplet-bg" style="opacity:.08; width:600px; bottom:-140px; left:-140px; z-index:1;" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M100 20 C70 70, 40 100, 40 130 C40 165, 68 185, 100 185 C132 185, 160 165, 160 130 C160 100, 130 70, 100 20 Z" stroke="#FFFFFF" stroke-width="3"/>
-    </svg>
-    <div class="container">
-      <div class="offer-badge reveal">LAUNCHING SOON, LIMITED SLOTS</div>
-      <div class="offer-price reveal" style="--i:1">AED 99<sup>/first clean</sup></div>
-      <div class="offer-note reveal" style="--i:2">3-hour minimum, capped intro slots for our first customers</div>
-      <h2 class="reveal" style="--i:3">Be first in line when we open bookings.</h2>
-      <p class="reveal" style="--i:4">We're onboarding our team carefully so every early clean gets it right. Join the waitlist and we'll message you the moment slots open.</p>
-      <a href="https://wa.me/971585820766?text=Hi%21%20I%27d%20like%20to%20join%20the%20PurelyCleaningServices%20waitlist" target="_blank" rel="noopener" class="btn btn-light reveal" style="--i:5">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.6-.7c.2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.9-.1 1.6z"/></svg>
-        Join the waitlist on WhatsApp
-      </a>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" style="background:var(--white);">
-    <div class="container">
-      <div class="section-head centered reveal">
-        <div class="eyebrow">Questions</div>
-        <h2>Everything you need to know.</h2>
-      </div>
-      <div class="faq-list reveal">
-        <div class="faq-item">
-          <button class="faq-q">Which areas do you cover?<span class="plus"></span></button>
-          <div class="faq-a"><p>We cover all of Dubai, from downtown apartments to villa communities on the outskirts. Message us your area on WhatsApp and we'll confirm right away.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">What types of homes do you clean?<span class="plus"></span></button>
-          <div class="faq-a"><p>Studios, apartments, townhouses, and villas, all sizes. Every home gets the same standard of clean.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">Are your cleaners vetted?<span class="plus"></span></button>
-          <div class="faq-a"><p>Yes. Every cleaner is background-checked and trained before they're ever sent to a client's home.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">Do you bring your own supplies?<span class="plus"></span></button>
-          <div class="faq-a"><p>Yes, eco-friendly, non-toxic products and equipment are included in every booking, no need to provide anything yourself.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">Can I cancel or reschedule?<span class="plus"></span></button>
-          <div class="faq-a"><p>Yes, free of charge up to 24 hours before your booking.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q">How do I book?<span class="plus"></span></button>
-          <div class="faq-a"><p>Everything runs through WhatsApp, message us your area and what you need, and we'll take it from there.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  <div class="container">
-    <div class="footer-top">
-      <div>
-        <div class="footer-brand">
-          <img src="assets/image-8.png" alt="PurelyCleaningServices">
-          <span>PurelyCleaningServices</span>
-        </div>
-        <p class="footer-tag">Clean Homes. Pure Living. Trusted home cleaning across Dubai.</p>
-      </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <a href="#services">Services</a>
-          <a href="#plans">Plans</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#area">Service area</a>
-          <a href="#faq">FAQ</a>
-        </div>
-        <div class="footer-col">
-          <h4>Connect</h4>
-          <a href="https://wa.me/971585820766" target="_blank" rel="noopener">WhatsApp</a>
-          <a href="https://www.instagram.com/purelycleaningservicesdxb/" target="_blank" rel="noopener">Instagram</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>(c) 2026 PurelyCleaningServices. All rights reserved.</span>
-      <span>Dubai, UAE</span>
-    </div>
+  <section class="section"><span class="eyebrow">Ongoing</span><div id="grpOngoing"></div></section>
+  <section class="section"><span class="eyebrow">Next 7 days</span><div id="grpSoon"></div></section>
+  <section class="section"><span class="eyebrow">Later</span><div id="grpFuture"></div></section>
+  <button class="toggle-log" data-log="finWrap">Show finished</button>
+  <div class="logwrap" id="finWrap">
+    <section class="section"><span class="eyebrow">Finished</span><div id="grpDone"></div></section>
   </div>
-</footer>
+</div>
 
-<a href="https://wa.me/971585820766" target="_blank" rel="noopener" class="wa-float" aria-label="Chat on WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15L2 22l5.2-1.4A10 10 0 1012 2zm5.7 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.2-.3.5-.4.7-.4h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5l-.4.5c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.6-.1l.6-.7c.2-.3.4-.2.6-.1l1.7.8c.2.1.3.2.4.3.1.2.1.9-.1 1.6z"/></svg>
-</a>
+<!-- ===== CALENDAR ===== -->
+<div class="pane" id="pane-cal">
+  <div class="cal-nav">
+    <button class="cal-arrow" id="calPrev">&#8592;</button>
+    <div class="cal-title" id="calTitle">&mdash;</div>
+    <button class="cal-arrow" id="calNext">&#8594;</button>
+  </div>
+  <div class="cal-dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+  <div class="cal-grid" id="calGrid"></div>
+  <div class="key" id="calKey"></div>
+
+  <section class="section"><span class="eyebrow" id="daySelLabel">Fleet status</span><div class="avail" id="dayAvail"></div></section>
+  <section class="section"><span class="eyebrow">Bookings on this day</span><div id="dayList"></div></section>
+</div>
+
+<!-- ===== COSTS ===== -->
+<div class="pane" id="pane-cost">
+  <section class="summary three">
+    <div class="cell"><span class="eyebrow">This cycle</span><div class="amount out" id="cCycle">0</div></div>
+    <div class="cell"><span class="eyebrow">Entries</span><div class="amount" id="cCount">0</div></div>
+    <div class="cell"><span class="eyebrow">Biggest</span><div class="amount out" id="cMax">0</div></div>
+  </section>
+  <section class="section"><span class="eyebrow">By type &mdash; this cycle</span><div id="costByType"></div></section>
+  <section class="section"><span class="eyebrow">This cycle</span><div id="costList"></div></section>
+  <button class="toggle-log" data-log="allCostWrap">Show all costs</button>
+  <div class="logwrap" id="allCostWrap">
+    <section class="section"><span class="eyebrow">Everything logged</span><div id="allCostList"></div></section>
+  </div>
+  <p class="note">Add and edit costs from the <b>Dashboard</b>. This tab is the detailed view.</p>
+</div>
+
+<!-- ===== PERSONAL ===== -->
+<div class="pane" id="pane-per">
+  <section class="gauge-block">
+    <div class="gauge-head">
+      <div><div class="gauge-label">Spent this cycle</div>
+        <div class="gauge-figure"><span class="cur">AED</span><span id="pSpentFig">0</span></div></div>
+      <div class="gauge-target">Budget<b>AED <input type="number" id="budgetInput" value="3000"></b></div>
+    </div>
+    <div class="gauge"><div class="gauge-fill" id="pFill"></div><div class="gauge-edge" id="pEdge"></div><div class="gauge-segs"></div></div>
+    <div class="gauge-foot"><div><b id="pPctTxt">0%</b> of budget</div><div id="pRemainTxt">&mdash;</div></div>
+  </section>
+
+  <section class="summary three">
+    <div class="cell"><span class="eyebrow">Drawn in</span><div class="amount" id="pInTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Spent</span><div class="amount out" id="pOutTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Left</span><div class="amount net" id="pLeftTot">0</div></div>
+  </section>
+  <div class="strip"><span class="eyebrow">Daily pace vs budget</span><span class="val" id="pPaceVal">&mdash;</span></div>
+
+  <div class="actions">
+    <button class="btn rev" id="btnPIn">+ Draw in</button>
+    <button class="btn" id="btnPOut">+ Spend</button>
+  </div>
+
+  <div class="form" id="formPIn">
+    <span class="eyebrow">Money in</span>
+    <div class="field-row">
+      <div class="field"><label>Amount (AED)</label><input type="number" id="piAmt" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Date</label><input type="date" id="piDate"></div>
+    </div>
+    <div class="field"><label>Source</label><select id="piType">
+      <option>Weekly draw</option><option>Profit split</option><option>From savings</option><option>Other income</option>
+    </select></div>
+    <div class="field"><label>Details</label><textarea id="piNote" placeholder="Optional"></textarea></div>
+    <button class="submit rev" id="savePIn">Save</button>
+    <button class="cancel" id="cancel-savePIn">Cancel edit</button>
+  </div>
+
+  <div class="form" id="formPOut">
+    <span class="eyebrow">Personal spending</span>
+    <div class="field-row">
+      <div class="field"><label>Amount (AED)</label><input type="number" id="poAmt" inputmode="decimal" placeholder="0"></div>
+      <div class="field"><label>Date</label><input type="date" id="poDate"></div>
+    </div>
+    <div class="field"><label>Type</label><select id="poType">
+      <option>Food</option><option>Restaurants</option><option>Clothes</option><option>Entertainment</option>
+      <option>Transport</option><option>Subscriptions</option><option>Gifts</option><option>Other</option>
+    </select></div>
+    <div class="field"><label>Details</label><textarea id="poNote" placeholder="Optional"></textarea></div>
+    <button class="submit" id="savePOut">Save</button>
+    <button class="cancel" id="cancel-savePOut">Cancel edit</button>
+  </div>
+
+  <section class="section"><span class="eyebrow">Recent personal</span><div id="recentPer"></div></section>
+  <p class="note">This tab is <b>private to you</b> &mdash; not visible to anyone you share the link with.</p>
+
+  <button class="toggle-log" data-log="dbWrap">Database connection</button>
+  <div class="logwrap" id="dbWrap">
+    <div class="feecalc" id="dbStatus" style="margin-top:15px">Checking&hellip;</div>
+    <div class="field"><label>Supabase project URL</label>
+      <input type="text" id="sbUrl" placeholder="https://xxxx.supabase.co" autocomplete="off"></div>
+    <div class="field"><label>Anon public key</label>
+      <input type="text" id="sbKey" placeholder="eyJhbGci..." autocomplete="off"></div>
+    <button class="btn" id="btnSbSave" style="width:100%">Connect</button>
+    <p class="note">
+      The anon key is meant to be public &mdash; access is controlled by row level security
+      in Supabase, not by hiding the key. Run the SQL from <b>schema.sql</b> once before connecting.
+    </p>
+  </div>
+
+  <button class="toggle-log" data-log="backupWrap">Backup &amp; restore</button>
+  <div class="logwrap" id="backupWrap">
+    <div class="field" style="margin-top:15px">
+      <label>Your data &mdash; copy and keep safe</label>
+      <textarea id="exportBox" readonly style="min-height:80px;font-family:'IBM Plex Mono',monospace;font-size:11px"></textarea>
+    </div>
+    <button class="btn" id="btnCopy" style="width:100%">Copy backup</button>
+    <div class="field" style="margin-top:20px">
+      <label>Restore &mdash; paste a backup</label>
+      <textarea id="importBox" placeholder="Paste backup text" style="min-height:80px;font-family:'IBM Plex Mono',monospace;font-size:11px"></textarea>
+    </div>
+    <button class="btn" id="btnRestore" style="width:100%">Merge in</button>
+  </div>
+</div>
+
+<nav class="tabs">
+  <button class="tab on" data-pane="dash">Dash</button>
+  <button class="tab" data-pane="book">Bookings</button>
+  <button class="tab" data-pane="cal">Calendar</button>
+  <button class="tab" data-pane="cost">Costs</button>
+  <button class="tab" data-pane="per">Personal</button>
+</nav>
 
 <script>
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
+  window.ROYALE_CONFIG = {
+    url: "https://hiwxnhenfcshxcarljpo.supabase.co",
+    key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhpd3huaGVuZmNzaHhjYXJsanBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxODkwMjQsImV4cCI6MjEwMzc2NTAyNH0.49lt3fntQHs4MnseTjlbe0sTAZajyAbmn7c32ETIJmk"
+  };
+</script>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+(function(){
+  var CFG_KEY='royale_supabase_cfg';
+  var sb=null, cfg=null;
+
+  function readCfg(){
+    if(window.ROYALE_CONFIG && window.ROYALE_CONFIG.url) return window.ROYALE_CONFIG;
+    try{ return JSON.parse(localStorage.getItem(CFG_KEY)||'null'); }catch(e){ return null; }
+  }
+  function connect(){
+    cfg=readCfg();
+    if(cfg && cfg.url && cfg.key){
+      try{ sb=createClient(cfg.url,cfg.key); return true; }catch(e){ sb=null; }
+    }
+    return false;
+  }
+
+  /* ---------- login gate ---------- */
+  connect(); // create the Supabase client right away so we can check auth before anything else
+  var loginErr=document.getElementById('loginErr');
+  var loginBtn=document.getElementById('loginBtn');
+
+  function showApp(){ document.body.classList.add('authed'); }
+  function showLogin(msg){
+    document.body.classList.remove('authed');
+    if(msg) loginErr.textContent=msg;
+  }
+
+  async function trySignIn(){
+    var email=document.getElementById('loginEmail').value.trim();
+    var pass=document.getElementById('loginPass').value;
+    if(!email||!pass){ loginErr.textContent='Enter email and password'; return; }
+    if(!sb){ loginErr.textContent='Not connected to the database yet'; return; }
+    loginBtn.disabled=true; loginErr.textContent='';
+    var res=await sb.auth.signInWithPassword({email:email,password:pass});
+    loginBtn.disabled=false;
+    if(res.error){ loginErr.textContent=res.error.message; return; }
+    showApp();
+    boot();
+  }
+  loginBtn.addEventListener('click', trySignIn);
+  document.getElementById('loginPass').addEventListener('keydown',function(e){ if(e.key==='Enter') trySignIn(); });
+  document.getElementById('loginEmail').addEventListener('keydown',function(e){ if(e.key==='Enter') trySignIn(); });
+
+  document.getElementById('btnSignOut').addEventListener('click', async function(){
+    if(sb) await sb.auth.signOut();
+    showLogin();
   });
 
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const mobileClose = document.getElementById('mobileClose');
-  menuToggle.addEventListener('click', () => mobileMenu.classList.add('open'));
-  mobileClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
-  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+  async function checkSession(){
+    if(!sb){ showLogin('Database not connected — set it up in Supabase first'); return false; }
+    var res=await sb.auth.getSession();
+    if(res.data && res.data.session){ showApp(); return true; }
+    showLogin();
+    return false;
+  }
 
-  const revealEls = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
-    });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => io.observe(el));
+  // Maps between the app's shape and the database columns.
+  var MAP={
+    bookings:{table:'bookings',
+      to:function(b){ return {id:b.id,customer:b.customer,vehicle:b.vehicle,source:b.source,
+        type:b.type,service:b.service||null,start_date:b.start,start_time:b.startTime||null,
+        end_date:b.end,total:b.total||0,collected:b.collected||0,
+        received:(b.received===null||b.received===undefined)?null:b.received,
+        cost:(b.cost===null||b.cost===undefined)?null:b.cost,notes:b.notes||null}; },
+      from:function(r){ return {id:r.id,customer:r.customer,vehicle:r.vehicle,source:r.source,
+        type:r.type,service:r.service||'',start:r.start_date,startTime:r.start_time||'',
+        end:r.end_date,endTime:'',total:+r.total||0,collected:+r.collected||0,
+        received:r.received===null?null:+r.received,cost:r.cost===null?null:+r.cost,
+        notes:r.notes||''}; }},
+    costs:{table:'costs',
+      to:function(c){ return {id:c.id,amount:c.amount||0,type:c.type,note:c.note||null,
+        cost_date:c.date,linked:c.linked||null}; },
+      from:function(r){ return {id:r.id,amount:+r.amount||0,type:r.type,note:r.note||'',
+        date:r.cost_date,linked:r.linked||null}; }},
+    revenue:{table:'revenue',
+      to:function(r){ return {id:r.id,amount:r.amount||0,
+        received:(r.received===null||r.received===undefined)?null:r.received,
+        type:r.type,car:r.car||null,note:r.note||null,rev_date:r.date}; },
+      from:function(r){ return {id:r.id,amount:+r.amount||0,
+        received:r.received===null?null:+r.received,type:r.type,car:r.car||'',
+        note:r.note||'',date:r.rev_date}; }},
+    personal:{table:'personal',
+      to:function(p){ return {id:p.id,kind:p.kind,amount:p.amount||0,type:p.type,
+        note:p.note||null,p_date:p.date}; },
+      from:function(r){ return {id:r.id,kind:r.kind,amount:+r.amount||0,type:r.type,
+        note:r.note||'',date:r.p_date}; }}
+  };
 
-  const routeWrap = document.getElementById('routeWrap');
-  const routeIo = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) { routeWrap.classList.add('in'); routeIo.unobserve(entry.target); } });
-  }, { threshold: 0.3 });
-  routeIo.observe(routeWrap);
+  var LOCAL='royale_local_cache';
+  function cacheWrite(){ try{ localStorage.setItem(LOCAL,JSON.stringify(S)); }catch(e){} }
+  function cacheRead(){ try{ return JSON.parse(localStorage.getItem(LOCAL)||'null'); }catch(e){ return null; } }
 
-  // Area coverage checker
-  const DUBAI_AREAS = [
-    "Downtown Dubai", "Dubai Marina", "Jumeirah Beach Residence (JBR)", "Business Bay",
-    "Palm Jumeirah", "Jumeirah Village Circle (JVC)", "Jumeirah Village Triangle (JVT)",
-    "Dubai Hills Estate", "Arabian Ranches", "Arabian Ranches 2", "Arabian Ranches 3",
-    "Damac Hills", "Damac Hills 2", "The Springs", "The Meadows", "The Lakes",
-    "Emirates Hills", "Al Barsha", "Al Barsha South", "Mirdif", "Dubai Silicon Oasis",
-    "Motor City", "Dubai Sports City", "Discovery Gardens", "Al Furjan", "The Greens",
-    "The Views", "Jumeirah Islands", "Jumeirah Park", "Jumeirah", "Umm Suqeim",
-    "Al Sufouh", "Dubai Media City", "Dubai Internet City", "Knowledge Village",
-    "Deira", "Bur Dubai", "Al Karama", "Al Satwa", "Al Quoz",
-    "Dubai Investments Park (DIP)", "Remraam", "Town Square", "Mudon", "Villanova",
-    "Dubai South", "International City", "Dubailand", "Al Warqa", "Nadd Al Sheba",
-    "Meydan", "DIFC", "Culture Village", "Dubai Creek Harbour", "Al Jaddaf"
+  var FLEET={
+    "Brabus G-Wagon|own":{c:"#B14FFF",s:"BRABUS",t:"purple int."},
+    "Brabus G-Wagon|external":{c:"#FF3D8B",s:"BRABUS",t:"orange int."},
+    "Ben's V-Class|external":{c:"#00E5FF",s:"V-BEN",t:"Ben's Maybach"},
+    "George's V-Class|external":{c:"#39FF88",s:"V-GEO",t:"George's"},
+    "Cadillac Escalade|own":{c:"#4D7CFF",s:"ESCALADE",t:""}
+  };
+  var CARS=["Brabus G-Wagon","Cadillac Escalade","Ben's V-Class","George's V-Class"];
+  function autoName(veh,src,type,svc){
+    var f=FLEET[veh+'|'+(src==='external'?'external':'own')];
+    var short=f?f.s.charAt(0)+f.s.slice(1).toLowerCase():veh;
+    if(type==='chauffeur') return short+' chauffeur'+(svc?' — '+svc.toLowerCase():'');
+    return short+' rental';
+  }
+  function fleet(b){
+    var k=b.vehicle+'|'+(b.source==='external'?'external':'own');
+    return FLEET[k]||{c:'#5E7793',s:String(b.vehicle||'CAR').toUpperCase(),t:''};
+  }
+
+  var SEED_BK=[
+    {id:"b7ext",customer:"Ed — Escalade extension",vehicle:"Cadillac Escalade",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-22",startTime:"",end:"2026-08-28",endTime:"",total:5000,collected:5000,received:4862,cost:0,notes:"Third and final week of Ed's chauffeur job."},
+    {id:"b16",customer:"Brabus day hire",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-08-23",startTime:"",end:"2026-08-23",endTime:"",total:1400,collected:1400,cost:0,notes:"Purple Brabus, 1 day. Paid cash. 180 deposit fee logged under Costs."},
+    {id:"b22",customer:"Brabus chauffeur — 19 days",vehicle:"Brabus G-Wagon",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-08-29",startTime:"",end:"2026-09-16",endTime:"",total:25000,collected:25000,received:23900,cost:0,notes:"Paid in full upfront. Clashes with the 5 Sept and 8-15 Sept Brabus rentals."},
+    {id:"b9",customer:"Brabus self-drive",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-09-05",startTime:"",end:"2026-09-05",endTime:"",total:1250,collected:125,cost:0,notes:"Check licence, ID, deposit."},
+    {id:"b11",customer:"Brabus week rental",vehicle:"Brabus G-Wagon",type:"rental",source:"own",start:"2026-09-08",startTime:"",end:"2026-09-15",endTime:"",total:2500,collected:250,cost:0,notes:"AED 2,250 due on collection."},
+    {id:"b17",customer:"V-Class Abu Dhabi transfer",vehicle:"Ben's V-Class",type:"chauffeur",service:"One way",source:"external",start:"2026-09-12",startTime:"",end:"2026-09-12",endTime:"",total:1700,collected:150,cost:null,notes:"Includes 200 Abu Dhabi surcharge. 1,550 due. Payout to Ben not recorded."},
+    {id:"b14",customer:"Escalade chauffeur week",vehicle:"Cadillac Escalade",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-09-24",startTime:"",end:"2026-09-30",endTime:"",total:6000,collected:500,cost:0,notes:"AED 5,500 due on collection."},
+    {id:"b10",customer:"Omid",vehicle:"Cadillac Escalade",type:"chauffeur",service:"Multiple day",source:"own",start:"2026-10-05",startTime:"",end:"2026-10-12",endTime:"",total:3200,collected:320,cost:0,notes:"3 legs. AED 2,880 due."}
   ];
 
-  const areaInput = document.getElementById('areaInput');
-  const areaSuggestions = document.getElementById('areaSuggestions');
-  const areaResult = document.getElementById('areaResult');
-  const areaResultText = document.getElementById('areaResultText');
-  const areaCtaLink = document.getElementById('areaCtaLink');
+  var SEED_RV=[
+    {id:"r1",amount:2929,type:"Chauffeur — hourly",car:"Ben's V-Class",note:"Airport pickup + 5hr + 10hr — collected this cycle, net of transfer fees",date:"2026-08-22"}
+  ];
 
-  function closeSuggestions() {
-    areaSuggestions.classList.remove('open');
-    setTimeout(() => { if (!areaSuggestions.classList.contains('open')) areaSuggestions.innerHTML = ''; }, 400);
+  var SEED_CO=[
+    {id:"fee-b7ext",amount:138,type:"Payment fees",linked:"b7ext",note:"Processing fees — Ed Escalade extension",date:"2026-08-22"},
+    {id:"c8",amount:1445,type:"Owner split",note:"Ben — three V-Class night bookings. 510 paid, 935 still owed.",date:"2026-08-22"},
+    {id:"c5",amount:2000,type:"Content / shoot",note:"Videographer + editing for social",date:"2026-08-23"},
+    {id:"c6",amount:180,type:"Deposit fee",note:"Brabus day hire",date:"2026-08-23"},
+    {id:"fee-b22",amount:1100,type:"Payment fees",linked:"b22",note:"Processing fees — 19-day Brabus chauffeur job",date:"2026-08-29"},
+    {id:"c7",amount:300,type:"Fuel",note:"Chauffeur booking",date:"2026-08-30"}
+  ];
+
+  var SEED_PR=[{id:"p1",kind:"expense",amount:2000,type:"Other",note:"Personal spending",date:"2026-08-23"}];
+
+  var S={bookings:[],costs:[],revenue:[],personal:[],target:34000,budget:3000};
+  var calOff=0, selDay=null;
+
+  function fmt(n){ return Math.round(n||0).toLocaleString('en-US'); }
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function cyStart(){ var n=new Date(),y=n.getFullYear(),m=n.getMonth(); if(n.getDate()<22)m-=1; return new Date(y,m,22); }
+  function cyEnd(){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()+1,22); }
+  function cyDays(){ return Math.round((cyEnd()-cyStart())/86400000); }
+  function dayNo(){ return Math.max(1,Math.floor((new Date()-cyStart())/86400000)+1); }
+  function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
+  function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'—'; }
+  function today(){ return new Date().toISOString().slice(0,10); }
+  function iso(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); }
+  function endMs(b){ return new Date(b.end+'T'+(b.endTime||'23:59')).getTime(); }
+  function startMs(b){ return new Date(b.start+'T'+(b.startTime||'00:00')).getTime(); }
+
+  function flash(m,bad){
+    var p=document.getElementById('saveState');
+    p.textContent=m; p.className='save-pill '+(bad?'bad':'ok');
+    clearTimeout(p._t); p._t=setTimeout(function(){p.className='save-pill';},2400);
   }
 
-  function renderSuggestions(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) { closeSuggestions(); return; }
-    const matches = DUBAI_AREAS.filter(a => a.toLowerCase().includes(q)).slice(0, 5);
-    if (matches.length === 0) { closeSuggestions(); return; }
-    areaSuggestions.innerHTML = matches.map(a => `<button type="button">${a}</button>`).join('');
-    areaSuggestions.classList.add('open');
-    areaSuggestions.querySelectorAll('button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        areaInput.value = btn.textContent;
-        closeSuggestions();
-        confirmArea(btn.textContent);
-        areaInput.blur();
+  async function load(silent){
+    if(!sb && !connect()){
+      var c=cacheRead();
+      if(c){ S=c; } else {
+        S.bookings=SEED_BK.slice(); S.costs=SEED_CO.slice();
+        S.revenue=SEED_RV.slice(); S.personal=SEED_PR.slice();
+      }
+      afterLoad(); flash('Offline — not connected',true); return;
+    }
+    try{
+      var keys=['bookings','costs','revenue','personal'];
+      for(var i=0;i<keys.length;i++){
+        var k=keys[i], m=MAP[k];
+        var res=await sb.from(m.table).select('*');
+        if(res.error) throw res.error;
+        S[k]=(res.data||[]).map(m.from);
+      }
+      var st=await sb.from('settings').select('*').eq('id',1).maybeSingle();
+      if(st.data){ S.target=+st.data.target||34000; S.budget=+st.data.budget||3000; }
+
+      // first run against an empty database — plant the starting data
+      if(!S.bookings.length && !S.costs.length && !S.revenue.length){
+        S.bookings=SEED_BK.slice(); S.costs=SEED_CO.slice();
+        S.revenue=SEED_RV.slice(); S.personal=SEED_PR.slice();
+        await doSave(true);
+      }
+      afterLoad(); cacheWrite();
+      if(!silent) flash('Loaded');
+    }catch(e){
+      console.error(e);
+      var c2=cacheRead(); if(c2) S=c2;
+      afterLoad(); flash('Load failed — using cache',true);
+    }
+  }
+
+  function afterLoad(){
+    document.getElementById('targetInput').value=S.target;
+    document.getElementById('budgetInput').value=S.budget;
+    render();
+  }
+
+  var t=null;
+  function save(){ clearTimeout(t); t=setTimeout(function(){ doSave(); },250); }
+
+  async function doSave(quiet){
+    cacheWrite();
+    var ex=document.getElementById('exportBox'); if(ex) ex.value=JSON.stringify(S);
+    if(!sb){ if(!quiet) flash('Saved locally only',true); return; }
+    if(!quiet) flash('Saving…');
+    try{
+      var keys=['bookings','costs','revenue','personal'];
+      for(var i=0;i<keys.length;i++){
+        var k=keys[i], m=MAP[k], rows=S[k].map(m.to);
+        if(rows.length){
+          var up=await sb.from(m.table).upsert(rows,{onConflict:'id'});
+          if(up.error) throw up.error;
+        }
+        var ids=S[k].map(function(x){ return x.id; });
+        var del=ids.length
+          ? await sb.from(m.table).delete().not('id','in','("'+ids.join('","')+'")')
+          : await sb.from(m.table).delete().neq('id','');
+        if(del.error) throw del.error;
+      }
+      var se=await sb.from('settings').upsert([{id:1,target:S.target,budget:S.budget}],{onConflict:'id'});
+      if(se.error) throw se.error;
+      if(!quiet) flash('Saved');
+    }catch(e){
+      console.error(e);
+      flash('Save failed — cached',true);
+    }
+  }
+
+  // ================= RENDER =================
+  function render(){
+    var s=cyStart(),e=cyEnd(),now=Date.now();
+    document.getElementById('cycleLabel').textContent='Cycle '+
+      s.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' → '+
+      e.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+
+    var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now;});
+    var mrev=S.revenue.filter(function(r){return inCy(r.date);});
+    var rev=bk.reduce(function(a,b){return a+(+b.total||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
+    var pay=bk.reduce(function(a,b){return a+(+b.cost||0);},0);
+    var coll=bk.reduce(function(a,b){return a+(+b.collected||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
+    var owed=bk.reduce(function(a,b){return a+Math.max(0,(+b.total||0)-(+b.collected||0));},0);
+    var co=S.costs.filter(function(c){return inCy(c.date);});
+    var cos=co.reduce(function(a,c){return a+(+c.amount||0);},0);
+    var net=rev-pay-cos,tgt=S.target;
+    var pct=Math.max(0,Math.min(100,(net/tgt)*100));
+
+    document.getElementById('netFig').textContent=fmt(net);
+    document.getElementById('revTot').textContent=fmt(rev);
+    document.getElementById('payTot').textContent=fmt(pay);
+    document.getElementById('cosTot').textContent=fmt(cos);
+    document.getElementById('netTot').textContent=fmt(net);
+    document.getElementById('pctTxt').textContent=Math.round(pct)+'%';
+    document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
+    document.getElementById('fill').style.width=pct+'%';
+    document.getElementById('edge').style.left=pct+'%';
+    document.getElementById('collVal').textContent=fmt(coll);
+    document.getElementById('owedVal').textContent=fmt(owed);
+
+    var dist=net-tgt;
+    var dv=document.getElementById('distVal');
+    dv.textContent=dist>0?fmt(dist):'— not yet at break-even';
+    dv.className='val'+(dist>0?' good':'');
+    var sv=document.getElementById('shareVal');
+    sv.textContent=dist>0?fmt(dist/2):'—';
+    sv.className='val'+(dist>0?' good':'');
+
+    // recent revenue: bookings + manual, merged
+    var revRows=bk.map(function(b){
+      return {d:b.start,n:b.customer||'Booking',m:fleet(b).s+' · booking',a:+b.total||0,id:null};
+    }).concat(mrev.map(function(r){
+      return {d:r.date,n:r.note||r.type,m:r.type+(r.car&&r.car!=='Not vehicle-related'?' · '+r.car:''),a:+r.amount||0,id:r.id};
+    })).sort(function(a,b){return a.d<b.d?1:-1;});
+    document.getElementById('recentRev').innerHTML=revRows.length?revRows.slice(0,5).map(function(r){
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(r.n)+
+        '</div><div class="row-meta">'+lbl(r.d)+' · '+esc(r.m)+'</div></div>'+
+        '<div class="row-amt">'+fmt(r.a)+'</div>'+
+        (r.id?'<button class="edit" data-er="'+r.id+'">&#9998;</button><button class="del" data-dr="'+r.id+'">×</button>':'')+
+        '</div>';
+    }).join(''):'<div class="empty">No revenue yet this cycle.</div>';
+
+    coList('recentExp',co.slice().sort(function(a,b){return a.date<b.date?1:-1;}).slice(0,5),'No expenses yet this cycle.');
+
+    var out=S.bookings.filter(function(b){ return startMs(b)<=now&&endMs(b)>=now; });
+    document.getElementById('outToday').innerHTML=out.length?out.map(function(b){
+      var f=fleet(b);
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(b.customer)+
+        '</div><div class="row-meta" style="color:'+f.c+'">'+esc(f.s)+' · until '+lbl(b.end)+'</div></div>'+
+        '<div class="row-amt">'+fmt(b.total)+'</div></div>';
+    }).join(''):'<div class="empty">Nothing out right now.</div>';
+
+    var al=[];
+    var noPay=S.bookings.filter(function(b){ return b.source==='external'&&(b.cost===null||b.cost===undefined); });
+    if(noPay.length) al.push(noPay.length+' borrowed-car booking'+(noPay.length>1?'s have':' has')+' no owner payout recorded, so profit on '+(noPay.length>1?'them is':'it is')+' overstated.');
+    findClashes().forEach(function(c){ al.push(c); });
+    var noTot=S.bookings.filter(function(b){ return !(+b.total)&&endMs(b)>now; });
+    if(noTot.length) al.push(noTot.length+' upcoming booking'+(noTot.length>1?'s have':' has')+' no total price set.');
+    var pOut=S.personal.filter(function(p){return p.kind==='expense'&&inCy(p.date);}).reduce(function(a,p){return a+p.amount;},0);
+    if(pOut/dayNo()>S.budget/cyDays()) al.push('Personal spending is ahead of budget — '+fmt(pOut/dayNo())+'/day against '+fmt(S.budget/cyDays())+' allowed.');
+    document.getElementById('alertList').innerHTML=al.length
+      ? al.map(function(a){return '<div class="alert">'+esc(a)+'</div>';}).join('')
+      : '<div class="alert" style="color:var(--green)">Nothing needs attention.</div>';
+
+    // bookings
+    var g={on:[],soon:[],fut:[],done:[]};
+    S.bookings.slice().sort(function(a,b){return startMs(a)-startMs(b);}).forEach(function(b){
+      if(endMs(b)<now) g.done.push(b);
+      else if(startMs(b)<=now) g.on.push(b);
+      else if(startMs(b)-now<86400000*7) g.soon.push(b);
+      else g.fut.push(b);
+    });
+    bkList('grpOngoing',g.on,'Nothing ongoing.');
+    bkList('grpSoon',g.soon,'Nothing in the next 7 days.');
+    bkList('grpFuture',g.fut,'Nothing further out.');
+    bkList('grpDone',g.done.reverse(),'Nothing finished.');
+
+    // costs tab
+    document.getElementById('cCycle').textContent=fmt(cos);
+    document.getElementById('cCount').textContent=co.length;
+    document.getElementById('cMax').textContent=co.length?fmt(Math.max.apply(null,co.map(function(c){return +c.amount||0;}))):'0';
+    var byT={};
+    co.forEach(function(c){ byT[c.type]=(byT[c.type]||0)+(+c.amount||0); });
+    var tk=Object.keys(byT).sort(function(a,b){return byT[b]-byT[a];});
+    document.getElementById('costByType').innerHTML=tk.length?tk.map(function(k){
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(k)+'</div></div>'+
+        '<div class="row-amt out">−'+fmt(byT[k])+'</div></div>';
+    }).join(''):'<div class="empty">Nothing this cycle.</div>';
+    coList('costList',co.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged this cycle.');
+    coList('allCostList',S.costs.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged.');
+
+    // personal
+    var per=S.personal.filter(function(p){return inCy(p.date);}).sort(function(a,b){return a.date<b.date?1:-1;});
+    var pIn=per.filter(function(p){return p.kind==='revenue';}).reduce(function(a,p){return a+p.amount;},0);
+    var pSp=per.filter(function(p){return p.kind==='expense';}).reduce(function(a,p){return a+p.amount;},0);
+    var bud=S.budget,pPct=Math.max(0,Math.min(100,(pSp/bud)*100));
+    document.getElementById('pSpentFig').textContent=fmt(pSp);
+    document.getElementById('pInTot').textContent=fmt(pIn);
+    document.getElementById('pOutTot').textContent=fmt(pSp);
+    var lfEl=document.getElementById('pLeftTot');
+    lfEl.textContent=fmt(bud-pSp); lfEl.className='amount '+((bud-pSp)<0?'warn':'net');
+    document.getElementById('pPctTxt').textContent=Math.round((pSp/bud)*100)+'%';
+    document.getElementById('pRemainTxt').textContent=((bud-pSp)>=0?fmt(bud-pSp)+' left':fmt(pSp-bud)+' over')+' · day '+dayNo()+' of '+cyDays();
+    document.getElementById('pFill').style.width=pPct+'%';
+    document.getElementById('pEdge').style.left=pPct+'%';
+    var pv=document.getElementById('pPaceVal');
+    pv.textContent=fmt(pSp/dayNo())+'/day vs '+fmt(bud/cyDays())+' allowed';
+    pv.className='val'+((pSp/dayNo())>(bud/cyDays())?' over':' good');
+    document.getElementById('recentPer').innerHTML=per.length?per.map(function(p){
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(p.note||p.type)+
+        '</div><div class="row-meta">'+lbl(p.date)+' · '+esc(p.type)+'</div></div>'+
+        '<div class="row-amt'+(p.kind==='expense'?' out':'')+'">'+(p.kind==='expense'?'−':'')+fmt(p.amount)+'</div>'+
+        '<button class="edit" data-ep="'+p.id+'">&#9998;</button><button class="del" data-dp="'+p.id+'">×</button></div>';
+    }).join(''):'<div class="empty">Nothing logged yet this cycle.</div>';
+
+    renderCal();
+    var ex=document.getElementById('exportBox'); if(ex) ex.value=JSON.stringify(S);
+  }
+
+  // ================= CALENDAR =================
+  function bookingsOn(dstr){
+    return S.bookings.filter(function(b){
+      return b.start<=dstr && dstr<=b.end;
+    });
+  }
+
+  function renderCal(){
+    var base=new Date(); base.setDate(1);
+    base.setMonth(base.getMonth()+calOff);
+    var y=base.getFullYear(), m=base.getMonth();
+    document.getElementById('calTitle').textContent=base.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+
+    var first=new Date(y,m,1);
+    var lead=(first.getDay()+6)%7;           // Monday-first
+    var dim=new Date(y,m+1,0).getDate();
+    var html='', todayStr=today();
+
+    for(var i=0;i<lead;i++) html+='<div class="cal-day pad"></div>';
+    for(var d=1;d<=dim;d++){
+      var ds=iso(new Date(y,m,d));
+      var on=bookingsOn(ds);
+      var cls='cal-day'+(ds===todayStr?' today':'')+(ds===selDay?' sel':'');
+      html+='<div class="'+cls+'" data-day="'+ds+'"><span class="cal-num">'+d+'</span>';
+      on.slice(0,3).forEach(function(b){
+        var f=fleet(b);
+        html+='<div class="chip" style="background:'+f.c+'">'+esc(f.s)+'</div>';
       });
+      if(on.length>3) html+='<div class="chip-more">+'+(on.length-3)+'</div>';
+      html+='</div>';
+    }
+    document.getElementById('calGrid').innerHTML=html;
+
+    // key — only cars appearing this month
+    var seen={}, mStart=iso(new Date(y,m,1)), mEnd=iso(new Date(y,m,dim));
+    S.bookings.forEach(function(b){
+      if(b.end<mStart||b.start>mEnd) return;
+      var f=fleet(b);
+      seen[f.s+'|'+f.c]={c:f.c,s:f.s,own:b.source!=='external'};
     });
+    var keys=Object.keys(seen);
+    document.getElementById('calKey').innerHTML=keys.length?keys.map(function(k){
+      var v=seen[k];
+      return '<div class="key-item"><span class="key-dot" style="background:'+v.c+'"></span>'+
+        esc(v.s)+' · '+(v.own?'ours':'borrowed')+'</div>';
+    }).join(''):'<div class="empty">No bookings this month.</div>';
+
+    renderDay();
   }
 
-  function confirmArea(name) {
-    if (!name || !name.trim()) return;
-    const clean = name.trim();
-    areaResultText.innerHTML = `Great news, we cover <strong>${clean}</strong>. Let's get your first clean booked in.`;
-    areaCtaLink.href = 'https://wa.me/971585820766?text=Hi%21%20I%20am%20in%20__AREA__%20and%20would%20like%20to%20book%20my%20first%20clean.'.replace('__AREA__', encodeURIComponent(clean));
-    areaResult.classList.add('show');
+  function renderDay(){
+    var ds=selDay||today();
+    document.getElementById('daySelLabel').textContent='Fleet status — '+lbl(ds);
+    var on=bookingsOn(ds);
+    var busy={};
+    on.forEach(function(b){ busy[b.vehicle]=b; });
+
+    document.getElementById('dayAvail').innerHTML=CARS.map(function(car){
+      var b=busy[car];
+      var f=b?fleet(b):(FLEET[car+'|own']||FLEET[car+'|external']||{c:'#5E7793'});
+      return '<div class="avail-row" style="border-left-color:'+f.c+'">'+
+        '<span class="avail-name">'+esc(car)+'</span>'+
+        (b?'<span class="avail-st busy">Out · '+esc(b.customer)+'</span>'
+           :'<span class="avail-st free">Available</span>')+'</div>';
+    }).join('');
+
+    document.getElementById('dayList').innerHTML=on.length?on.map(function(b){
+      var f=fleet(b);
+      var due=Math.max(0,(+b.total||0)-(+b.collected||0));
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(b.customer)+
+        '</div><div class="row-meta" style="color:'+f.c+'">'+esc(f.s)+' · '+esc(b.type)+' · '+lbl(b.start)+' → '+lbl(b.end)+'</div></div>'+
+        '<div class="row-amt">'+fmt(b.total)+(due?'<div class="row-meta" style="color:var(--amber);text-align:right">'+fmt(due)+' due</div>':'')+'</div></div>';
+    }).join(''):'<div class="empty">Nothing booked on this day.</div>';
   }
 
-  if (areaInput) {
-    areaInput.addEventListener('input', () => {
-      areaResult.classList.remove('show');
-      renderSuggestions(areaInput.value);
+  function findClashes(){
+    var out=[],v={},now=Date.now();
+    S.bookings.forEach(function(b){ (v[b.vehicle]=v[b.vehicle]||[]).push(b); });
+    Object.keys(v).forEach(function(k){
+      var arr=v[k].slice().sort(function(a,b){return startMs(a)-startMs(b);});
+      for(var i=1;i<arr.length;i++){
+        if(startMs(arr[i])<endMs(arr[i-1]) && endMs(arr[i-1])>now){
+          out.push('Clash: '+k+' double-booked around '+lbl(arr[i].start)+' — '+arr[i-1].customer+' and '+arr[i].customer+'.');
+        }
+      }
     });
-    areaInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') { e.preventDefault(); closeSuggestions(); confirmArea(areaInput.value); areaInput.blur(); }
-    });
-    areaInput.addEventListener('focus', () => { if (areaInput.value && !areaResult.classList.contains('show')) renderSuggestions(areaInput.value); });
-    document.addEventListener('click', (e) => {
-      if (!document.getElementById('areaChecker').contains(e.target)) { closeSuggestions(); }
-    });
+    return out;
   }
 
-  document.querySelectorAll('.faq-item').forEach(item => {
-    const q = item.querySelector('.faq-q');
-    const a = item.querySelector('.faq-a');
-    q.addEventListener('click', () => {
-      const isOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item.open').forEach(openItem => {
-        if (openItem !== item) { openItem.classList.remove('open'); openItem.querySelector('.faq-a').style.maxHeight = null; }
-      });
-      item.classList.toggle('open', !isOpen);
-      a.style.maxHeight = !isOpen ? a.scrollHeight + 'px' : null;
+  function bkList(id,arr,msg){
+    var el=document.getElementById(id);
+    if(!arr.length){ el.innerHTML='<div class="empty">'+msg+'</div>'; return; }
+    el.innerHTML=arr.map(function(b){
+      var f=fleet(b);
+      var due=Math.max(0,(+b.total||0)-(+b.collected||0));
+      var noCost=(b.cost===null||b.cost===undefined);
+      var prof=(+b.total||0)-(+b.cost||0);
+      var days=Math.max(1,Math.round((new Date(b.end)-new Date(b.start))/86400000)||1);
+      return '<div class="bk" style="border-left-color:'+f.c+'">'+
+        '<div class="bk-top"><div><div class="bk-name">'+esc(b.customer||autoName(b.vehicle,b.source,b.type,b.service))+'</div>'+
+        '<div class="bk-veh" style="color:'+f.c+'">'+esc(f.s)+(f.t?' · '+esc(f.t):'')+' · '+esc(b.type)+
+        ' · '+(b.source==='external'?'borrowed':'ours')+'</div></div>'+
+        '<div class="bk-tot">'+fmt(b.total)+'</div></div>'+
+        '<div class="bk-grid">'+
+          '<div><div class="bk-k">Dates</div><div class="bk-v" style="font-size:11px">'+lbl(b.start)+' → '+lbl(b.end)+'</div></div>'+
+          '<div><div class="bk-k">'+(b.service?'Service':'Days')+'</div><div class="bk-v" style="font-size:11px">'+esc(b.service||days)+'</div></div>'+
+          '<div><div class="bk-k">Collected</div><div class="bk-v">'+fmt(b.collected)+'</div></div>'+
+          '<div><div class="bk-k">Still due</div><div class="bk-v'+(due?' due':'')+'">'+fmt(due)+'</div></div>'+
+          '<div><div class="bk-k">Payout</div>'+(noCost?'<div class="bk-v miss">Not recorded</div>':'<div class="bk-v">'+fmt(b.cost)+'</div>')+'</div>'+
+          '<div><div class="bk-k">Profit</div>'+(noCost?'<div class="bk-v miss">Unknown</div>':'<div class="bk-v prof">'+fmt(prof)+'</div>')+'</div>'+
+        '</div>'+
+        (b.notes?'<div class="bk-note">'+esc(b.notes)+'</div>':'')+
+        '<div class="bk-acts"><button class="mini" data-eb="'+b.id+'">Edit</button>'+
+        '<button class="mini danger" data-db="'+b.id+'">Delete</button></div></div>';
+    }).join('');
+  }
+
+  function coList(id,arr,msg){
+    var el=document.getElementById(id);
+    el.innerHTML=arr.length?arr.map(function(c){
+      return '<div class="row"><div class="row-main"><div class="row-name">'+esc(c.note||c.type)+
+        '</div><div class="row-meta">'+lbl(c.date)+' · '+esc(c.type)+'</div></div>'+
+        '<div class="row-amt out">−'+fmt(c.amount)+'</div>'+
+        '<button class="edit" data-ec="'+c.id+'">&#9998;</button><button class="del" data-dc="'+c.id+'">×</button></div>';
+    }).join(''):'<div class="empty">'+msg+'</div>';
+  }
+
+  // ================= FORMS =================
+  function V(id){ return document.getElementById(id).value; }
+  function setV(id,v){ document.getElementById(id).value=(v==null?'':v); }
+  function setSel(id,v){
+    var s=document.getElementById(id);
+    for(var i=0;i<s.options.length;i++){ if(s.options[i].value===v||s.options[i].text===v){s.selectedIndex=i;return;} }
+  }
+  var edit={bk:null,co:null,rv:null,pi:null,po:null};
+
+  // Creates, updates or removes the linked "Payment fees" cost for a booking
+  // or revenue entry, so fees are never entered by hand.
+  function upsertFee(ownerId,fee,label,date){
+    var fid='fee-'+ownerId;
+    S.costs=S.costs.filter(function(c){ return c.id!==fid; });
+    if(fee>0){
+      S.costs.push({id:fid,amount:fee,type:'Payment fees',linked:ownerId,
+        note:label,date:date||today()});
+    }
+  }
+  function dropFee(ownerId){
+    S.costs=S.costs.filter(function(c){ return c.id!=='fee-'+ownerId; });
+  }
+
+  function bkReadout(){
+    var charged=parseFloat(V('bTotal'))||0;
+    var coll=parseFloat(V('bColl'))||0;
+    var recvRaw=V('bRecv').trim();
+    var base=coll||charged;
+    var fee=recvRaw===''?0:Math.max(0,base-(parseFloat(recvRaw)||0));
+    var borrowed=V('bSrc')==='external';
+    var owner=borrowed?(parseFloat(V('bCost'))||0):0;
+    var el=document.getElementById('bFeeCalc');
+    var bits=[];
+    if(fee>0) bits.push('Fees <b>'+fmt(fee)+'</b>'+(base?' ('+((fee/base)*100).toFixed(1)+'%)':''));
+    if(borrowed&&owner>0) bits.push('Owner <b>'+fmt(owner)+'</b>');
+    if(charged>0){
+      var profit=charged-owner-fee;
+      bits.push('Profit <b style="color:'+(profit>0?'var(--green)':'var(--warn)')+'">'+fmt(profit)+'</b>');
+    }
+    if(!bits.length){
+      el.textContent='Fill in the amounts and the fees and profit work themselves out.';
+      el.className='feecalc';
+    } else {
+      el.innerHTML=bits.join(' &nbsp;·&nbsp; ');
+      el.className='feecalc hot';
+    }
+  }
+
+  function revReadout(){
+    var a=parseFloat(V('rAmt'))||0;
+    var raw=V('rRecv').trim();
+    var el=document.getElementById('rFeeCalc');
+    if(raw===''||!a){ el.textContent='Leave blank if the full amount landed.'; el.className='feecalc'; return; }
+    var fee=Math.max(0,a-(parseFloat(raw)||0));
+    if(fee>0){
+      el.innerHTML='Fees <b>'+fmt(fee)+'</b> ('+((fee/a)*100).toFixed(1)+'%) — logged as a cost.';
+      el.className='feecalc hot';
+    } else { el.textContent='No fees taken.'; el.className='feecalc'; }
+  }
+
+  // show only the fields the booking actually needs
+  function bkFields(){
+    var chauff=V('bType')==='chauffeur';
+    var svc=V('bSvc');
+    var multi=!chauff||svc==='Multiple day';
+    document.getElementById('chauffRow').style.display=chauff?'block':'none';
+    document.getElementById('endWrap').style.display=multi?'block':'none';
+    document.getElementById('startLbl').textContent=multi?'Start date':'Date';
+    document.getElementById('borrowRow').style.display=(V('bSrc')==='external')?'block':'none';
+    if(!multi) setV('bEnd',V('bStart'));
+    bkReadout();
+  }
+
+  var bFeeUpd=bkReadout, rFeeUpd=revReadout;
+  ['bTotal','bColl','bRecv','bCost'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',bkReadout);
+  });
+  ['bType','bSvc','bSrc'].forEach(function(id){
+    document.getElementById(id).addEventListener('change',bkFields);
+  });
+  document.getElementById('bStart').addEventListener('change',bkFields);
+  ['rAmt','rRecv'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',revReadout);
+  });
+
+  function closeAll(){
+    ['formBk','formCost','formRev','formPIn','formPOut'].forEach(function(f){ document.getElementById(f).classList.remove('open','editing'); });
+    ['btnBk','btnCost','btnRev','btnPIn','btnPOut'].forEach(function(b){ document.getElementById(b).classList.remove('on'); });
+    ['cancel-saveBk','cancel-saveCost','cancel-saveRev','cancel-savePIn','cancel-savePOut'].forEach(function(c){ document.getElementById(c).classList.remove('on'); });
+    edit={bk:null,co:null,rv:null,pi:null,po:null};
+    document.getElementById('saveBk').textContent='Save booking';
+    document.getElementById('saveCost').textContent='Save cost';
+    document.getElementById('saveRev').textContent='Save revenue';
+    document.getElementById('savePIn').textContent='Save';
+    document.getElementById('savePOut').textContent='Save';
+    document.getElementById('bkFormTitle').textContent='New booking';
+    document.getElementById('costFormTitle').textContent='New business cost';
+    document.getElementById('revFormTitle').textContent='Other revenue';
+    ['bCust','bTotal','bColl','bRecv','bCost','cAmt','cNote','rAmt','rRecv','rNote','piAmt','piNote','poAmt','poNote','bStartT'].forEach(function(i){ setV(i,''); });
+    ['bStart','bEnd','cDate','rDate','piDate','poDate'].forEach(function(i){ setV(i,today()); });
+    if(typeof bkFields==='function'){ bkFields(); revReadout(); }
+  }
+
+  [['btnBk','formBk'],['btnCost','formCost'],['btnRev','formRev'],['btnPIn','formPIn'],['btnPOut','formPOut']].forEach(function(p){
+    document.getElementById(p[0]).addEventListener('click',function(){
+      var f=document.getElementById(p[1]),was=f.classList.contains('open');
+      closeAll();
+      if(!was){ f.classList.add('open'); this.classList.add('on'); }
     });
   });
-</script>
+  ['cancel-saveBk','cancel-saveCost','cancel-saveRev','cancel-savePIn','cancel-savePOut'].forEach(function(c){
+    document.getElementById(c).addEventListener('click',closeAll);
+  });
 
+  document.getElementById('saveBk').addEventListener('click',function(){
+    var tot=parseFloat(V('bTotal'));
+    if(!V('bCust')&&!tot){ document.getElementById('bCust').focus(); return; }
+    var chauff=V('bType')==='chauffeur';
+    var svc=chauff?V('bSvc'):'';
+    var multi=!chauff||svc==='Multiple day';
+    var rv=V('bRecv').trim();
+    var coll=parseFloat(V('bColl'))||0;
+    var borrowed=V('bSrc')==='external';
+    var d={
+      customer:V('bCust').trim()||autoName(V('bVeh'),V('bSrc'),V('bType'),svc),
+      vehicle:V('bVeh'),source:V('bSrc'),type:V('bType'),service:svc,
+      start:V('bStart')||today(),startTime:chauff?V('bStartT'):'',
+      end:multi?(V('bEnd')||V('bStart')||today()):(V('bStart')||today()),endTime:'',
+      total:tot||0,collected:coll,
+      received: rv===''?null:(parseFloat(rv)||0),
+      cost: borrowed?(parseFloat(V('bCost'))||0):0,
+      notes:''
+    };
+    var id;
+    if(edit.bk){ id=edit.bk; S.bookings=S.bookings.map(function(b){return b.id===id?Object.assign({},b,d):b;}); }
+    else { id='b'+Date.now(); d.id=id; S.bookings.push(d); }
+    var base=coll||d.total;
+    upsertFee(id, d.received===null?0:Math.max(0,base-d.received),
+      'Processing fees — '+d.customer, d.start);
+    closeAll(); save(); render();
+  });
+
+  document.getElementById('saveCost').addEventListener('click',function(){
+    var a=parseFloat(V('cAmt'));
+    if(!a||a<=0){ document.getElementById('cAmt').focus(); return; }
+    var d={amount:a,type:V('cType'),note:V('cNote').trim(),date:V('cDate')||today()};
+    if(edit.co){ S.costs=S.costs.map(function(c){return c.id===edit.co?Object.assign({},c,d):c;}); }
+    else { d.id='c'+Date.now(); S.costs.push(d); }
+    closeAll(); save(); render();
+  });
+
+  document.getElementById('saveRev').addEventListener('click',function(){
+    var a=parseFloat(V('rAmt'));
+    if(!a||a<=0){ document.getElementById('rAmt').focus(); return; }
+    var rv=V('rRecv').trim();
+    var d={amount:a,received:rv===''?null:(parseFloat(rv)||0),
+      type:V('rType'),car:V('rCar'),note:V('rNote').trim(),date:V('rDate')||today()};
+    var id;
+    if(edit.rv){ id=edit.rv; S.revenue=S.revenue.map(function(r){return r.id===id?Object.assign({},r,d):r;}); }
+    else { id='r'+Date.now(); d.id=id; S.revenue.push(d); }
+    upsertFee(id, d.received===null?0:Math.max(0,a-d.received),
+      'Processing fees — '+(d.note||d.type), d.date);
+    closeAll(); save(); render();
+  });
+
+  [['savePIn','revenue','piAmt','piType','piNote','piDate','pi'],
+   ['savePOut','expense','poAmt','poType','poNote','poDate','po']].forEach(function(x){
+    document.getElementById(x[0]).addEventListener('click',function(){
+      var a=parseFloat(V(x[2]));
+      if(!a||a<=0){ document.getElementById(x[2]).focus(); return; }
+      var d={kind:x[1],amount:a,type:V(x[3]),note:V(x[4]).trim(),date:V(x[5])||today()};
+      if(edit[x[6]]){ S.personal=S.personal.map(function(p){return p.id===edit[x[6]]?Object.assign({},p,d):p;}); }
+      else { d.id='p'+Date.now(); S.personal.push(d); }
+      closeAll(); save(); render();
+    });
+  });
+
+  function goTab(n){
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on',x.dataset.pane===n); });
+    document.querySelectorAll('.pane').forEach(function(x){ x.classList.remove('on'); });
+    document.getElementById('pane-'+n).classList.add('on');
+  }
+  function openForm(fid,bid,sid,title,titleTxt){
+    var f=document.getElementById(fid);
+    f.classList.add('open','editing');
+    document.getElementById(bid).classList.add('on');
+    document.getElementById(sid).textContent='Update';
+    if(title) document.getElementById(title).textContent=titleTxt;
+    document.getElementById('cancel-'+sid).classList.add('on');
+    f.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  document.body.addEventListener('click',function(ev){
+    var el;
+    if((el=ev.target.closest('[data-day]'))){ selDay=el.dataset.day; renderCal(); return; }
+    if((el=ev.target.closest('[data-eb]'))){
+      var b=S.bookings.filter(function(x){return x.id===el.dataset.eb;})[0]; if(!b) return;
+      closeAll(); goTab('book');
+      setV('bCust',b.customer); setSel('bVeh',b.vehicle); setSel('bSrc',b.source); setSel('bType',b.type);
+      if(b.service) setSel('bSvc',b.service);
+      setV('bStart',b.start); setV('bStartT',b.startTime); setV('bEnd',b.end);
+      setV('bTotal',b.total); setV('bColl',b.collected);
+      setV('bRecv',(b.received===null||b.received===undefined)?'':b.received);
+      setV('bCost',(b.cost===null||b.cost===undefined)?'':b.cost);
+      bkFields();
+      edit.bk=b.id;
+      openForm('formBk','btnBk','saveBk','bkFormTitle','Editing booking');
+      document.getElementById('saveBk').textContent='Update booking';
+      return;
+    }
+    if((el=ev.target.closest('[data-db]'))){ dropFee(el.dataset.db); S.bookings=S.bookings.filter(function(x){return x.id!==el.dataset.db;}); save(); render(); return; }
+    if((el=ev.target.closest('[data-ec]'))){
+      var c=S.costs.filter(function(x){return x.id===el.dataset.ec;})[0]; if(!c) return;
+      closeAll(); goTab('dash');
+      setV('cAmt',c.amount); setSel('cType',c.type); setV('cNote',c.note); setV('cDate',c.date);
+      edit.co=c.id;
+      openForm('formCost','btnCost','saveCost','costFormTitle','Editing cost');
+      document.getElementById('saveCost').textContent='Update cost';
+      return;
+    }
+    if((el=ev.target.closest('[data-dc]'))){ S.costs=S.costs.filter(function(x){return x.id!==el.dataset.dc;}); save(); render(); return; }
+    if((el=ev.target.closest('[data-er]'))){
+      var r=S.revenue.filter(function(x){return x.id===el.dataset.er;})[0]; if(!r) return;
+      closeAll(); goTab('dash');
+      setV('rAmt',r.amount); setV('rRecv',(r.received===null||r.received===undefined)?'':r.received);
+      setSel('rType',r.type); setSel('rCar',r.car||'Not vehicle-related');
+      setV('rNote',r.note); setV('rDate',r.date); rFeeUpd();
+      edit.rv=r.id;
+      openForm('formRev','btnRev','saveRev','revFormTitle','Editing revenue');
+      document.getElementById('saveRev').textContent='Update revenue';
+      return;
+    }
+    if((el=ev.target.closest('[data-dr]'))){ dropFee(el.dataset.dr); S.revenue=S.revenue.filter(function(x){return x.id!==el.dataset.dr;}); save(); render(); return; }
+    if((el=ev.target.closest('[data-ep]'))){
+      var p=S.personal.filter(function(x){return x.id===el.dataset.ep;})[0]; if(!p) return;
+      closeAll(); goTab('per');
+      var isIn=p.kind==='revenue';
+      setV(isIn?'piAmt':'poAmt',p.amount); setSel(isIn?'piType':'poType',p.type);
+      setV(isIn?'piNote':'poNote',p.note); setV(isIn?'piDate':'poDate',p.date);
+      edit[isIn?'pi':'po']=p.id;
+      openForm(isIn?'formPIn':'formPOut',isIn?'btnPIn':'btnPOut',isIn?'savePIn':'savePOut',null,null);
+      return;
+    }
+    if((el=ev.target.closest('[data-dp]'))){ S.personal=S.personal.filter(function(x){return x.id!==el.dataset.dp;}); save(); render(); return; }
+  });
+
+  document.getElementById('calPrev').addEventListener('click',function(){ calOff--; selDay=null; renderCal(); });
+  document.getElementById('calNext').addEventListener('click',function(){ calOff++; selDay=null; renderCal(); });
+
+  document.querySelectorAll('.tab').forEach(function(tb){
+    tb.addEventListener('click',function(){ goTab(tb.dataset.pane); window.scrollTo(0,0); });
+  });
+  document.querySelectorAll('.toggle-log').forEach(function(b){
+    b.addEventListener('click',function(){
+      var open=document.getElementById(b.dataset.log).classList.toggle('open');
+      b.textContent=(open?'Hide':'Show')+' '+b.textContent.replace(/^(Show|Hide)\s*/,'');
+    });
+  });
+  document.getElementById('targetInput').addEventListener('change',function(){ S.target=parseFloat(this.value)||34000; save(); render(); });
+  document.getElementById('budgetInput').addEventListener('change',function(){ S.budget=parseFloat(this.value)||3000; save(); render(); });
+
+  document.getElementById('btnCopy').addEventListener('click',function(){
+    var b=document.getElementById('exportBox'); b.select(); b.setSelectionRange(0,999999);
+    try{ document.execCommand('copy'); flash('Copied'); }catch(e){ flash('Copy manually',true); }
+  });
+  document.getElementById('btnRestore').addEventListener('click',function(){
+    var raw=document.getElementById('importBox').value.trim();
+    if(!raw){ flash('Nothing to restore',true); return; }
+    try{
+      var i=JSON.parse(raw),n=0;
+      ['bookings','costs','revenue','personal'].forEach(function(k){
+        if(!Array.isArray(i[k])) return;
+        var have={}; S[k].forEach(function(x){have[x.id]=1;});
+        i[k].forEach(function(x){ if(x&&x.id&&!have[x.id]){ S[k].push(x); n++; } });
+      });
+      if(i.target) S.target=i.target;
+      if(i.budget) S.budget=i.budget;
+      document.getElementById('importBox').value='';
+      save(); render(); flash(n+' restored');
+    }catch(e){ flash('Backup not readable',true); }
+  });
+
+  ['bStart','bEnd','cDate','rDate','piDate','poDate'].forEach(function(i){ document.getElementById(i).value=today(); });
+  bkFields();
+  function dbStatus(){
+    var el=document.getElementById('dbStatus');
+    if(sb && cfg){
+      el.innerHTML='Connected to <b>'+esc(cfg.url.replace(/^https?:\/\//,''))+'</b>';
+      el.className='feecalc';
+      document.getElementById('sbUrl').value=cfg.url;
+      document.getElementById('sbKey').value=cfg.key;
+    } else {
+      el.textContent='Not connected — changes are saved to this device only.';
+      el.className='feecalc hot';
+    }
+  }
+  document.getElementById('btnSbSave').addEventListener('click',async function(){
+    var url=document.getElementById('sbUrl').value.trim().replace(/\/+$/,'');
+    var key=document.getElementById('sbKey').value.trim();
+    if(!url||!key){ flash('Both fields needed',true); return; }
+    try{ localStorage.setItem(CFG_KEY,JSON.stringify({url:url,key:key})); }catch(e){}
+    sb=null; connect(); dbStatus();
+    if(sb){ await load(); flash('Connected'); } else { flash('Could not connect',true); }
+  });
+
+  document.getElementById('btnRefresh').addEventListener('click',function(){ load(); });
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden && document.body.classList.contains('authed')) load(true); });
+  setInterval(function(){ if(document.body.classList.contains('authed')) render(); },30000);
+
+  function boot(){ load(true); }
+  checkSession().then(function(authed){ if(authed) boot(); });
+})();
+</script>
 </body>
 </html>
