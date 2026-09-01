@@ -299,7 +299,7 @@
     <div class="gauge-head">
       <div>
         <div class="gauge-label">Net &mdash; after payouts &amp; costs</div>
-        <div class="gauge-figure"><span class="cur">AED</span><span id="netFig">0</span></div>
+        <div class="gauge-figure"><span id="netFig">0</span></div>
       </div>
       <div class="gauge-target">Fixed base<b>AED <input type="number" id="targetInput" value="34000"></b></div>
     </div>
@@ -316,6 +316,7 @@
 
   <div class="strip"><span class="eyebrow">Cash collected</span><span class="val good" id="collVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Still owed to you</span><span class="val amber" id="owedVal">&mdash;</span></div>
+  <div class="strip"><span class="eyebrow">Upcoming (not started yet)</span><span class="val" id="upcomingVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Distributable after fixed base</span><span class="val" id="distVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Your share at 50%</span><span class="val" id="shareVal">&mdash;</span></div>
 
@@ -477,7 +478,7 @@
   <section class="gauge-block">
     <div class="gauge-head">
       <div><div class="gauge-label">Spent this cycle</div>
-        <div class="gauge-figure"><span class="cur">AED</span><span id="pSpentFig">0</span></div></div>
+        <div class="gauge-figure"><span id="pSpentFig">0</span></div></div>
       <div class="gauge-target">Budget<b>AED <input type="number" id="budgetInput" value="3000"></b></div>
     </div>
     <div class="gauge"><div class="gauge-fill" id="pFill"></div><div class="gauge-edge" id="pEdge"></div><div class="gauge-segs"></div></div>
@@ -720,7 +721,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   var S={bookings:[],costs:[],revenue:[],personal:[],target:34000,budget:3000};
   var calOff=0, selDay=null;
 
-  function fmt(n){ return Math.round(n||0).toLocaleString('en-US'); }
+  function fmt(n){ return 'AED '+Math.round(n||0).toLocaleString('en-US'); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function cyStart(){ var n=new Date(),y=n.getFullYear(),m=n.getMonth(); if(n.getDate()<22)m-=1; return new Date(y,m,22); }
   function cyEnd(){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()+1,22); }
@@ -841,6 +842,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('collVal').textContent=fmt(coll);
     document.getElementById('owedVal').textContent=fmt(owed);
 
+    // Bookings within this cycle whose start date/time hasn't arrived yet -
+    // their value isn't in Revenue yet, but it's coming once the date hits.
+    var upcoming=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)>now;})
+      .reduce(function(a,b){return a+(+b.total||0);},0);
+    document.getElementById('upcomingVal').textContent=fmt(upcoming);
+
     var dist=net-tgt;
     var dv=document.getElementById('distVal');
     dv.textContent=dist>0?fmt(dist):'- not yet at break-even';
@@ -907,7 +914,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var tk=Object.keys(byT).sort(function(a,b){return byT[b]-byT[a];});
     document.getElementById('costByType').innerHTML=tk.length?tk.map(function(k){
       return '<div class="row"><div class="row-main"><div class="row-name">'+esc(k)+'</div></div>'+
-        '<div class="row-amt out">−'+fmt(byT[k])+'</div></div>';
+        '<div class="row-amt out">'+fmt(-byT[k])+'</div></div>';
     }).join(''):'<div class="empty">Nothing this cycle.</div>';
     coList('costList',co.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged this cycle.');
     coList('allCostList',S.costs.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged.');
@@ -932,7 +939,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('recentPer').innerHTML=per.length?per.map(function(p){
       return '<div class="row"><div class="row-main"><div class="row-name">'+esc(p.note||p.type)+
         '</div><div class="row-meta">'+lbl(p.date)+' · '+esc(p.type)+'</div></div>'+
-        '<div class="row-amt'+(p.kind==='expense'?' out':'')+'">'+(p.kind==='expense'?'−':'')+fmt(p.amount)+'</div>'+
+        '<div class="row-amt'+(p.kind==='expense'?' out':'')+'">'+fmt(p.kind==='expense'?-p.amount:p.amount)+'</div>'+
         '<button class="edit" data-ep="'+p.id+'">&#9998;</button><button class="del" data-dp="'+p.id+'">×</button></div>';
     }).join(''):'<div class="empty">Nothing logged yet this cycle.</div>';
 
@@ -1062,7 +1069,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     el.innerHTML=arr.length?arr.map(function(c){
       return '<div class="row"><div class="row-main"><div class="row-name">'+esc(c.note||c.type)+
         '</div><div class="row-meta">'+lbl(c.date)+' · '+esc(c.type)+'</div></div>'+
-        '<div class="row-amt out">−'+fmt(c.amount)+'</div>'+
+        '<div class="row-amt out">'+fmt(-c.amount)+'</div>'+
         '<button class="edit" data-ec="'+c.id+'">&#9998;</button><button class="del" data-dc="'+c.id+'">×</button></div>';
     }).join(''):'<div class="empty">'+msg+'</div>';
   }
