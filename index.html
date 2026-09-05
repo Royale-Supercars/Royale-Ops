@@ -64,6 +64,23 @@
   .gauge-foot b{color:var(--cyan);font-weight:500}
 
   .summary{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--hair)}
+
+  /* ---------- confirmation banner ---------- */
+  .confirm-banner{background:rgba(214,168,54,.08);border:1px solid var(--warn);border-radius:6px;
+    padding:14px 16px;margin:0 0 16px}
+  .confirm-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--warn);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
+  .confirm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}
+  .confirm-row:first-child{border-top:0}
+  .confirm-info{font-family:'Inter',sans-serif;font-size:13px;color:var(--ice)}
+  .confirm-info b{color:var(--warn)}
+  .confirm-btns{display:flex;gap:8px;flex:none}
+  .confirm-btn{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.02em;
+    border-radius:5px;padding:8px 14px;cursor:pointer;border:1px solid transparent}
+  .confirm-btn.paid{background:var(--green);color:#0a0a0a}
+  .confirm-btn.notpaid{background:transparent;border-color:var(--hair-hot);color:var(--dim)}
+  .confirm-btn.notpaid:hover{border-color:var(--warn);color:var(--warn)}
   .summary.three{grid-template-columns:repeat(3,1fr)}
   .cell{padding:16px 0 18px;border-right:1px solid var(--hair);padding-left:10px}
   .cell:first-child{padding-left:0}
@@ -305,6 +322,11 @@
     </div>
     <div class="gauge"><div class="gauge-fill" id="fill"></div><div class="gauge-edge" id="edge"></div><div class="gauge-segs"></div></div>
     <div class="gauge-foot"><div><b id="pctTxt">0%</b> covered</div><div id="remainTxt">&mdash;</div></div>
+  </section>
+
+  <section id="confirmBanner" class="confirm-banner" style="display:none">
+    <div class="confirm-title">&#9888; <span id="confirmCount">0</span> booking(s) need confirmation</div>
+    <div id="confirmList"></div>
   </section>
 
   <section class="summary">
@@ -819,7 +841,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       s.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' → '+
       e.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 
-    var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now;});
+    // A booking counts toward revenue if it's a legacy booking from before
+    // this feature existed (confirmed is undefined -> auto-grandfathered,
+    // so past cycles are never affected) or has been explicitly marked
+    // paid (confirmed:true). New bookings start as confirmed:'pending' and
+    // are excluded until you mark them Paid or Not Paid on the dashboard.
+    function isConfirmed(b){ return b.confirmed===undefined || b.confirmed===true; }
+
+    var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now && isConfirmed(b);});
     var mrev=S.revenue.filter(function(r){return inCy(r.date);});
     var rev=bk.reduce(function(a,b){return a+(+b.total||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
     var pay=bk.reduce(function(a,b){return a+(+b.cost||0);},0);
@@ -847,6 +876,26 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var upcoming=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)>now;})
       .reduce(function(a,b){return a+(+b.total||0);},0);
     document.getElementById('upcomingVal').textContent=fmt(upcoming);
+
+    // Bookings that have started but haven't been confirmed as paid/not-paid yet.
+    var needsConfirm=S.bookings.filter(function(b){
+      return inCy(b.start) && startMs(b)<=now && b.confirmed==='pending';
+    });
+    var banner=document.getElementById('confirmBanner');
+    if(needsConfirm.length){
+      banner.style.display='block';
+      document.getElementById('confirmCount').textContent=needsConfirm.length;
+      document.getElementById('confirmList').innerHTML=needsConfirm.map(function(b){
+        return '<div class="confirm-row">'+
+          '<span class="confirm-info">'+(b.vehicle||'Booking')+' &mdash; <b>'+fmt(b.total)+'</b></span>'+
+          '<span class="confirm-btns">'+
+            '<button class="confirm-btn paid" data-confirm-id="'+b.id+'" data-confirm-val="true">Paid</button>'+
+            '<button class="confirm-btn notpaid" data-confirm-id="'+b.id+'" data-confirm-val="false">Not Paid</button>'+
+          '</span></div>';
+      }).join('');
+    } else {
+      banner.style.display='none';
+    }
 
     var dist=net-tgt;
     var dv=document.getElementById('distVal');
@@ -1213,6 +1262,17 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById(c).addEventListener('click',closeAll);
   });
 
+  document.getElementById('confirmList').addEventListener('click',function(ev){
+    var btn=ev.target.closest('[data-confirm-id]');
+    if(!btn) return;
+    var id=btn.dataset.confirmId;
+    var val=btn.dataset.confirmVal==='true';
+    S.bookings=S.bookings.map(function(b){
+      return b.id===id?Object.assign({},b,{confirmed:val}):b;
+    });
+    save(); render();
+  });
+
   document.getElementById('saveBk').addEventListener('click',function(){
     var tot=parseFloat(V('bTotal'));
     if(!V('bCust')&&!tot){ document.getElementById('bCust').focus(); return; }
@@ -1234,7 +1294,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     };
     var id;
     if(edit.bk){ id=edit.bk; S.bookings=S.bookings.map(function(b){return b.id===id?Object.assign({},b,d):b;}); }
-    else { id='b'+Date.now(); d.id=id; S.bookings.push(d); }
+    else { id='b'+Date.now(); d.id=id; d.confirmed='pending'; S.bookings.push(d); }
     var base=coll||d.total;
     upsertFee(id, d.received===null?0:Math.max(0,base-d.received),
       'Processing fees - '+d.customer, d.start);
