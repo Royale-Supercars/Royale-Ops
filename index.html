@@ -844,12 +844,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       s.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' → '+
       e.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
 
-    // A booking counts toward revenue if it's a legacy booking from before
-    // this feature existed (confirmed is undefined -> auto-grandfathered,
-    // so past cycles are never affected) or has been explicitly marked
-    // paid (confirmed:true). New bookings start as confirmed:'pending' and
-    // are excluded until you mark them Paid or Not Paid on the dashboard.
-    function isConfirmed(b){ return b.confirmed===undefined || b.confirmed===true; }
+    // A booking counts toward revenue if it's genuinely historical - either
+    // explicitly marked paid (confirmed:true), OR it's a legacy booking
+    // (confirmed never set) that had ALREADY STARTED before this
+    // confirmation feature went live (7 Sep 2026) - protecting cycles that
+    // were already counted before this existed. Anything starting from
+    // that cutoff onward needs a real Paid/Not Paid answer, even if it was
+    // entered into the system long before today.
+    var CONFIRM_CUTOFF = new Date('2026-09-07T00:00:00').getTime();
+    function isConfirmed(b){
+      if(b.confirmed===true) return true;
+      if(b.confirmed===false) return false;
+      return b.confirmed===undefined && startMs(b) < CONFIRM_CUTOFF;
+    }
 
     var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now && isConfirmed(b);});
     var mrev=S.revenue.filter(function(r){return inCy(r.date);});
@@ -882,7 +889,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     // Bookings that have started but haven't been confirmed as paid/not-paid yet.
     var needsConfirm=S.bookings.filter(function(b){
-      return inCy(b.start) && startMs(b)<=now && b.confirmed==='pending';
+      return inCy(b.start) && startMs(b)<=now && !isConfirmed(b) && b.confirmed!==false;
     });
     var banner=document.getElementById('confirmBanner');
     if(needsConfirm.length){
