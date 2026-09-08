@@ -905,7 +905,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var lapAmount = beyondTarget ? (net - tgt) : net;
     var pct=Math.max(0,Math.min(100,(lapAmount/tgt)*100));
 
-    document.getElementById('netFig').textContent=fmt(net);
+    document.getElementById('netFig').textContent=fmt(net>=tgt?(net-tgt):net);
     document.getElementById('revTot').textContent=fmt(rev);
     document.getElementById('payTot').textContent=fmt(pay);
     document.getElementById('cosTot').textContent=fmt(cos);
