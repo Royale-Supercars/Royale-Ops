@@ -362,7 +362,7 @@
     <div class="cell"><span class="eyebrow">Revenue</span><div class="amount" id="revTot">0</div></div>
     <div class="cell"><span class="eyebrow">Payouts</span><div class="amount out" id="payTot">0</div></div>
     <div class="cell"><span class="eyebrow">Costs</span><div class="amount out" id="cosTot">0</div></div>
-    <div class="cell"><span class="eyebrow">Profit</span><div class="amount net" id="netTot">0</div></div>
+    <div class="cell"><span class="eyebrow">Net</span><div class="amount net" id="netTot">0</div></div>
   </section>
 
   <div class="strip"><span class="eyebrow">Cash collected</span><span class="val good" id="collVal">&mdash;</span></div>
@@ -896,24 +896,15 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var co=S.costs.filter(function(c){return inCy(c.date);});
     var cos=co.reduce(function(a,c){return a+(+c.amount||0);},0);
     var net=rev-pay-cos,tgt=S.target;
-    // Once net reaches the target, the gauge resets to empty and starts
-    // Simple 0-100% progress toward the target. Once hit, the bar just
-    // stays full - the big number switches to showing pure profit made
-    // beyond the target instead of the running total.
-    var beyondTarget = net>=tgt;
     var pct=Math.max(0,Math.min(100,(net/tgt)*100));
 
-    document.getElementById('netFig').textContent=fmt(beyondTarget?(net-tgt):net);
+    document.getElementById('netFig').textContent=fmt(net);
     document.getElementById('revTot').textContent=fmt(rev);
     document.getElementById('payTot').textContent=fmt(pay);
     document.getElementById('cosTot').textContent=fmt(cos);
     document.getElementById('netTot').textContent=fmt(net);
     document.getElementById('pctTxt').textContent=Math.round(pct)+'%';
-    if(beyondTarget){
-      document.getElementById('remainTxt').textContent='Target hit - '+fmt(net-tgt)+' profit · day '+dayNo()+' of '+cyDays();
-    } else {
-      document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
-    }
+    document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
     document.getElementById('fill').style.width=pct+'%';
     document.getElementById('edge').style.left=pct+'%';
     document.getElementById('collVal').textContent=fmt(coll);
