@@ -71,7 +71,8 @@
   .confirm-title{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;color:var(--warn);
     text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px}
   .confirm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
-    padding:9px 0;border-top:1px solid rgba(255,255,255,.06)}
+    padding:9px 0;border-top:1px solid rgba(255,255,255,.06);cursor:pointer}
+  .confirm-row:hover{background:rgba(255,255,255,.03)}
   .confirm-row:first-child{border-top:0}
   .confirm-info{font-family:'Inter',sans-serif;font-size:13px;color:var(--ice)}
   .confirm-info b{color:var(--warn)}
@@ -81,7 +82,6 @@
   .confirm-btn.paid{background:var(--green);color:#0a0a0a}
   .confirm-btn.notpaid{background:transparent;border-color:var(--hair-hot);color:var(--dim)}
   .confirm-btn.notpaid:hover{border-color:var(--warn);color:var(--warn)}
-  .confirm-info{cursor:pointer}
   .confirm-info:hover{color:var(--cyan)}
 
   /* ---------- booking detail popup ---------- */
@@ -368,9 +368,6 @@
   <div class="strip"><span class="eyebrow">Cash collected</span><span class="val good" id="collVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Still owed to you</span><span class="val amber" id="owedVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Upcoming (not started yet)</span><span class="val" id="upcomingVal">&mdash;</span></div>
-  <div class="strip" id="beyondTargetStrip" style="display:none">
-    <span class="eyebrow">Profit beyond target</span><span class="val good" id="beyondTargetVal">&mdash;</span>
-  </div>
   <div class="strip"><span class="eyebrow">Distributable after fixed base</span><span class="val" id="distVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Your share at 50%</span><span class="val" id="shareVal">&mdash;</span></div>
 
@@ -899,7 +896,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var co=S.costs.filter(function(c){return inCy(c.date);});
     var cos=co.reduce(function(a,c){return a+(+c.amount||0);},0);
     var net=rev-pay-cos,tgt=S.target;
-    var pct=Math.max(0,Math.min(100,(net/tgt)*100));
+    // Once net reaches the target, the gauge resets to empty and starts
+    // filling again - now tracking pure profit made beyond the target,
+    // using the same target size as the new lap. The whole thing goes
+    // back to a fresh 0 automatically at the next cycle, since net/rev
+    // are already recalculated per-cycle above.
+    var beyondTarget = net>=tgt;
+    var lapAmount = beyondTarget ? (net - tgt) : net;
+    var pct=Math.max(0,Math.min(100,(lapAmount/tgt)*100));
 
     document.getElementById('netFig').textContent=fmt(net);
     document.getElementById('revTot').textContent=fmt(rev);
@@ -907,13 +911,10 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('cosTot').textContent=fmt(cos);
     document.getElementById('netTot').textContent=fmt(net);
     document.getElementById('pctTxt').textContent=Math.round(pct)+'%';
-    if(net>=tgt){
-      document.getElementById('remainTxt').textContent='Target hit! · day '+dayNo()+' of '+cyDays();
-      document.getElementById('beyondTargetStrip').style.display='flex';
-      document.getElementById('beyondTargetVal').textContent=fmt(net-tgt);
+    if(beyondTarget){
+      document.getElementById('remainTxt').textContent='Target hit - '+fmt(lapAmount)+' profit since · day '+dayNo()+' of '+cyDays();
     } else {
       document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
-      document.getElementById('beyondTargetStrip').style.display='none';
     }
     document.getElementById('fill').style.width=pct+'%';
     document.getElementById('edge').style.left=pct+'%';
@@ -935,8 +936,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       banner.style.display='block';
       document.getElementById('confirmCount').textContent=needsConfirm.length;
       document.getElementById('confirmList').innerHTML=needsConfirm.map(function(b){
-        return '<div class="confirm-row">'+
-          '<span class="confirm-info" data-detail-id="'+b.id+'">'+(b.vehicle||'Booking')+' &mdash; <b>'+fmt(b.total)+'</b></span>'+
+        return '<div class="confirm-row" data-detail-id="'+b.id+'">'+
+          '<span class="confirm-info">'+(b.vehicle||'Booking')+' &mdash; <b>'+fmt(b.total)+'</b></span>'+
           '<span class="confirm-btns">'+
             '<button class="confirm-btn paid" data-confirm-id="'+b.id+'" data-confirm-val="true">Paid</button>'+
             '<button class="confirm-btn notpaid" data-confirm-id="'+b.id+'" data-confirm-val="false">Not Paid</button>'+
@@ -1312,20 +1313,21 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   });
 
   document.getElementById('confirmList').addEventListener('click',function(ev){
-    var detailEl=ev.target.closest('[data-detail-id]');
-    if(detailEl){
-      var b=S.bookings.filter(function(x){return x.id===detailEl.dataset.detailId;})[0];
-      if(b) openBkDetail(b);
+    var btn=ev.target.closest('[data-confirm-id]');
+    if(btn){
+      var id=btn.dataset.confirmId;
+      var val=btn.dataset.confirmVal==='true';
+      S.bookings=S.bookings.map(function(b){
+        return b.id===id?Object.assign({},b,{confirmed:val}):b;
+      });
+      save(); render();
       return;
     }
-    var btn=ev.target.closest('[data-confirm-id]');
-    if(!btn) return;
-    var id=btn.dataset.confirmId;
-    var val=btn.dataset.confirmVal==='true';
-    S.bookings=S.bookings.map(function(b){
-      return b.id===id?Object.assign({},b,{confirmed:val}):b;
-    });
-    save(); render();
+    var row=ev.target.closest('[data-detail-id]');
+    if(row){
+      var b=S.bookings.filter(function(x){return x.id===row.dataset.detailId;})[0];
+      if(b) openBkDetail(b);
+    }
   });
 
   function openBkDetail(b){
