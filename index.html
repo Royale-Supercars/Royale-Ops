@@ -896,15 +896,27 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var co=S.costs.filter(function(c){return inCy(c.date);});
     var cos=co.reduce(function(a,c){return a+(+c.amount||0);},0);
     var net=rev-pay-cos,tgt=S.target;
-    var pct=Math.max(0,Math.min(100,(net/tgt)*100));
+    var beyondTarget = net>=tgt;
+    var profit = net - tgt; // uncapped - keeps counting up honestly, no ceiling
+    // Before target: bar fills 0-100% toward the 30k goal.
+    // After target: bar resets to 0% and fills again using the same 30k
+    // as its scale (so another full 30k profit fills it again), but the
+    // actual profit number itself is never capped.
+    var pct = beyondTarget
+      ? Math.max(0,Math.min(100,(profit/tgt)*100))
+      : Math.max(0,Math.min(100,(net/tgt)*100));
 
-    document.getElementById('netFig').textContent=fmt(net);
+    document.getElementById('netFig').textContent=fmt(beyondTarget?profit:net);
     document.getElementById('revTot').textContent=fmt(rev);
     document.getElementById('payTot').textContent=fmt(pay);
     document.getElementById('cosTot').textContent=fmt(cos);
     document.getElementById('netTot').textContent=fmt(net);
     document.getElementById('pctTxt').textContent=Math.round(pct)+'%';
-    document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
+    if(beyondTarget){
+      document.getElementById('remainTxt').textContent=fmt(profit)+' profit beyond target · day '+dayNo()+' of '+cyDays();
+    } else {
+      document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
+    }
     document.getElementById('fill').style.width=pct+'%';
     document.getElementById('edge').style.left=pct+'%';
     document.getElementById('collVal').textContent=fmt(coll);
