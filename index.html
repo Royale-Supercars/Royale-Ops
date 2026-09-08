@@ -81,6 +81,28 @@
   .confirm-btn.paid{background:var(--green);color:#0a0a0a}
   .confirm-btn.notpaid{background:transparent;border-color:var(--hair-hot);color:var(--dim)}
   .confirm-btn.notpaid:hover{border-color:var(--warn);color:var(--warn)}
+  .confirm-info{cursor:pointer}
+  .confirm-info:hover{color:var(--cyan)}
+
+  /* ---------- booking detail popup ---------- */
+  .bk-detail-overlay{position:fixed;inset:0;z-index:400;background:rgba(4,7,14,.82);
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    opacity:0;pointer-events:none;transition:opacity .25s}
+  .bk-detail-overlay.open{opacity:1;pointer-events:auto}
+  .bk-detail-card{position:relative;width:100%;max-width:380px;background:var(--panel);
+    border:1px solid var(--hair-hot);padding:26px 22px;max-height:80vh;overflow-y:auto}
+  .bk-detail-close{position:absolute;top:10px;right:12px;background:none;border:0;
+    color:var(--dim);font-size:22px;cursor:pointer;line-height:1;padding:6px}
+  .bk-detail-close:hover{color:var(--ice)}
+  .bk-detail-row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;
+    border-top:1px solid rgba(255,255,255,.06);font-family:'Inter',sans-serif;font-size:13px}
+  .bk-detail-row:first-of-type{border-top:0}
+  .bk-detail-row .k{color:var(--dim)}
+  .bk-detail-row .v{color:var(--ice);font-weight:500;text-align:right}
+  .bk-detail-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--ice);
+    margin-bottom:4px;padding-right:20px}
+  .bk-detail-sub{font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:16px}
   .summary.three{grid-template-columns:repeat(3,1fr)}
   .cell{padding:16px 0 18px;border-right:1px solid var(--hair);padding-left:10px}
   .cell:first-child{padding-left:0}
@@ -282,6 +304,13 @@
 </head>
 <body>
 
+<div id="bkDetailModal" class="bk-detail-overlay">
+  <div class="bk-detail-card">
+    <button class="bk-detail-close" id="bkDetailClose" aria-label="Close">&times;</button>
+    <div id="bkDetailBody"></div>
+  </div>
+</div>
+
 <div id="loginGate">
   <div class="login-card">
     <div class="login-word">Royale</div>
@@ -339,6 +368,9 @@
   <div class="strip"><span class="eyebrow">Cash collected</span><span class="val good" id="collVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Still owed to you</span><span class="val amber" id="owedVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Upcoming (not started yet)</span><span class="val" id="upcomingVal">&mdash;</span></div>
+  <div class="strip" id="beyondTargetStrip" style="display:none">
+    <span class="eyebrow">Profit beyond target</span><span class="val good" id="beyondTargetVal">&mdash;</span>
+  </div>
   <div class="strip"><span class="eyebrow">Distributable after fixed base</span><span class="val" id="distVal">&mdash;</span></div>
   <div class="strip"><span class="eyebrow">Your share at 50%</span><span class="val" id="shareVal">&mdash;</span></div>
 
@@ -875,7 +907,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('cosTot').textContent=fmt(cos);
     document.getElementById('netTot').textContent=fmt(net);
     document.getElementById('pctTxt').textContent=Math.round(pct)+'%';
-    document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
+    if(net>=tgt){
+      document.getElementById('remainTxt').textContent='Target hit! · day '+dayNo()+' of '+cyDays();
+      document.getElementById('beyondTargetStrip').style.display='flex';
+      document.getElementById('beyondTargetVal').textContent=fmt(net-tgt);
+    } else {
+      document.getElementById('remainTxt').textContent=fmt(Math.max(0,tgt-net))+' to cover · day '+dayNo()+' of '+cyDays();
+      document.getElementById('beyondTargetStrip').style.display='none';
+    }
     document.getElementById('fill').style.width=pct+'%';
     document.getElementById('edge').style.left=pct+'%';
     document.getElementById('collVal').textContent=fmt(coll);
@@ -897,7 +936,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       document.getElementById('confirmCount').textContent=needsConfirm.length;
       document.getElementById('confirmList').innerHTML=needsConfirm.map(function(b){
         return '<div class="confirm-row">'+
-          '<span class="confirm-info">'+(b.vehicle||'Booking')+' &mdash; <b>'+fmt(b.total)+'</b></span>'+
+          '<span class="confirm-info" data-detail-id="'+b.id+'">'+(b.vehicle||'Booking')+' &mdash; <b>'+fmt(b.total)+'</b></span>'+
           '<span class="confirm-btns">'+
             '<button class="confirm-btn paid" data-confirm-id="'+b.id+'" data-confirm-val="true">Paid</button>'+
             '<button class="confirm-btn notpaid" data-confirm-id="'+b.id+'" data-confirm-val="false">Not Paid</button>'+
@@ -1273,6 +1312,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   });
 
   document.getElementById('confirmList').addEventListener('click',function(ev){
+    var detailEl=ev.target.closest('[data-detail-id]');
+    if(detailEl){
+      var b=S.bookings.filter(function(x){return x.id===detailEl.dataset.detailId;})[0];
+      if(b) openBkDetail(b);
+      return;
+    }
     var btn=ev.target.closest('[data-confirm-id]');
     if(!btn) return;
     var id=btn.dataset.confirmId;
@@ -1281,6 +1326,36 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return b.id===id?Object.assign({},b,{confirmed:val}):b;
     });
     save(); render();
+  });
+
+  function openBkDetail(b){
+    var rows=[
+      ['Customer', b.customer||'-'],
+      ['Vehicle', b.vehicle||'-'],
+      ['Car is', b.source==='external'?'Borrowed':'Ours'],
+      ['Type', b.type||'-'],
+      ['Service', b.service||'-'],
+      ['Start', (b.start||'-')+(b.startTime?' '+b.startTime:'')],
+      ['End', b.end||'-'],
+      ['Total charged', fmt(b.total)],
+      ['Collected so far', fmt(b.collected)],
+      ['Received in bank', b.received==null?'-':fmt(b.received)],
+      ['Payout (borrowed)', b.cost==null?'-':fmt(b.cost)],
+      ['Notes', b.notes||'-']
+    ];
+    document.getElementById('bkDetailBody').innerHTML=
+      '<div class="bk-detail-title">'+(b.vehicle||'Booking')+'</div>'+
+      '<div class="bk-detail-sub">'+(b.customer||'No customer name')+'</div>'+
+      rows.map(function(r){
+        return '<div class="bk-detail-row"><span class="k">'+r[0]+'</span><span class="v">'+r[1]+'</span></div>';
+      }).join('');
+    document.getElementById('bkDetailModal').classList.add('open');
+  }
+  document.getElementById('bkDetailClose').addEventListener('click',function(){
+    document.getElementById('bkDetailModal').classList.remove('open');
+  });
+  document.getElementById('bkDetailModal').addEventListener('click',function(ev){
+    if(ev.target===this) this.classList.remove('open');
   });
 
   document.getElementById('saveBk').addEventListener('click',function(){
