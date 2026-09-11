@@ -41,7 +41,7 @@
   .save-pill.bad{color:var(--warn);opacity:1}
   .refresh{margin-top:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
 
-  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(6,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
   .tab{padding:20px 4px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;min-height:64px}
   .tab.on{color:var(--cyan);box-shadow:inset 0 2px 0 var(--cyan)}
   .pane{display:none}
@@ -83,23 +83,6 @@
   .confirm-btn.notpaid{background:transparent;border-color:var(--hair-hot);color:var(--dim)}
   .confirm-btn.notpaid:hover{border-color:var(--warn);color:var(--warn)}
 
-  /* ---------- history / month-by-month ---------- */
-  .hist-chart{display:flex;align-items:flex-end;gap:14px;padding:20px 4px 8px;overflow-x:auto;min-height:180px}
-  .hist-month{display:flex;flex-direction:column;align-items:center;flex:none;width:64px}
-  .hist-bars{display:flex;align-items:flex-end;gap:3px;height:130px}
-  .hist-bar{width:14px;border-radius:2px 2px 0 0;transition:height .4s var(--ease)}
-  .hist-bar.rev{background:var(--cyan)}
-  .hist-bar.cos{background:var(--warn)}
-  .hist-bar.prof{background:var(--green)}
-  .hist-label{font-family:'Inter',sans-serif;font-size:10px;color:var(--dim);margin-top:8px;text-align:center;white-space:nowrap}
-  .hist-legend{display:flex;gap:16px;justify-content:center;padding:0 0 6px;font-family:'Inter',sans-serif;font-size:10.5px;color:var(--dim)}
-  .hist-legend span{display:inline-flex;align-items:center;gap:5px}
-  .hist-legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
-  .hist-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid rgba(255,255,255,.06)}
-  .hist-row:first-child{border-top:0}
-  .hist-row .m{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ice)}
-  .hist-row .figs{display:flex;gap:14px;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim);text-align:right}
-  .hist-row .figs b{color:var(--ice);font-weight:600;display:block;font-size:10px;text-transform:uppercase;letter-spacing:.02em}
   .confirm-info:hover{color:var(--cyan)}
 
   /* ---------- booking detail popup ---------- */
@@ -283,7 +266,7 @@
   @media (max-width:360px){
     .gauge-figure{font-size:34px}
     .bk-grid{grid-template-columns:1fr 1fr}
-    .tab{font-size:9.5px;padding:18px 1px 24px;min-height:60px;letter-spacing:0}
+    .tab{font-size:11px;padding:18px 2px 24px;min-height:60px}
   }
   @media (prefers-reduced-motion:reduce){.gauge-fill,.gauge-edge{transition:none}}
 
@@ -658,24 +641,12 @@
   </div>
 </div>
 
-<div class="pane" id="pane-hist">
-  <section class="section">
-    <span class="eyebrow">Month by month</span>
-    <div id="histChart" class="hist-chart"></div>
-  </section>
-  <section class="section">
-    <span class="eyebrow">Full breakdown</span>
-    <div id="histTable"></div>
-  </section>
-</div>
-
 <nav class="tabs">
   <button class="tab on" data-pane="dash">Dash</button>
   <button class="tab" data-pane="book">Bookings</button>
   <button class="tab" data-pane="cal">Calendar</button>
   <button class="tab" data-pane="cost">Costs</button>
   <button class="tab" data-pane="per">Personal</button>
-  <button class="tab" data-pane="hist">History</button>
 </nav>
 
 <script>
@@ -842,12 +813,6 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function cyStart(){ var n=new Date(),y=n.getFullYear(),m=n.getMonth(); if(n.getDate()<22)m-=1; return new Date(y,m,22); }
   function cyEnd(){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()+1,22); }
-  // Same 22nd-to-22nd cycle math as above, but for any cycle N months back
-  // from the current one (0 = this cycle, 1 = last cycle, etc.) - used by
-  // the History tab to compute each past month's figures.
-  function cyStartOffset(n){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()-n,22); }
-  function cyEndOffset(n){ var s=cyStartOffset(n); return new Date(s.getFullYear(),s.getMonth()+1,22); }
-  function inRange(d,start,end){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=start&&t<end; }
   function cyDays(){ return Math.round((cyEnd()-cyStart())/86400000); }
   function dayNo(){ return Math.max(1,Math.floor((new Date()-cyStart())/86400000)+1); }
   function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
@@ -864,8 +829,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   // confirmation feature went live (7 Sep 2026) - protecting cycles that
   // were already counted before this existed. Anything starting from
   // that cutoff onward needs a real Paid/Not Paid answer, even if it was
-  // entered into the system long before today. Shared by the Dashboard
-  // and the History tab so both agree on what counts.
+  // entered into the system long before today.
   var CONFIRM_CUTOFF = new Date('2026-09-07T00:00:00').getTime();
   function isConfirmed(b){
     if(b.confirmed===true) return true;
@@ -1115,60 +1079,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     }).join(''):'<div class="empty">Nothing logged yet this cycle.</div>';
 
     renderCal();
-    renderHistory();
     var ex=document.getElementById('exportBox'); if(ex) ex.value=JSON.stringify(S);
   }
 
-  // ---------- History: every completed/current cycle since data began (22 Aug 2026) ----------
-  function renderHistory(){
-    var ANCHOR=new Date('2026-08-22T00:00:00');
-    var nowMs=Date.now();
-    var months=[];
-    for(var n=0;;n++){
-      var s=cyStartOffset(n), e=cyEndOffset(n);
-      if(s<ANCHOR) break;
-      months.push({start:s,end:e});
-    }
-    months.reverse(); // oldest first, left to right on the chart
-
-    var data=months.map(function(m){
-      var bk=S.bookings.filter(function(b){
-        return inRange(b.start,m.start,m.end) && startMs(b)<=nowMs && isConfirmed(b) && b.stage!=='potential';
-      });
-      var mrev=S.revenue.filter(function(r){return inRange(r.date,m.start,m.end);});
-      var rev=bk.reduce(function(a,b){return a+(+b.total||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
-      var pay=bk.reduce(function(a,b){return a+(+b.cost||0);},0);
-      var co=S.costs.filter(function(c){return inRange(c.date,m.start,m.end);});
-      var cos=pay+co.reduce(function(a,c){return a+(+c.amount||0);},0);
-      var net=rev-cos;
-      return {label:m.start.toLocaleDateString('en-GB',{month:'short',year:'2-digit'}),rev:rev,cos:cos,net:net};
-    });
-
-    var maxVal=data.reduce(function(m,d){return Math.max(m,d.rev,d.cos,Math.abs(d.net));},1);
-
-    document.getElementById('histChart').innerHTML=
-      '<div class="hist-legend"><span><i style="background:var(--cyan)"></i>Revenue</span>'+
-      '<span><i style="background:var(--warn)"></i>Costs</span>'+
-      '<span><i style="background:var(--green)"></i>Profit</span></div>'+
-      '<div style="display:flex;align-items:flex-end;gap:14px;overflow-x:auto">'+
-      data.map(function(d){
-        var revH=Math.max(2,(d.rev/maxVal)*130);
-        var cosH=Math.max(2,(d.cos/maxVal)*130);
-        var netH=Math.max(2,(Math.abs(d.net)/maxVal)*130);
-        return '<div class="hist-month"><div class="hist-bars">'+
-          '<div class="hist-bar rev" style="height:'+revH+'px" title="Revenue: '+fmt(d.rev)+'"></div>'+
-          '<div class="hist-bar cos" style="height:'+cosH+'px" title="Costs: '+fmt(d.cos)+'"></div>'+
-          '<div class="hist-bar prof" style="height:'+netH+'px" title="Profit: '+fmt(d.net)+'"></div></div>'+
-          '<div class="hist-label">'+d.label+'</div></div>';
-      }).join('')+'</div>';
-
-    document.getElementById('histTable').innerHTML=data.length?data.slice().reverse().map(function(d){
-      return '<div class="hist-row"><span class="m">'+d.label+'</span>'+
-        '<span class="figs"><span><b>Revenue</b>'+fmt(d.rev)+'</span>'+
-        '<span><b>Costs</b>'+fmt(d.cos)+'</span>'+
-        '<span><b>Profit</b>'+fmt(d.net)+'</span></span></div>';
-    }).join(''):'<div class="empty">No completed cycles yet.</div>';
-  }
   // ================= CALENDAR =================
   function bookingsOn(dstr){
     return S.bookings.filter(function(b){
