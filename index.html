@@ -311,6 +311,32 @@
   </div>
 </div>
 
+<div id="swapModal" class="bk-detail-overlay">
+  <div class="bk-detail-card">
+    <button class="bk-detail-close" id="swapClose" aria-label="Close">&times;</button>
+    <div class="bk-detail-title">Swap Vehicle</div>
+    <div class="bk-detail-sub" id="swapSub"></div>
+    <div class="field"><label>Switch to vehicle from</label>
+      <input type="date" id="swapDate"></div>
+    <div class="field"><label>New vehicle</label>
+      <select id="swapVeh">
+        <option>Brabus G-Wagon</option><option>Cadillac Escalade</option>
+        <option>Ben's V-Class</option><option>George's V-Class</option>
+        <option value="__other__">Other...</option>
+      </select></div>
+    <div class="field" id="swapVehOtherWrap" style="display:none">
+      <label>Vehicle name</label>
+      <input type="text" id="swapVehOther" placeholder="Type the car name">
+    </div>
+    <p style="font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim);margin:4px 0 16px">
+      This splits the booking in two: the original vehicle keeps its dates up to the switch,
+      and a new booking is created for the new vehicle from the switch date onward.
+      All the money stays on the original booking - add the new booking's amounts yourself after.
+    </p>
+    <button class="btn" id="swapConfirm" style="width:100%">Confirm Swap</button>
+  </div>
+</div>
+
 <div id="loginGate">
   <div class="login-card">
     <div class="login-word">Royale</div>
@@ -791,6 +817,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
   function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'; }
   function today(){ return new Date().toISOString().slice(0,10); }
+  function addDays(dstr,n){ var d=new Date(dstr+'T00:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
   function iso(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); }
   function endMs(b){ return new Date(b.end+'T'+(b.endTime||'23:59')).getTime(); }
   function startMs(b){ return new Date(b.start+'T'+(b.startTime||'00:00')).getTime(); }
@@ -1167,6 +1194,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         '</div>'+
         (b.notes?'<div class="bk-note">'+esc(b.notes)+'</div>':'')+
         '<div class="bk-acts"><button class="mini" data-eb="'+b.id+'">Edit</button>'+
+        '<button class="mini" data-swap="'+b.id+'">Swap Vehicle</button>'+
         '<button class="mini danger" data-db="'+b.id+'">Delete</button></div></div>';
     }).join('');
   }
@@ -1369,6 +1397,60 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(ev.target===this) this.classList.remove('open');
   });
 
+  // ---------- Swap Vehicle (split a booking into two at a chosen date) ----------
+  var swapTarget=null;
+  function openSwapModal(b){
+    swapTarget=b;
+    document.getElementById('swapSub').textContent=
+      (b.customer||'Booking')+' - currently '+(b.vehicle||'-')+' ('+lbl(b.start)+' \u2192 '+lbl(b.end)+')';
+    document.getElementById('swapDate').value=b.start;
+    document.getElementById('swapDate').min=b.start;
+    document.getElementById('swapDate').max=b.end;
+    document.getElementById('swapVeh').value='Brabus G-Wagon';
+    document.getElementById('swapVehOtherWrap').style.display='none';
+    document.getElementById('swapVehOther').value='';
+    document.getElementById('swapModal').classList.add('open');
+  }
+  document.getElementById('swapClose').addEventListener('click',function(){
+    document.getElementById('swapModal').classList.remove('open');
+  });
+  document.getElementById('swapModal').addEventListener('click',function(ev){
+    if(ev.target===this) this.classList.remove('open');
+  });
+  document.getElementById('swapVeh').addEventListener('change',function(){
+    document.getElementById('swapVehOtherWrap').style.display=(this.value==='__other__')?'':'none';
+  });
+  document.getElementById('swapConfirm').addEventListener('click',function(){
+    if(!swapTarget) return;
+    var splitDate=document.getElementById('swapDate').value;
+    var vehSel=document.getElementById('swapVeh');
+    var newVeh=vehSel.value==='__other__'?document.getElementById('swapVehOther').value.trim():vehSel.value;
+    if(!splitDate || !newVeh){ return; }
+    if(splitDate<=swapTarget.start || splitDate>swapTarget.end){
+      alert('Pick a date within the booking, after its start date.');
+      return;
+    }
+    var originalEnd=addDays(splitDate,-1);
+    var newBookingId='b'+Date.now();
+    var newBooking=Object.assign({},swapTarget,{
+      id:newBookingId,
+      vehicle:newVeh,
+      start:splitDate,
+      startTime:'',
+      end:swapTarget.end,
+      total:0,collected:0,received:null,cost:null,
+      confirmed:swapTarget.confirmed==='pending'?'pending':undefined,
+      notes:(swapTarget.notes?swapTarget.notes+' - ':'')+'Vehicle swap from '+(swapTarget.vehicle||'-')+' on '+lbl(splitDate)+'.'
+    });
+    S.bookings=S.bookings.map(function(b){
+      return b.id===swapTarget.id?Object.assign({},b,{end:originalEnd}):b;
+    });
+    S.bookings.push(newBooking);
+    save(); render();
+    document.getElementById('swapModal').classList.remove('open');
+    swapTarget=null;
+  });
+
   document.getElementById('saveBk').addEventListener('click',function(){
     var tot=parseFloat(V('bTotal'));
     if(!V('bCust')&&!tot){ document.getElementById('bCust').focus(); return; }
@@ -1469,6 +1551,11 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return;
     }
     if((el=ev.target.closest('[data-db]'))){ dropFee(el.dataset.db); S.bookings=S.bookings.filter(function(x){return x.id!==el.dataset.db;}); save(); render(); return; }
+    if((el=ev.target.closest('[data-swap]'))){
+      var sb=S.bookings.filter(function(x){return x.id===el.dataset.swap;})[0]; if(!sb) return;
+      openSwapModal(sb);
+      return;
+    }
     if((el=ev.target.closest('[data-ec]'))){
       var c=S.costs.filter(function(x){return x.id===el.dataset.ec;})[0]; if(!c) return;
       closeAll(); goTab('dash');
