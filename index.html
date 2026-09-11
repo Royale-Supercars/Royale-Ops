@@ -434,6 +434,11 @@
     <span class="eyebrow" id="bkFormTitle">New booking</span>
 
     <div class="field"><label>Customer</label><input type="text" id="bCust" placeholder="Leave blank to name it automatically"></div>
+    <div class="field"><label>Phone number</label><input type="tel" id="bPhone" placeholder="e.g. 971501234567"></div>
+    <div class="field"><label>Booking status</label><select id="bStage">
+      <option value="confirmed">Confirmed</option>
+      <option value="potential">Potential</option>
+    </select></div>
 
     <div class="field-row">
       <div class="field"><label>Vehicle</label><select id="bVeh">
@@ -691,19 +696,21 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   // Maps between the app's shape and the database columns.
   var MAP={
     bookings:{table:'bookings',
-      to:function(b){ return {id:b.id,customer:b.customer,vehicle:b.vehicle,source:b.source,
+      to:function(b){ return {id:b.id,customer:b.customer,phone:b.phone||null,vehicle:b.vehicle,source:b.source,
         type:b.type,service:b.service||null,start_date:b.start,start_time:b.startTime||null,
         end_date:b.end,total:b.total||0,collected:b.collected||0,
         received:(b.received===null||b.received===undefined)?null:b.received,
         cost:(b.cost===null||b.cost===undefined)?null:b.cost,notes:b.notes||null,
-        confirmed:(b.confirmed===undefined)?null:String(b.confirmed)}; },
-      from:function(r){ return {id:r.id,customer:r.customer,vehicle:r.vehicle,source:r.source,
+        confirmed:(b.confirmed===undefined)?null:String(b.confirmed),
+        stage:b.stage||'confirmed'}; },
+      from:function(r){ return {id:r.id,customer:r.customer,phone:r.phone||'',vehicle:r.vehicle,source:r.source,
         type:r.type,service:r.service||'',start:r.start_date,startTime:r.start_time||'',
         end:r.end_date,endTime:'',total:+r.total||0,collected:+r.collected||0,
         received:r.received===null?null:+r.received,cost:r.cost===null?null:+r.cost,
         notes:r.notes||'',
         confirmed:(r.confirmed===null||r.confirmed===undefined)?undefined:
-          (r.confirmed==='true'?true:(r.confirmed==='false'?false:r.confirmed))}; }},
+          (r.confirmed==='true'?true:(r.confirmed==='false'?false:r.confirmed)),
+        stage:r.stage||'confirmed'}; }},
     costs:{table:'costs',
       to:function(c){ return {id:c.id,amount:c.amount||0,type:c.type,note:c.note||null,
         cost_date:c.date,linked:c.linked||null}; },
@@ -887,7 +894,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return b.confirmed===undefined && startMs(b) < CONFIRM_CUTOFF;
     }
 
-    var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now && isConfirmed(b);});
+    var bk=S.bookings.filter(function(b){return inCy(b.start) && startMs(b)<=now && isConfirmed(b) && b.stage!=='potential';});
     var mrev=S.revenue.filter(function(r){return inCy(r.date);});
     var rev=bk.reduce(function(a,b){return a+(+b.total||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
     var pay=bk.reduce(function(a,b){return a+(+b.cost||0);},0);
@@ -1050,7 +1057,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   // ================= CALENDAR =================
   function bookingsOn(dstr){
     return S.bookings.filter(function(b){
-      return b.start<=dstr && dstr<=b.end;
+      return b.start<=dstr && dstr<=b.end && b.stage!=='potential';
     });
   }
 
@@ -1124,7 +1131,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   function findClashes(){
     var out=[],v={},now=Date.now();
-    S.bookings.forEach(function(b){ (v[b.vehicle]=v[b.vehicle]||[]).push(b); });
+    S.bookings.filter(function(b){return b.stage!=='potential';}).forEach(function(b){ (v[b.vehicle]=v[b.vehicle]||[]).push(b); });
     Object.keys(v).forEach(function(k){
       var arr=v[k].slice().sort(function(a,b){return startMs(a)-startMs(b);});
       for(var i=1;i<arr.length;i++){
@@ -1297,7 +1304,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('bkFormTitle').textContent='New booking';
     document.getElementById('costFormTitle').textContent='New business cost';
     document.getElementById('revFormTitle').textContent='Other revenue';
-    ['bCust','bTotal','bColl','bRecv','bCost','cAmt','cNote','rAmt','rRecv','rNote','piAmt','piNote','poAmt','poNote','bStartT'].forEach(function(i){ setV(i,''); });
+    ['bCust','bPhone','bTotal','bColl','bRecv','bCost','cAmt','cNote','rAmt','rRecv','rNote','piAmt','piNote','poAmt','poNote','bStartT'].forEach(function(i){ setV(i,''); });
+    setSel('bStage','confirmed');
     ['bStart','bEnd','cDate','rDate','piDate','poDate'].forEach(function(i){ setV(i,today()); });
     if(typeof bkFields==='function'){ bkFields(); revReadout(); }
   }
@@ -1372,6 +1380,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var borrowed=V('bSrc')==='external';
     var d={
       customer:V('bCust').trim()||autoName(getVehicleValue(),V('bSrc'),V('bType'),svc),
+      phone:V('bPhone').trim(),
+      stage:V('bStage')||'confirmed',
       vehicle:getVehicleValue(),source:V('bSrc'),type:V('bType'),service:svc,
       start:V('bStart')||today(),startTime:chauff?V('bStartT'):'',
       end:multi?(V('bEnd')||V('bStart')||today()):(V('bStart')||today()),endTime:'',
@@ -1445,7 +1455,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if((el=ev.target.closest('[data-eb]'))){
       var b=S.bookings.filter(function(x){return x.id===el.dataset.eb;})[0]; if(!b) return;
       closeAll(); goTab('book');
-      setV('bCust',b.customer); setVehicleField(b.vehicle); setSel('bSrc',b.source); setSel('bType',b.type);
+      setV('bCust',b.customer); setV('bPhone',b.phone); setSel('bStage',b.stage||'confirmed');
+      setVehicleField(b.vehicle); setSel('bSrc',b.source); setSel('bType',b.type);
       if(b.service) setSel('bSvc',b.service);
       setV('bStart',b.start); setV('bStartT',b.startTime); setV('bEnd',b.end);
       setV('bTotal',b.total); setV('bColl',b.collected);
