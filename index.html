@@ -465,6 +465,7 @@
     <div class="field"><label>Booking status</label><select id="bStage">
       <option value="confirmed">Confirmed</option>
       <option value="potential">Potential</option>
+      <option value="finished">Finished (returned early)</option>
     </select></div>
 
     <div class="field-row">
@@ -837,6 +838,16 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     return b.confirmed===undefined && startMs(b) < CONFIRM_CUTOFF;
   }
 
+  // Still due on a booking: once money has actually landed in the bank
+  // (received filled in), it's settled - no more chasing the customer,
+  // even if that's less than the total (the gap is fees, not their debt).
+  // Only falls back to total-minus-collected if received hasn't been
+  // entered yet at all.
+  function dueAmount(b){
+    if(b.received!==null && b.received!==undefined && b.received!=='') return 0;
+    return Math.max(0,(+b.total||0)-(+b.collected||0));
+  }
+
   function flash(m,bad){
     var p=document.getElementById('saveState');
     p.textContent=m; p.className='save-pill '+(bad?'bad':'ok');
@@ -927,7 +938,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var rev=bk.reduce(function(a,b){return a+(+b.total||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
     var pay=bk.reduce(function(a,b){return a+(+b.cost||0);},0);
     var coll=bk.reduce(function(a,b){return a+(+b.collected||0);},0)+mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
-    var owed=bk.reduce(function(a,b){return a+Math.max(0,(+b.total||0)-(+b.collected||0));},0);
+    var owed=bk.reduce(function(a,b){return a+dueAmount(b);},0);
     var co=S.costs.filter(function(c){return inCy(c.date);});
     var cos=co.reduce(function(a,c){return a+(+c.amount||0);},0);
     var net=rev-pay-cos,tgt=S.target;
@@ -1085,7 +1096,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   // ================= CALENDAR =================
   function bookingsOn(dstr){
     return S.bookings.filter(function(b){
-      return b.start<=dstr && dstr<=b.end && b.stage!=='potential';
+      return b.start<=dstr && dstr<=b.end && b.stage!=='potential' && b.stage!=='finished';
     });
   }
 
@@ -1150,7 +1161,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     document.getElementById('dayList').innerHTML=on.length?on.map(function(b){
       var f=fleet(b);
-      var due=Math.max(0,(+b.total||0)-(+b.collected||0));
+      var due=dueAmount(b);
       return '<div class="row" data-detail-id="'+b.id+'" style="cursor:pointer"><div class="row-main"><div class="row-name">'+esc(b.customer)+
         '</div><div class="row-meta" style="color:'+f.c+'">'+esc(f.s)+' · '+esc(b.type)+' · '+lbl(b.start)+' → '+lbl(b.end)+'</div></div>'+
         '<div class="row-amt">'+fmt(b.total)+(due?'<div class="row-meta" style="color:var(--amber);text-align:right">'+fmt(due)+' due</div>':'')+'</div></div>';
@@ -1159,7 +1170,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   function findClashes(){
     var out=[],v={},now=Date.now();
-    S.bookings.filter(function(b){return b.stage!=='potential';}).forEach(function(b){ (v[b.vehicle]=v[b.vehicle]||[]).push(b); });
+    S.bookings.filter(function(b){return b.stage!=='potential' && b.stage!=='finished';}).forEach(function(b){ (v[b.vehicle]=v[b.vehicle]||[]).push(b); });
     Object.keys(v).forEach(function(k){
       var arr=v[k].slice().sort(function(a,b){return startMs(a)-startMs(b);});
       for(var i=1;i<arr.length;i++){
@@ -1176,7 +1187,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(!arr.length){ el.innerHTML='<div class="empty">'+msg+'</div>'; return; }
     el.innerHTML=arr.map(function(b){
       var f=fleet(b);
-      var due=Math.max(0,(+b.total||0)-(+b.collected||0));
+      var due=dueAmount(b);
       var noCost=(b.cost===null||b.cost===undefined);
       var prof=(+b.total||0)-(+b.cost||0);
       var days=Math.max(1,Math.round((new Date(b.end)-new Date(b.start))/86400000)||1);
