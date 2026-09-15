@@ -465,7 +465,7 @@
     <div class="field"><label>Booking status</label><select id="bStage">
       <option value="confirmed">Confirmed</option>
       <option value="potential">Potential</option>
-      <option value="finished">Finished (returned early)</option>
+      <option value="finished">Finished</option>
     </select></div>
 
     <div class="field-row">
@@ -1041,7 +1041,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     // bookings
     var g={on:[],soon:[],fut:[],done:[]};
     S.bookings.slice().sort(function(a,b){return startMs(a)-startMs(b);}).forEach(function(b){
-      if(endMs(b)<now) g.done.push(b);
+      if(endMs(b)<now || b.stage==='finished') g.done.push(b);
       else if(startMs(b)<=now) g.on.push(b);
       else if(startMs(b)-now<86400000*7) g.soon.push(b);
       else g.fut.push(b);
