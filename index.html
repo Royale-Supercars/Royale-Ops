@@ -176,6 +176,10 @@
   .rep-car-bar-fill{height:100%;background:var(--gold);border-radius:5px}
   .rep-car-days{display:flex;gap:16px;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim)}
   .rep-car-days b{color:var(--text);font-weight:600}
+  .rep-car-toggle{cursor:pointer}
+  .rep-car-detail{display:none;gap:16px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--hair);font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim)}
+  .rep-car-detail b{color:var(--gold);font-weight:600;display:block;margin-top:2px;font-size:13px}
+  .rep-car.expanded .rep-car-detail{display:flex}
   .rep-cost-row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--hair)}
   .rep-cost-row:first-child{border-top:0}
   .rep-cost-row .k{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--dim);text-transform:capitalize}
@@ -1640,7 +1644,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var net = rev - cos;
 
     var carStats = {};
-    CARS.forEach(function(car){ carStats[car] = {booked:0, revenue:0, profit:0}; });
+    CARS.forEach(function(car){ carStats[car] = {booked:0, revenue:0, profit:0, payout:0}; });
     var fleetBusyDays = 0;
 
     for(var i=0;i<days;i++){
@@ -1659,9 +1663,10 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
     var borrowedStats = {};
     confirmedBookings.forEach(function(b){
-      if(!carStats[b.vehicle]) carStats[b.vehicle] = {booked:0,revenue:0,profit:0};
+      if(!carStats[b.vehicle]) carStats[b.vehicle] = {booked:0,revenue:0,profit:0,payout:0};
       carStats[b.vehicle].revenue += (+b.total||0);
       carStats[b.vehicle].profit += (+b.total||0) - (+b.cost||0);
+      carStats[b.vehicle].payout += (+b.cost||0);
       if(b.source==='external'){
         if(!borrowedStats[b.vehicle]) borrowedStats[b.vehicle] = {revenue:0,payout:0,bookings:0};
         borrowedStats[b.vehicle].revenue += (+b.total||0);
@@ -1708,6 +1713,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       sel.value = '0';
       sel.addEventListener('change', renderReports);
     }
+    var fleetEl = document.getElementById('repFleet');
+    if(!fleetEl._toggleWired){
+      fleetEl.addEventListener('click', function(ev){
+        var card = ev.target.closest('.rep-car-toggle');
+        if(card) card.classList.toggle('expanded');
+      });
+      fleetEl._toggleWired = true;
+    }
     var chosen = cycles.filter(function(c){ return String(c.n)===sel.value; })[0] || cycles[0];
     var r = computeReport(chosen.start, chosen.end);
     var tgt = S.target||34000;
@@ -1725,13 +1738,18 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         '<span class="v">'+r.fleetZeroDays+' of '+r.days+' days</span>'+
       '</div>'+
       CARS.map(function(car){
-        var st = r.carStats[car] || {booked:0};
+        var st = r.carStats[car] || {booked:0,revenue:0,profit:0,payout:0};
         var pct = r.days ? Math.round((st.booked/r.days)*100) : 0;
         var idle = r.days - st.booked;
-        return '<div class="rep-car">'+
+        return '<div class="rep-car rep-car-toggle" data-car="'+esc(car)+'">'+
           '<div class="rep-car-head"><span class="rep-car-name">'+esc(car)+'</span><span class="rep-car-pct">'+pct+'%</span></div>'+
           '<div class="rep-car-bar"><div class="rep-car-bar-fill" style="width:'+pct+'%"></div></div>'+
           '<div class="rep-car-days"><span><b>'+st.booked+'</b> days booked</span><span><b>'+idle+'</b> days idle</span></div>'+
+          '<div class="rep-car-detail">'+
+            '<span>Revenue <b>'+fmt(st.revenue)+'</b></span>'+
+            '<span>Profit <b>'+fmt(st.profit)+'</b></span>'+
+            '<span>Payout <b>'+fmt(st.payout)+'</b></span>'+
+          '</div>'+
         '</div>';
       }).join('');
 
@@ -1771,8 +1789,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       document.getElementById('repStandouts').innerHTML =
         '<div class="rep-standout"><span class="k">Highest revenue car</span><span class="v">'+esc(topRevenue)+' &middot; '+fmt(r.carStats[topRevenue].revenue)+'</span></div>'+
         '<div class="rep-standout"><span class="k">Most profitable car</span><span class="v">'+esc(topProfit)+' &middot; '+fmt(r.carStats[topProfit].profit)+'</span></div>'+
-        '<div class="rep-standout"><span class="k">Vehicle swaps this month</span><span class="v">'+r.swaps+'</span></div>'+
-        '<div class="rep-standout"><span class="k">Early finishes this month</span><span class="v">'+r.earlyFinishes+'</span></div>';
+        '<div class="rep-standout"><span class="k">Vehicle swaps this month</span><span class="v">'+r.swaps+'</span></div>';
     }
   }
   function openForm(fid,bid,sid,title,titleTxt){
