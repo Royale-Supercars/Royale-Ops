@@ -41,8 +41,8 @@
   .save-pill.bad{color:var(--warn);opacity:1}
   .refresh{margin-top:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
 
-  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
-  .tab{padding:20px 4px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;min-height:64px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(6,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
+  .tab{padding:20px 3px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;min-height:64px}
   .tab.on{color:var(--cyan);box-shadow:inset 0 2px 0 var(--cyan)}
   .pane{display:none}
   .pane.on{display:block}
@@ -161,6 +161,29 @@
 
   .section{padding:22px 0 4px}
   .section > .eyebrow{display:block;margin-bottom:11px}
+  .rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .rep-stat{background:var(--panel);border:1px solid var(--hair-hot);border-radius:10px;padding:14px 16px}
+  .rep-stat .eyebrow{display:block;margin-bottom:8px;font-size:9.5px}
+  .rep-stat .val{font-family:'Inter',sans-serif;font-weight:700;font-size:21px;font-variant-numeric:tabular-nums;line-height:1.15;color:var(--ice)}
+  .rep-stat .sub{font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);margin-top:4px}
+  .rep-stat.good .val{color:var(--green)}
+  .rep-stat.bad .val{color:var(--warn)}
+  .rep-car{background:var(--panel);border:1px solid var(--hair-hot);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+  .rep-car-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+  .rep-car-name{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--ice)}
+  .rep-car-pct{font-family:'Inter',sans-serif;font-weight:700;font-size:14px;color:var(--gold)}
+  .rep-car-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:8px}
+  .rep-car-bar-fill{height:100%;background:var(--gold);border-radius:5px}
+  .rep-car-days{display:flex;gap:16px;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim)}
+  .rep-car-days b{color:var(--text);font-weight:600}
+  .rep-cost-row{display:flex;justify-content:space-between;padding:11px 0;border-top:1px solid var(--hair)}
+  .rep-cost-row:first-child{border-top:0}
+  .rep-cost-row .k{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--dim);text-transform:capitalize}
+  .rep-cost-row .v{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;color:var(--ice)}
+  .rep-standout{background:var(--panel);border:1px solid var(--hair-hot);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .rep-standout .k{font-family:'Inter',sans-serif;font-size:12px;color:var(--dim)}
+  .rep-standout .v{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;color:var(--ice);text-align:right}
+  .rep-empty{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--dim);padding:20px 0;text-align:center}
 
   .bk{background:var(--panel-2);border:1px solid var(--hair);border-left:3px solid var(--dim);padding:14px 14px 12px;margin-bottom:10px}
   .bk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
@@ -249,7 +272,7 @@
     .btn{padding:16px 6px;font-size:10px;letter-spacing:.1em}
     .submit{padding:16px}
     .mini{padding:9px 13px;font-size:9px}
-    .tab{padding:20px 3px 26px;font-size:12px;letter-spacing:.01em;font-weight:500;min-height:64px}
+    .tab{padding:20px 2px 26px;font-size:10.5px;letter-spacing:0;font-weight:500;min-height:64px}
     .field input,.field select,.field textarea{padding:12px 10px}
     .field-row{gap:8px}
     .edit,.del{padding-left:14px;font-size:16px}
@@ -266,7 +289,7 @@
   @media (max-width:360px){
     .gauge-figure{font-size:34px}
     .bk-grid{grid-template-columns:1fr 1fr}
-    .tab{font-size:11px;padding:18px 2px 24px;min-height:60px}
+    .tab{font-size:9.5px;padding:18px 1px 24px;min-height:60px;letter-spacing:0}
   }
   @media (prefers-reduced-motion:reduce){.gauge-fill,.gauge-edge{transition:none}}
 
@@ -642,12 +665,45 @@
   </div>
 </div>
 
+<div class="pane" id="pane-rep">
+  <section class="section">
+    <span class="eyebrow">Month</span>
+    <select id="repMonthSel" style="width:100%;padding:14px;font-size:15px;font-family:'Inter',sans-serif;background:var(--panel);color:var(--ice);border:1px solid var(--hair-hot);border-radius:10px;margin-top:8px"></select>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Overview</span>
+    <div class="rep-grid" id="repOverview"></div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Fleet - Days Booked vs Idle</span>
+    <div id="repFleet"></div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Bookings</span>
+    <div class="rep-grid" id="repBookings"></div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Costs Breakdown</span>
+    <div id="repCosts"></div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Standouts</span>
+    <div id="repStandouts"></div>
+  </section>
+</div>
+
 <nav class="tabs">
   <button class="tab on" data-pane="dash">Dash</button>
   <button class="tab" data-pane="book">Bookings</button>
   <button class="tab" data-pane="cal">Calendar</button>
   <button class="tab" data-pane="cost">Costs</button>
   <button class="tab" data-pane="per">Personal</button>
+  <button class="tab" data-pane="rep">Reports</button>
 </nav>
 
 <script>
@@ -815,6 +871,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function cyStart(){ var n=new Date(),y=n.getFullYear(),m=n.getMonth(); if(n.getDate()<22)m-=1; return new Date(y,m,22); }
   function cyEnd(){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()+1,22); }
   function cyDays(){ return Math.round((cyEnd()-cyStart())/86400000); }
+
+  // Same 22nd-to-22nd cycle math as above, but for any cycle N months
+  // back from the current one (0 = this cycle, 1 = last cycle, etc.) -
+  // used by the Reports tab so any past month can be selected and viewed.
+  function cyStartOffset(n){ var s=cyStart(); return new Date(s.getFullYear(),s.getMonth()-n,22); }
+  function cyEndOffset(n){ var s=cyStartOffset(n); return new Date(s.getFullYear(),s.getMonth()+1,22); }
+  function dstr(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function inRange(dateStr,start,end){ if(!dateStr) return false; var t=new Date(dateStr+'T00:00:00'); return t>=start&&t<end; }
   function dayNo(){ return Math.max(1,Math.floor((new Date()-cyStart())/86400000)+1); }
   function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
   function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'; }
@@ -1539,6 +1603,149 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on',x.dataset.pane===n); });
     document.querySelectorAll('.pane').forEach(function(x){ x.classList.remove('on'); });
     document.getElementById('pane-'+n).classList.add('on');
+    if(n==='rep') renderReports();
+  }
+
+  // ================= REPORTS =================
+  var REPORT_ANCHOR = new Date('2026-08-22T00:00:00');
+
+  function getReportCycles(){
+    var cycles=[];
+    for(var n=0;;n++){
+      var s=cyStartOffset(n), e=cyEndOffset(n);
+      if(s<REPORT_ANCHOR) break;
+      cycles.push({n:n, start:s, end:e, label:s.toLocaleDateString('en-GB',{month:'long',year:'numeric'})});
+    }
+    return cycles;
+  }
+
+  function computeReport(start,end){
+    var days = Math.round((end-start)/86400000);
+    var now = Date.now();
+
+    var inCycleBookings = S.bookings.filter(function(b){ return inRange(b.start,start,end); });
+    var confirmedBookings = inCycleBookings.filter(function(b){ return b.stage!=='potential' && isConfirmed(b) && startMs(b)<=now; });
+    var potentialBookings = inCycleBookings.filter(function(b){ return b.stage==='potential'; });
+
+    var mrev = S.revenue.filter(function(r){ return inRange(r.date,start,end); });
+    var rev = confirmedBookings.reduce(function(a,b){return a+(+b.total||0);},0) + mrev.reduce(function(a,r){return a+(+r.amount||0);},0);
+    var pay = confirmedBookings.reduce(function(a,b){return a+(+b.cost||0);},0);
+    var co = S.costs.filter(function(c){ return inRange(c.date,start,end); });
+    var cos = pay + co.reduce(function(a,c){return a+(+c.amount||0);},0);
+    var net = rev - cos;
+
+    var carStats = {};
+    CARS.forEach(function(car){ carStats[car] = {booked:0, revenue:0, profit:0}; });
+    var fleetBusyDays = 0;
+
+    for(var i=0;i<days;i++){
+      var d = new Date(start.getTime()+i*86400000);
+      var ds = dstr(d);
+      var anyBusy = false;
+      CARS.forEach(function(car){
+        var busy = S.bookings.some(function(b){
+          return b.vehicle===car && b.stage!=='potential' && b.start<=ds && ds<=b.end && startMs(b)<=now;
+        });
+        if(busy){ carStats[car].booked++; anyBusy=true; }
+      });
+      if(anyBusy) fleetBusyDays++;
+    }
+    var fleetZeroDays = days - fleetBusyDays;
+
+    confirmedBookings.forEach(function(b){
+      if(!carStats[b.vehicle]) carStats[b.vehicle] = {booked:0,revenue:0,profit:0};
+      carStats[b.vehicle].revenue += (+b.total||0);
+      carStats[b.vehicle].profit += (+b.total||0) - (+b.cost||0);
+    });
+
+    var costByType = {};
+    co.forEach(function(c){
+      var t=c.type||'other';
+      costByType[t] = (costByType[t]||0) + (+c.amount||0);
+    });
+
+    var swaps = inCycleBookings.filter(function(b){ return (b.notes||'').indexOf('Vehicle swap from')>=0; }).length;
+    var earlyFinishes = inCycleBookings.filter(function(b){ return b.stage==='finished'; }).length;
+    var outstanding = confirmedBookings.reduce(function(a,b){ return a+dueAmount(b); },0);
+
+    var totalBookings = confirmedBookings.length;
+    var avgLen = totalBookings ? confirmedBookings.reduce(function(a,b){
+      return a + Math.round((endMs(b)-startMs(b))/86400000) + 1;
+    },0) / totalBookings : 0;
+
+    return {
+      days:days, rev:rev, pay:pay, cos:cos, net:net,
+      carStats:carStats, fleetBusyDays:fleetBusyDays, fleetZeroDays:fleetZeroDays,
+      costByType:costByType, swaps:swaps, earlyFinishes:earlyFinishes,
+      outstanding:outstanding, totalBookings:totalBookings, avgLen:avgLen,
+      confirmedCount:confirmedBookings.length, potentialCount:potentialBookings.length
+    };
+  }
+
+  function renderReports(){
+    var sel = document.getElementById('repMonthSel');
+    var cycles = getReportCycles();
+    if(!cycles.length){
+      document.getElementById('repOverview').innerHTML = '<div class="rep-empty">No completed months yet.</div>';
+      return;
+    }
+    if(!sel._populated){
+      sel.innerHTML = cycles.map(function(c){ return '<option value="'+c.n+'">'+c.label+'</option>'; }).join('');
+      sel._populated = true;
+      sel.value = '0';
+      sel.addEventListener('change', renderReports);
+    }
+    var chosen = cycles.filter(function(c){ return String(c.n)===sel.value; })[0] || cycles[0];
+    var r = computeReport(chosen.start, chosen.end);
+    var tgt = S.target||34000;
+    var vsTarget = r.net - tgt;
+
+    document.getElementById('repOverview').innerHTML =
+      '<div class="rep-stat"><span class="eyebrow">Revenue</span><div class="val">'+fmt(r.rev)+'</div></div>'+
+      '<div class="rep-stat"><span class="eyebrow">Costs &amp; Payouts</span><div class="val">'+fmt(r.cos)+'</div></div>'+
+      '<div class="rep-stat"><span class="eyebrow">Net Profit</span><div class="val">'+fmt(r.net)+'</div></div>'+
+      '<div class="rep-stat '+(vsTarget>=0?'good':'bad')+'"><span class="eyebrow">Vs Target ('+fmt(tgt)+')</span><div class="val">'+(vsTarget>=0?'+':'')+fmt(vsTarget)+'</div></div>';
+
+    document.getElementById('repFleet').innerHTML =
+      '<div class="rep-standout" style="margin-bottom:14px">'+
+        '<span class="k">Days with zero bookings across the whole fleet</span>'+
+        '<span class="v">'+r.fleetZeroDays+' of '+r.days+' days</span>'+
+      '</div>'+
+      CARS.map(function(car){
+        var st = r.carStats[car] || {booked:0};
+        var pct = r.days ? Math.round((st.booked/r.days)*100) : 0;
+        var idle = r.days - st.booked;
+        return '<div class="rep-car">'+
+          '<div class="rep-car-head"><span class="rep-car-name">'+esc(car)+'</span><span class="rep-car-pct">'+pct+'%</span></div>'+
+          '<div class="rep-car-bar"><div class="rep-car-bar-fill" style="width:'+pct+'%"></div></div>'+
+          '<div class="rep-car-days"><span><b>'+st.booked+'</b> days booked</span><span><b>'+idle+'</b> days idle</span></div>'+
+        '</div>';
+      }).join('');
+
+    document.getElementById('repBookings').innerHTML =
+      '<div class="rep-stat"><span class="eyebrow">Confirmed Bookings</span><div class="val">'+r.confirmedCount+'</div></div>'+
+      '<div class="rep-stat"><span class="eyebrow">Potential (Unconverted)</span><div class="val">'+r.potentialCount+'</div></div>'+
+      '<div class="rep-stat"><span class="eyebrow">Avg. Booking Length</span><div class="val">'+(r.avgLen?r.avgLen.toFixed(1):'0')+' days</div></div>'+
+      '<div class="rep-stat"><span class="eyebrow">Still Outstanding</span><div class="val">'+fmt(r.outstanding)+'</div></div>';
+
+    var costKeys = Object.keys(r.costByType);
+    document.getElementById('repCosts').innerHTML = costKeys.length ?
+      costKeys.sort(function(a,b){return r.costByType[b]-r.costByType[a];}).map(function(k){
+        return '<div class="rep-cost-row"><span class="k">'+esc(k)+'</span><span class="v">'+fmt(r.costByType[k])+'</span></div>';
+      }).join('') : '<div class="rep-empty">No costs logged this month.</div>';
+
+    var carsWithRevenue = CARS.filter(function(c){ return r.carStats[c] && r.carStats[c].revenue>0; });
+    if(!carsWithRevenue.length){
+      document.getElementById('repStandouts').innerHTML = '<div class="rep-empty">No confirmed bookings this month yet.</div>';
+    } else {
+      var topRevenue = carsWithRevenue.reduce(function(a,b){ return r.carStats[b].revenue>r.carStats[a].revenue?b:a; });
+      var topProfit = carsWithRevenue.reduce(function(a,b){ return r.carStats[b].profit>r.carStats[a].profit?b:a; });
+      document.getElementById('repStandouts').innerHTML =
+        '<div class="rep-standout"><span class="k">Highest revenue car</span><span class="v">'+esc(topRevenue)+' &middot; '+fmt(r.carStats[topRevenue].revenue)+'</span></div>'+
+        '<div class="rep-standout"><span class="k">Most profitable car</span><span class="v">'+esc(topProfit)+' &middot; '+fmt(r.carStats[topProfit].profit)+'</span></div>'+
+        '<div class="rep-standout"><span class="k">Vehicle swaps this month</span><span class="v">'+r.swaps+'</span></div>'+
+        '<div class="rep-standout"><span class="k">Early finishes this month</span><span class="v">'+r.earlyFinishes+'</span></div>';
+    }
   }
   function openForm(fid,bid,sid,title,titleTxt){
     var f=document.getElementById(fid);
