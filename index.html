@@ -682,6 +682,11 @@
   </section>
 
   <section class="section">
+    <span class="eyebrow">Borrowed Cars - What Each Made</span>
+    <div id="repBorrowed"></div>
+  </section>
+
+  <section class="section">
     <span class="eyebrow">Bookings</span>
     <div class="rep-grid" id="repBookings"></div>
   </section>
@@ -1652,10 +1657,17 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     }
     var fleetZeroDays = days - fleetBusyDays;
 
+    var borrowedStats = {};
     confirmedBookings.forEach(function(b){
       if(!carStats[b.vehicle]) carStats[b.vehicle] = {booked:0,revenue:0,profit:0};
       carStats[b.vehicle].revenue += (+b.total||0);
       carStats[b.vehicle].profit += (+b.total||0) - (+b.cost||0);
+      if(b.source==='external'){
+        if(!borrowedStats[b.vehicle]) borrowedStats[b.vehicle] = {revenue:0,payout:0,bookings:0};
+        borrowedStats[b.vehicle].revenue += (+b.total||0);
+        borrowedStats[b.vehicle].payout += (+b.cost||0);
+        borrowedStats[b.vehicle].bookings += 1;
+      }
     });
 
     var costByType = {};
@@ -1678,7 +1690,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       carStats:carStats, fleetBusyDays:fleetBusyDays, fleetZeroDays:fleetZeroDays,
       costByType:costByType, swaps:swaps, earlyFinishes:earlyFinishes,
       outstanding:outstanding, totalBookings:totalBookings, avgLen:avgLen,
-      confirmedCount:confirmedBookings.length, potentialCount:potentialBookings.length
+      confirmedCount:confirmedBookings.length, potentialCount:potentialBookings.length,
+      borrowedStats:borrowedStats
     };
   }
 
@@ -1721,6 +1734,21 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
           '<div class="rep-car-days"><span><b>'+st.booked+'</b> days booked</span><span><b>'+idle+'</b> days idle</span></div>'+
         '</div>';
       }).join('');
+
+    var borrowedKeys = Object.keys(r.borrowedStats);
+    document.getElementById('repBorrowed').innerHTML = borrowedKeys.length ?
+      borrowedKeys.sort(function(a,b){ return r.borrowedStats[b].revenue - r.borrowedStats[a].revenue; }).map(function(car){
+        var bs = r.borrowedStats[car];
+        var net = bs.revenue - bs.payout;
+        return '<div class="rep-car">'+
+          '<div class="rep-car-head"><span class="rep-car-name">'+esc(car)+'</span><span class="rep-car-pct">'+bs.bookings+' booking'+(bs.bookings===1?'':'s')+'</span></div>'+
+          '<div class="rep-car-days" style="gap:14px;flex-wrap:wrap">'+
+            '<span>Revenue <b>'+fmt(bs.revenue)+'</b></span>'+
+            '<span>Payout to owner <b>'+fmt(bs.payout)+'</b></span>'+
+            '<span>Net kept <b>'+fmt(net)+'</b></span>'+
+          '</div>'+
+        '</div>';
+      }).join('') : '<div class="rep-empty">No borrowed cars went out this month.</div>';
 
     document.getElementById('repBookings').innerHTML =
       '<div class="rep-stat"><span class="eyebrow">Confirmed Bookings</span><div class="val">'+r.confirmedCount+'</div></div>'+
