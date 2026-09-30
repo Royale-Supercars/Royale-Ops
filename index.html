@@ -921,6 +921,26 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     return Math.max(0,(+b.total||0)-(+b.collected||0));
   }
 
+  // Payment processing fee on a booking: the gap between what actually
+  // landed in the bank and what was charged/collected. Matches the same
+  // logic already used in the live fee calculator on the booking form,
+  // so a saved booking's numbers never drift from what was shown while
+  // filling it in.
+  function feeAmount(b){
+    var base=(+b.collected||0)||(+b.total||0);
+    if(b.received===null||b.received===undefined||b.received==='') return 0;
+    return Math.max(0, base-(+b.received||0));
+  }
+
+  // Real profit on a booking: what was charged, minus whatever was paid
+  // out to a car's owner (0 for our own cars), minus the bank fee above.
+  // Previously this was calculated as just total-minus-cost everywhere
+  // except the live form calculator, silently overstating profit by the
+  // fee amount on every booking with one recorded.
+  function profitAmount(b){
+    return (+b.total||0)-(+b.cost||0)-feeAmount(b);
+  }
+
   function flash(m,bad){
     var p=document.getElementById('saveState');
     p.textContent=m; p.className='save-pill '+(bad?'bad':'ok');
@@ -1262,7 +1282,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       var f=fleet(b);
       var due=dueAmount(b);
       var noCost=(b.cost===null||b.cost===undefined);
-      var prof=(+b.total||0)-(+b.cost||0);
+      var prof=profitAmount(b);
       var days=Math.max(1,Math.round((new Date(b.end)-new Date(b.start))/86400000)||1);
       return '<div class="bk" style="border-left-color:'+f.c+'">'+
         '<div class="bk-top"><div><div class="bk-name">'+esc(b.customer||autoName(b.vehicle,b.source,b.type,b.service))+'</div>'+
@@ -1346,16 +1366,20 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     var charged=parseFloat(V('bTotal'))||0;
     var coll=parseFloat(V('bColl'))||0;
     var recvRaw=V('bRecv').trim();
-    var base=coll||charged;
-    var fee=recvRaw===''?0:Math.max(0,base-(parseFloat(recvRaw)||0));
     var borrowed=V('bSrc')==='external';
     var owner=borrowed?(parseFloat(V('bCost'))||0):0;
+    // Build a temporary booking-shaped object so this reads on the exact
+    // same feeAmount/profitAmount logic a saved booking uses - the live
+    // preview and the saved display can never silently drift apart again.
+    var draft={total:charged,collected:coll,cost:owner,received:recvRaw===''?null:(parseFloat(recvRaw)||0)};
+    var fee=feeAmount(draft);
+    var base=coll||charged;
     var el=document.getElementById('bFeeCalc');
     var bits=[];
     if(fee>0) bits.push('Fees <b>'+fmt(fee)+'</b>'+(base?' ('+((fee/base)*100).toFixed(1)+'%)':''));
     if(borrowed&&owner>0) bits.push('Owner <b>'+fmt(owner)+'</b>');
     if(charged>0){
-      var profit=charged-owner-fee;
+      var profit=profitAmount(draft);
       bits.push('Profit <b style="color:'+(profit>0?'var(--green)':'var(--warn)')+'">'+fmt(profit)+'</b>');
     }
     if(!bits.length){
@@ -1665,7 +1689,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     confirmedBookings.forEach(function(b){
       if(!carStats[b.vehicle]) carStats[b.vehicle] = {booked:0,revenue:0,profit:0,payout:0};
       carStats[b.vehicle].revenue += (+b.total||0);
-      carStats[b.vehicle].profit += (+b.total||0) - (+b.cost||0);
+      carStats[b.vehicle].profit += profitAmount(b);
       carStats[b.vehicle].payout += (+b.cost||0);
       if(b.source==='external'){
         if(!borrowedStats[b.vehicle]) borrowedStats[b.vehicle] = {revenue:0,payout:0,bookings:0};
