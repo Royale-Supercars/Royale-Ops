@@ -13,6 +13,7 @@
     --hair:rgba(96,164,236,.15); --hair-hot:rgba(96,164,236,.34);
     --ice:#DEEAF8; --blue:#2F7FF0; --cyan:#4FDCF7;
     --dim:#5E7793; --dimmer:#3E5470; --warn:#E0705A; --amber:#E8A54B; --green:#3FB98A;
+    --gold:#E8A54B; --bg-soft:#0C1626;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
@@ -41,8 +42,8 @@
   .save-pill.bad{color:var(--warn);opacity:1}
   .refresh{margin-top:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;cursor:pointer}
 
-  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(6,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
-  .tab{padding:20px 3px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:11px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;min-height:64px}
+  .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(7,1fr);background:rgba(4,7,14,.97);border-top:1px solid var(--hair-hot);padding-bottom:env(safe-area-inset-bottom);padding-top:4px}
+  .tab{padding:20px 2px 26px;cursor:pointer;background:transparent;border:0;color:var(--dim);font-family:'Inter',sans-serif;font-size:9.5px;font-weight:500;letter-spacing:0;text-transform:uppercase;min-height:64px}
   .tab.on{color:var(--cyan);box-shadow:inset 0 2px 0 var(--cyan)}
   .pane{display:none}
   .pane.on{display:block}
@@ -175,7 +176,7 @@
   .rep-car-bar{height:8px;border-radius:5px;background:rgba(255,255,255,.06);overflow:hidden;margin-bottom:8px}
   .rep-car-bar-fill{height:100%;background:var(--gold);border-radius:5px}
   .rep-car-days{display:flex;gap:16px;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim)}
-  .rep-car-days b{color:var(--text);font-weight:600}
+  .rep-car-days b{color:var(--ice);font-weight:600}
   .rep-car-toggle{cursor:pointer}
   .rep-car-detail{display:none;gap:16px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--hair);font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim)}
   .rep-car-detail b{color:var(--gold);font-weight:600;display:block;margin-top:2px;font-size:13px}
@@ -188,6 +189,45 @@
   .rep-standout .k{font-family:'Inter',sans-serif;font-size:12px;color:var(--dim)}
   .rep-standout .v{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;color:var(--ice);text-align:right}
   .rep-empty{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--dim);padding:20px 0;text-align:center}
+
+  /* ---------- leads crm ---------- */
+  .lead-board{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 10px;margin:0 -2px}
+  .lead-col{flex:0 0 76%;max-width:230px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--hair-hot);border-radius:10px;display:flex;flex-direction:column;min-height:120px}
+  .lead-col-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--hair);font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+  .lead-col-head b{color:var(--gold);font-size:12px}
+  .lead-col-body{padding:10px;display:flex;flex-direction:column;gap:8px;flex:1;min-height:60px;transition:background .2s}
+  .lead-col-body.drag-over{background:rgba(201,162,75,.08)}
+  .lead-col-empty{font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);text-align:center;padding:16px 4px}
+  .lead-card{background:var(--bg-soft);border:1px solid var(--hair-hot);border-radius:8px;padding:10px 12px;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:pan-y;transition:transform .15s,box-shadow .15s,opacity .15s}
+  .lead-card:active{transform:scale(.98)}
+  .lead-card.dragging{opacity:.4}
+  .lead-card-name{font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;color:var(--ice)}
+  .lead-card-phone{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim);margin-top:2px}
+  .lead-card-notes{font-family:'Inter',sans-serif;font-size:11.5px;color:var(--dim);margin-top:5px;line-height:1.4;white-space:pre-wrap}
+  .lead-ghost{position:fixed;z-index:400;pointer-events:none;opacity:.92;box-shadow:0 14px 30px rgba(0,0,0,.5);width:200px}
+
+  .lead-hist-day{margin-bottom:14px}
+  .lead-hist-date{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  .lead-hist-card{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--hair-hot);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+  .lead-hist-info{min-width:0}
+  .lead-hist-name{font-family:'Inter',sans-serif;font-weight:600;font-size:13px;color:var(--ice)}
+  .lead-hist-phone{font-family:'Inter',sans-serif;font-size:11px;color:var(--dim)}
+  .lead-hist-notes{font-family:'Inter',sans-serif;font-size:11px;color:var(--dim);margin-top:3px;white-space:pre-wrap}
+  .lead-hist-status{flex-shrink:0;font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:20px;padding:4px 10px;white-space:nowrap}
+
+  .lead-sheet-bg{position:fixed;inset:0;z-index:410;background:rgba(0,0,0,.55);opacity:0;visibility:hidden;transition:.25s}
+  .lead-sheet-bg.open{opacity:1;visibility:visible}
+  .lead-sheet{position:fixed;left:0;right:0;bottom:0;z-index:411;background:var(--panel);border-top:1px solid var(--hair-hot);border-radius:16px 16px 0 0;padding:10px 18px calc(18px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .3s cubic-bezier(.25,.8,.25,1)}
+  .lead-sheet-bg.open .lead-sheet{transform:none}
+  .lead-sheet-handle{width:36px;height:4px;border-radius:3px;background:var(--hair-hot);margin:6px auto 14px}
+  .lead-sheet-name{font-family:'Inter',sans-serif;font-weight:700;font-size:15px;color:var(--ice);margin-bottom:2px}
+  .lead-sheet-phone{font-family:'Inter',sans-serif;font-size:12px;color:var(--dim);margin-bottom:14px}
+  .lead-sheet-label{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:14px 0 8px}
+  .lead-sheet-opt{display:flex;align-items:center;justify-content:space-between;width:100%;background:var(--bg-soft);border:1px solid var(--hair-hot);border-radius:8px;padding:13px 14px;margin-bottom:8px;font-family:'Inter',sans-serif;font-size:13.5px;font-weight:600;color:var(--ice);cursor:pointer}
+  .lead-sheet-opt.current{border-color:var(--gold);color:var(--gold)}
+  .lead-sheet-row{display:flex;gap:8px}
+  .lead-sheet-row button{flex:1;padding:13px;border-radius:8px;font-family:'Inter',sans-serif;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--hair-hot);background:var(--bg-soft);color:var(--ice)}
+  .lead-sheet-row button.danger{color:var(--warn);border-color:var(--warn)}
 
   .bk{background:var(--panel-2);border:1px solid var(--hair);border-left:3px solid var(--dim);padding:14px 14px 12px;margin-bottom:10px}
   .bk-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
@@ -276,7 +316,7 @@
     .btn{padding:16px 6px;font-size:10px;letter-spacing:.1em}
     .submit{padding:16px}
     .mini{padding:9px 13px;font-size:9px}
-    .tab{padding:20px 2px 26px;font-size:10.5px;letter-spacing:0;font-weight:500;min-height:64px}
+    .tab{padding:20px 1px 26px;font-size:9px;letter-spacing:0;font-weight:500;min-height:64px}
     .field input,.field select,.field textarea{padding:12px 10px}
     .field-row{gap:8px}
     .edit,.del{padding-left:14px;font-size:16px}
@@ -293,7 +333,7 @@
   @media (max-width:360px){
     .gauge-figure{font-size:34px}
     .bk-grid{grid-template-columns:1fr 1fr}
-    .tab{font-size:9.5px;padding:18px 1px 24px;min-height:60px;letter-spacing:0}
+    .tab{font-size:8.3px;padding:18px 1px 24px;min-height:60px;letter-spacing:0}
   }
   @media (prefers-reduced-motion:reduce){.gauge-fill,.gauge-edge{transition:none}}
 
@@ -706,6 +746,68 @@
   </section>
 </div>
 
+<!-- ===== LEADS (CRM) ===== -->
+<div class="pane" id="pane-leads">
+  <div class="actions one"><button class="btn" id="btnLead">+ Add lead</button></div>
+
+  <div class="form" id="formLead">
+    <span class="eyebrow" id="leadFormTitle">New lead</span>
+    <div class="field"><label>Name</label><input type="text" id="ldName" placeholder="Customer name"></div>
+    <div class="field"><label>Phone</label><input type="tel" id="ldPhone" inputmode="tel" placeholder="05XXXXXXXX"></div>
+    <div class="field"><label>Notes</label><textarea id="ldNotes" placeholder="What they're after, dates, anything useful"></textarea></div>
+    <button class="submit" id="saveLead">Save lead</button>
+    <button class="cancel" id="cancel-saveLead">Cancel</button>
+  </div>
+
+  <section class="section">
+    <span class="eyebrow">Today &middot; swipe to see every column</span>
+    <div class="lead-board" id="leadBoard">
+      <div class="lead-col" data-status="incoming">
+        <div class="lead-col-head"><span>Incoming</span><b id="cnt-incoming">0</b></div>
+        <div class="lead-col-body" id="col-incoming" data-status="incoming"></div>
+      </div>
+      <div class="lead-col" data-status="responded">
+        <div class="lead-col-head"><span>Responded</span><b id="cnt-responded">0</b></div>
+        <div class="lead-col-body" id="col-responded" data-status="responded"></div>
+      </div>
+      <div class="lead-col" data-status="potential">
+        <div class="lead-col-head"><span>Potential Booking</span><b id="cnt-potential">0</b></div>
+        <div class="lead-col-body" id="col-potential" data-status="potential"></div>
+      </div>
+      <div class="lead-col" data-status="confirmed">
+        <div class="lead-col-head"><span>Confirmed Booking</span><b id="cnt-confirmed">0</b></div>
+        <div class="lead-col-body" id="col-confirmed" data-status="confirmed"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Previous Days</span>
+    <div id="leadHistory"></div>
+  </section>
+
+  <p class="note">
+    The board above always shows <b>today's</b> leads. Once a day ends, those leads move down into Previous Days automatically,
+    showing exactly which column each one ended in. Tap a lead at any time to move it, add notes, or edit it.
+  </p>
+</div>
+
+<div class="lead-sheet-bg" id="leadSheetBg">
+  <div class="lead-sheet" id="leadSheet">
+    <div class="lead-sheet-handle"></div>
+    <div class="lead-sheet-name" id="lsName"></div>
+    <div class="lead-sheet-phone" id="lsPhone"></div>
+    <div class="lead-sheet-label">Move to</div>
+    <div id="lsMoveOpts"></div>
+    <div class="lead-sheet-label">Notes</div>
+    <div class="field"><textarea id="lsNotes" placeholder="Add a note"></textarea></div>
+    <div class="lead-sheet-row" style="margin-top:4px">
+      <button id="lsSaveNotes">Save notes</button>
+      <button class="danger" id="lsDelete">Delete lead</button>
+    </div>
+  </div>
+</div>
+
 <nav class="tabs">
   <button class="tab on" data-pane="dash">Dash</button>
   <button class="tab" data-pane="book">Bookings</button>
@@ -713,6 +815,7 @@
   <button class="tab" data-pane="cost">Costs</button>
   <button class="tab" data-pane="per">Personal</button>
   <button class="tab" data-pane="rep">Reports</button>
+  <button class="tab" data-pane="leads">Leads</button>
 </nav>
 
 <script>
@@ -820,7 +923,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       to:function(p){ return {id:p.id,kind:p.kind,amount:p.amount||0,type:p.type,
         note:p.note||null,p_date:p.date}; },
       from:function(r){ return {id:r.id,kind:r.kind,amount:+r.amount||0,type:r.type,
-        note:r.note||'',date:r.p_date}; }}
+        note:r.note||'',date:r.p_date}; }},
+    leads:{table:'leads',
+      to:function(l){ return {id:l.id,name:l.name,phone:l.phone||null,
+        notes:l.notes||null,status:l.status||'incoming',day:l.day}; },
+      from:function(r){ return {id:r.id,name:r.name,phone:r.phone||'',
+        notes:r.notes||'',status:r.status||'incoming',day:r.day}; }}
   };
 
   var LOCAL='royale_local_cache';
@@ -872,7 +980,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   var SEED_PR=[{id:"p1",kind:"expense",amount:2000,type:"Other",note:"Personal spending",date:"2026-08-23"}];
 
-  var S={bookings:[],costs:[],revenue:[],personal:[],target:34000,budget:3000};
+  var S={bookings:[],costs:[],revenue:[],personal:[],leads:[],target:34000,budget:3000};
   var calOff=0, selDay=null;
 
   function fmt(n){ return 'AED '+Math.round(n||0).toLocaleString('en-US'); }
@@ -957,7 +1065,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       afterLoad(); flash('Offline - not connected',true); return;
     }
     try{
-      var keys=['bookings','costs','revenue','personal'];
+      var keys=['bookings','costs','revenue','personal','leads'];
       for(var i=0;i<keys.length;i++){
         var k=keys[i], m=MAP[k];
         var res=await sb.from(m.table).select('*');
@@ -997,7 +1105,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(!sb){ if(!quiet) flash('Saved locally only',true); return; }
     if(!quiet) flash('Saving…');
     try{
-      var keys=['bookings','costs','revenue','personal'];
+      var keys=['bookings','costs','revenue','personal','leads'];
       for(var i=0;i<keys.length;i++){
         var k=keys[i], m=MAP[k], rows=S[k].map(m.to);
         if(rows.length){
@@ -1637,6 +1745,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.querySelectorAll('.pane').forEach(function(x){ x.classList.remove('on'); });
     document.getElementById('pane-'+n).classList.add('on');
     if(n==='rep') renderReports();
+    if(n==='leads') renderLeads();
   }
 
   // ================= REPORTS =================
@@ -1816,6 +1925,185 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         '<div class="rep-standout"><span class="k">Vehicle swaps this month</span><span class="v">'+r.swaps+'</span></div>';
     }
   }
+  // ================= LEADS (CRM) =================
+  var LEAD_STATUSES = ['incoming','responded','potential','confirmed'];
+  var LEAD_LABELS = {incoming:'Incoming', responded:'Responded', potential:'Potential Booking', confirmed:'Confirmed Booking'};
+
+  function leadHTML(l){
+    return '<div class="lead-card" data-id="'+l.id+'">'+
+      '<div class="lead-card-name">'+esc(l.name)+'</div>'+
+      (l.phone?'<div class="lead-card-phone">'+esc(l.phone)+'</div>':'')+
+      (l.notes?'<div class="lead-card-notes">'+esc(l.notes)+'</div>':'')+
+    '</div>';
+  }
+
+  function renderLeads(){
+    var t = today();
+    var todays = S.leads.filter(function(l){ return l.day===t; });
+
+    LEAD_STATUSES.forEach(function(st){
+      var inCol = todays.filter(function(l){ return l.status===st; });
+      document.getElementById('cnt-'+st).textContent = inCol.length;
+      var body = document.getElementById('col-'+st);
+      body.innerHTML = inCol.length ? inCol.map(leadHTML).join('') : '<div class="lead-col-empty">No leads here yet</div>';
+    });
+
+    // History: every lead NOT from today, grouped by day, most recent first.
+    var past = S.leads.filter(function(l){ return l.day!==t; });
+    var byDay = {};
+    past.forEach(function(l){ (byDay[l.day]=byDay[l.day]||[]).push(l); });
+    var days = Object.keys(byDay).sort().reverse();
+    var hist = document.getElementById('leadHistory');
+    if(!days.length){
+      hist.innerHTML = '<div class="rep-empty">No previous days yet.</div>';
+    } else {
+      hist.innerHTML = days.map(function(d){
+        var dLabel = new Date(d+'T00:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+        var cards = byDay[d].map(function(l){
+          return '<div class="lead-hist-card"><div class="lead-hist-info">'+
+            '<div class="lead-hist-name">'+esc(l.name)+'</div>'+
+            (l.phone?'<div class="lead-hist-phone">'+esc(l.phone)+'</div>':'')+
+            (l.notes?'<div class="lead-hist-notes">'+esc(l.notes)+'</div>':'')+
+          '</div><span class="lead-hist-status">'+esc(LEAD_LABELS[l.status]||l.status)+'</span></div>';
+        }).join('');
+        return '<div class="lead-hist-day"><div class="lead-hist-date">'+dLabel+'</div>'+cards+'</div>';
+      }).join('');
+    }
+  }
+
+  // ---- add lead form ----
+  document.getElementById('btnLead').addEventListener('click', function(){
+    var f = document.getElementById('formLead'), was = f.classList.contains('open');
+    f.classList.toggle('open', !was);
+    this.classList.toggle('on', !was);
+    if(!was){ setV('ldName',''); setV('ldPhone',''); setV('ldNotes',''); document.getElementById('ldName').focus(); }
+  });
+  document.getElementById('cancel-saveLead').addEventListener('click', function(){
+    document.getElementById('formLead').classList.remove('open');
+    document.getElementById('btnLead').classList.remove('on');
+  });
+  document.getElementById('saveLead').addEventListener('click', function(){
+    var name = V('ldName').trim();
+    if(!name){ document.getElementById('ldName').focus(); return; }
+    var d = {id:'l'+Date.now(), name:name, phone:V('ldPhone').trim(), notes:V('ldNotes').trim(), status:'incoming', day:today()};
+    S.leads.push(d);
+    document.getElementById('formLead').classList.remove('open');
+    document.getElementById('btnLead').classList.remove('on');
+    save(); renderLeads();
+  });
+
+  // ---- tap-to-move / edit sheet ----
+  var sheetLeadId = null;
+  function openLeadSheet(id){
+    var l = S.leads.find(function(x){ return x.id===id; });
+    if(!l) return;
+    sheetLeadId = id;
+    document.getElementById('lsName').textContent = l.name;
+    document.getElementById('lsPhone').textContent = l.phone || '';
+    setV('lsNotes', l.notes || '');
+    document.getElementById('lsMoveOpts').innerHTML = LEAD_STATUSES.map(function(st){
+      return '<div class="lead-sheet-opt'+(st===l.status?' current':'')+'" data-move="'+st+'">'+LEAD_LABELS[st]+(st===l.status?' &#10003;':'')+'</div>';
+    }).join('');
+    document.getElementById('leadSheetBg').classList.add('open');
+  }
+  function closeLeadSheet(){
+    document.getElementById('leadSheetBg').classList.remove('open');
+    sheetLeadId = null;
+  }
+  document.getElementById('leadSheetBg').addEventListener('click', function(ev){
+    if(ev.target===this) closeLeadSheet();
+  });
+  document.getElementById('lsMoveOpts').addEventListener('click', function(ev){
+    var opt = ev.target.closest('[data-move]'); if(!opt || !sheetLeadId) return;
+    var st = opt.dataset.move;
+    S.leads = S.leads.map(function(l){ return l.id===sheetLeadId ? Object.assign({},l,{status:st}) : l; });
+    save(); renderLeads(); closeLeadSheet();
+  });
+  document.getElementById('lsSaveNotes').addEventListener('click', function(){
+    if(!sheetLeadId) return;
+    var n = V('lsNotes').trim();
+    S.leads = S.leads.map(function(l){ return l.id===sheetLeadId ? Object.assign({},l,{notes:n}) : l; });
+    save(); renderLeads(); closeLeadSheet();
+  });
+  document.getElementById('lsDelete').addEventListener('click', function(){
+    if(!sheetLeadId) return;
+    S.leads = S.leads.filter(function(l){ return l.id!==sheetLeadId; });
+    save(); renderLeads(); closeLeadSheet();
+  });
+
+  // ---- tap vs long-press-drag, on every lead card ----
+  // A quick tap opens the move/edit sheet. A press-and-hold (320ms) followed
+  // by movement starts a real drag instead, so dragging a card never fights
+  // with swiping the board sideways to see the other columns.
+  (function(){
+    var board = document.getElementById('leadBoard');
+    var pressTimer = null, dragging = null, ghost = null, startX = 0, startY = 0, moved = false, overEl = null;
+
+    function clearPress(){ clearTimeout(pressTimer); pressTimer = null; }
+
+    function startDrag(card, x, y){
+      dragging = card;
+      card.classList.add('dragging');
+      ghost = card.cloneNode(true);
+      ghost.classList.add('lead-ghost');
+      ghost.style.left = (x - 90) + 'px';
+      ghost.style.top = (y - 24) + 'px';
+      document.body.appendChild(ghost);
+    }
+    function moveDrag(x, y){
+      if(!ghost) return;
+      ghost.style.left = (x - 90) + 'px';
+      ghost.style.top = (y - 24) + 'px';
+      ghost.style.display = 'none';
+      var el = document.elementFromPoint(x, y);
+      ghost.style.display = '';
+      var col = el && el.closest('.lead-col-body');
+      if(col !== overEl){
+        if(overEl) overEl.classList.remove('drag-over');
+        overEl = col;
+        if(overEl) overEl.classList.add('drag-over');
+      }
+    }
+    function endDrag(){
+      if(dragging){
+        dragging.classList.remove('dragging');
+        if(overEl){
+          var id = dragging.dataset.id, st = overEl.dataset.status;
+          S.leads = S.leads.map(function(l){ return l.id===id ? Object.assign({},l,{status:st}) : l; });
+          save(); renderLeads();
+        }
+      }
+      if(overEl) overEl.classList.remove('drag-over');
+      if(ghost) ghost.remove();
+      dragging = null; ghost = null; overEl = null;
+    }
+
+    board.addEventListener('pointerdown', function(ev){
+      var card = ev.target.closest('.lead-card'); if(!card) return;
+      startX = ev.clientX; startY = ev.clientY; moved = false;
+      clearPress();
+      pressTimer = setTimeout(function(){
+        startDrag(card, ev.clientX, ev.clientY);
+      }, 320);
+    });
+    board.addEventListener('pointermove', function(ev){
+      if(dragging){ moveDrag(ev.clientX, ev.clientY); return; }
+      if(pressTimer && (Math.abs(ev.clientX-startX)>10 || Math.abs(ev.clientY-startY)>10)){
+        moved = true; clearPress();
+      }
+    });
+    board.addEventListener('pointerup', function(ev){
+      var wasDragging = !!dragging;
+      clearPress();
+      if(wasDragging){ endDrag(); return; }
+      if(!moved){
+        var card = ev.target.closest('.lead-card');
+        if(card) openLeadSheet(card.dataset.id);
+      }
+    });
+    board.addEventListener('pointercancel', function(){ clearPress(); endDrag(); });
+  })();
+
   function openForm(fid,bid,sid,title,titleTxt){
     var f=document.getElementById(fid);
     f.classList.add('open','editing');
@@ -1910,7 +2198,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if(!raw){ flash('Nothing to restore',true); return; }
     try{
       var i=JSON.parse(raw),n=0;
-      ['bookings','costs','revenue','personal'].forEach(function(k){
+      ['bookings','costs','revenue','personal','leads'].forEach(function(k){
         if(!Array.isArray(i[k])) return;
         var have={}; S[k].forEach(function(x){have[x.id]=1;});
         i[k].forEach(function(x){ if(x&&x.id&&!have[x.id]){ S[k].push(x); n++; } });
