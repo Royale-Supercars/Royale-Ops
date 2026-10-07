@@ -379,6 +379,27 @@
   </div>
 </div>
 
+<div id="extModal" class="bk-detail-overlay">
+  <div class="bk-detail-card">
+    <button class="bk-detail-close" id="extClose" aria-label="Close">&times;</button>
+    <div class="bk-detail-title">Extend Booking</div>
+    <div class="bk-detail-sub" id="extSub"></div>
+    <div class="field-row">
+      <div class="field"><label>Rate type</label>
+        <select id="extType"><option value="day">Daily</option><option value="week">Weekly</option><option value="month">Monthly</option></select></div>
+      <div class="field"><label id="extQtyLbl">How many days</label>
+        <input type="number" id="extQty" inputmode="numeric" min="1" step="1" value="1"></div>
+    </div>
+    <div class="field"><label id="extRateLbl">Rate (AED per day)</label>
+      <input type="number" id="extRate" inputmode="decimal" placeholder="0"></div>
+    <div class="field" id="extCostWrap" style="display:none"><label>Extra payout to owner</label>
+      <input type="number" id="extCost" inputmode="decimal" placeholder="0"></div>
+    <div class="feecalc" id="extCalc"></div>
+    <div id="extWarn" style="display:none;font-family:'Inter',sans-serif;font-size:12px;color:var(--amber);margin:0 0 12px"></div>
+    <button class="btn" id="extConfirm" style="width:100%">Confirm Extension</button>
+  </div>
+</div>
+
 <div id="swapModal" class="bk-detail-overlay">
   <div class="bk-detail-card">
     <button class="bk-detail-close" id="swapClose" aria-label="Close">&times;</button>
@@ -1000,7 +1021,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   function inCy(d){ if(!d) return false; var t=new Date(d+'T00:00:00'); return t>=cyStart()&&t<cyEnd(); }
   function lbl(d){ return d?new Date(d+'T00:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short'}):'-'; }
   function today(){ return new Date().toISOString().slice(0,10); }
-  function addDays(dstr,n){ var d=new Date(dstr+'T00:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+  function addDays(ds,n){ var d=new Date(ds+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function iso(dt){ return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); }
   function endMs(b){ return new Date(b.end+'T'+(b.endTime||'23:59')).getTime(); }
   function startMs(b){ return new Date(b.start+'T'+(b.startTime||'00:00')).getTime(); }
@@ -1407,6 +1428,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         '</div>'+
         (b.notes?'<div class="bk-note">'+esc(b.notes)+'</div>':'')+
         '<div class="bk-acts"><button class="mini" data-eb="'+b.id+'">Edit</button>'+
+        '<button class="mini" data-ext="'+b.id+'">Extend</button>'+
         '<button class="mini" data-swap="'+b.id+'">Swap Vehicle</button>'+
         '<button class="mini danger" data-db="'+b.id+'">Delete</button></div></div>';
     }).join('');
@@ -1619,6 +1641,112 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   });
   document.getElementById('bkDetailModal').addEventListener('click',function(ev){
     if(ev.target===this) this.classList.remove('open');
+  });
+
+  // ---------- Extend booking ----------
+  var extTarget=null,extPerDay=0,extCostPerDay=0,extDays=1,extMonths=0;
+  function addMonthsTo(ds,n){
+    var d=new Date(ds+'T00:00:00'),day=d.getDate();
+    d.setDate(1); d.setMonth(d.getMonth()+n);
+    var last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+    d.setDate(Math.min(day,last));
+    return dstr(d);
+  }
+  function extNewEnd(){
+    var t=V('extType'),n=Math.max(0,Math.floor(parseFloat(V('extQty'))||0));
+    if(!extTarget||!n) return null;
+    if(t==='month') return addMonthsTo(extTarget.end,n);
+    return addDays(extTarget.end,t==='week'?n*7:n);
+  }
+  function extDefaultRate(t){
+    return Math.round(extPerDay*(t==='month'?30:t==='week'?7:1));
+  }
+  var EXT_UNIT={day:'day',week:'week',month:'month'};
+  function extLabels(){
+    var t=V('extType');
+    document.getElementById('extQtyLbl').textContent='How many '+EXT_UNIT[t]+'s';
+    document.getElementById('extRateLbl').textContent='Rate (AED per '+EXT_UNIT[t]+')';
+  }
+  function extUpdate(){
+    if(!extTarget) return;
+    var ne=extNewEnd(),calc=document.getElementById('extCalc'),warn=document.getElementById('extWarn');
+    var qty=Math.max(0,Math.floor(parseFloat(V('extQty'))||0));
+    var rate=parseFloat(V('extRate'))||0;
+    warn.style.display='none';
+    if(!ne){ calc.textContent='Enter how long to extend by.'; return; }
+    var addDaysN=Math.round((new Date(ne)-new Date(extTarget.end))/86400000);
+    var add=Math.round(qty*rate);
+    // payout default follows the number of days added until the user types their own
+    var costEl=document.getElementById('extCost');
+    if(!costEl.dataset.touched) costEl.value=extCostPerDay?Math.round(extCostPerDay*addDaysN):'';
+    calc.innerHTML='New end date: <b>'+lbl(ne)+'</b> (+'+addDaysN+' day'+(addDaysN===1?'':'s')+')<br>Adds <b>'+fmt(add)+'</b> &middot; new total <b>'+fmt((+extTarget.total||0)+add)+'</b>';
+    var clash=S.bookings.filter(function(o){
+      return o.id!==extTarget.id && o.vehicle===extTarget.vehicle && o.stage!=='potential' && o.stage!=='finished'
+        && o.start<=ne && o.end>extTarget.end;
+    })[0];
+    if(clash){
+      warn.textContent='Heads up: '+extTarget.vehicle+' is already booked for '+(clash.customer||'another booking')+' ('+lbl(clash.start)+' \u2192 '+lbl(clash.end)+') inside this period.';
+      warn.style.display='block';
+    }
+  }
+  function openExtModal(b){
+    extTarget=b;
+    var days=Math.max(1,Math.round((new Date(b.end)-new Date(b.start))/86400000)||1);
+    var total=+b.total||0;
+    var isMonthly=days>=28;
+    var isWeekly=!isMonthly && days>=7 && days%7===0;
+    if(isMonthly){
+      var months=Math.max(1,Math.round(days/30.44));
+      var whole=Math.abs(days-months*30.44)<=2;
+      extPerDay=whole?total/months/30:total/days;
+      extCostPerDay=(b.source==='external' && b.cost)?(+b.cost)/(whole?months*30:days):0;
+    } else {
+      extPerDay=total/days;
+      extCostPerDay=(b.source==='external' && b.cost)?(+b.cost)/days:0;
+    }
+    var t=isMonthly?'month':isWeekly?'week':'day';
+    document.getElementById('extSub').textContent=(b.customer||'Booking')+' - '+(b.vehicle||'-')+' ('+lbl(b.start)+' \u2192 '+lbl(b.end)+')';
+    setSel('extType',t);
+    setV('extQty',1);
+    setV('extRate',extDefaultRate(t)||'');
+    var ce=document.getElementById('extCost'); ce.value=''; delete ce.dataset.touched;
+    document.getElementById('extCostWrap').style.display=b.source==='external'?'':'none';
+    extLabels(); extUpdate();
+    document.getElementById('extModal').classList.add('open');
+  }
+  document.getElementById('extClose').addEventListener('click',function(){
+    document.getElementById('extModal').classList.remove('open');
+  });
+  document.getElementById('extModal').addEventListener('click',function(ev){
+    if(ev.target===this) this.classList.remove('open');
+  });
+  document.getElementById('extType').addEventListener('change',function(){
+    setV('extRate',extDefaultRate(this.value)||'');
+    extLabels(); extUpdate();
+  });
+  ['extQty','extRate'].forEach(function(id){ document.getElementById(id).addEventListener('input',extUpdate); });
+  document.getElementById('extCost').addEventListener('input',function(){ this.dataset.touched='1'; });
+  document.getElementById('extConfirm').addEventListener('click',function(){
+    if(!extTarget) return;
+    var ne=extNewEnd();
+    if(!ne){ document.getElementById('extQty').focus(); return; }
+    var qty=Math.floor(parseFloat(V('extQty'))||0);
+    var add=Math.round(qty*(parseFloat(V('extRate'))||0));
+    var addCost=extTarget.source==='external'?(parseFloat(V('extCost'))||0):0;
+    var id=extTarget.id,oldEnd=extTarget.end;
+    var dn=Math.round((new Date(ne)-new Date(oldEnd))/86400000);
+    S.bookings=S.bookings.map(function(b){
+      if(b.id!==id) return b;
+      var u={end:ne,total:(+b.total||0)+add,
+        notes:(b.notes?b.notes+' - ':'')+'Extended +'+dn+' day'+(dn===1?'':'s')+' from '+lbl(oldEnd)+' to '+lbl(ne)+(add?' (+'+fmt(add)+')':'')+' on '+lbl(today())+'.'};
+      if(b.source==='external' && addCost) u.cost=(+b.cost||0)+addCost;
+      if(b.stage==='finished') u.stage='confirmed';
+      if(b.type==='chauffeur' && b.service && b.service!=='Multiple day') u.service='Multiple day';
+      return Object.assign({},b,u);
+    });
+    save(); render();
+    document.getElementById('extModal').classList.remove('open');
+    extTarget=null;
   });
 
   // ---------- Swap Vehicle (split a booking into two at a chosen date) ----------
@@ -2134,6 +2262,11 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return;
     }
     if((el=ev.target.closest('[data-db]'))){ dropFee(el.dataset.db); S.bookings=S.bookings.filter(function(x){return x.id!==el.dataset.db;}); save(); render(); return; }
+    if((el=ev.target.closest('[data-ext]'))){
+      var eb=S.bookings.filter(function(x){return x.id===el.dataset.ext;})[0]; if(!eb) return;
+      openExtModal(eb);
+      return;
+    }
     if((el=ev.target.closest('[data-swap]'))){
       var sb=S.bookings.filter(function(x){return x.id===el.dataset.swap;})[0]; if(!sb) return;
       openSwapModal(sb);
