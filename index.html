@@ -262,6 +262,12 @@
   .cal-num{font-family:'Inter',sans-serif;font-size:9px;color:var(--dim);display:block;margin-bottom:2px}
   .cal-day.today .cal-num{color:var(--cyan)}
   .chip{font-family:'Inter',sans-serif;font-size:7px;letter-spacing:.04em;padding:1.5px 2px;margin-bottom:1.5px;border-radius:1px;color:#04070E;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;box-shadow:0 0 7px currentColor;filter:saturate(1.15)}
+  .calf{display:flex;gap:6px;overflow-x:auto;padding:12px 0 4px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .calf::-webkit-scrollbar{display:none}
+  .calf-btn{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--hair);color:var(--dim);font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 11px;cursor:pointer;white-space:nowrap}
+  .calf-btn .d{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .calf-btn.on{color:var(--ice);border-color:var(--hair-hot);background:var(--panel-2)}
+  .calf-x{flex:0 0 auto;background:transparent;border:1px solid var(--hair);color:var(--ice);font-size:14px;line-height:1;padding:6px 11px;cursor:pointer}
   .chip-more{font-family:'Inter',sans-serif;font-size:7px;color:var(--dim)}
   .key{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
   .key-item{display:flex;align-items:center;gap:5px;font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
@@ -621,6 +627,7 @@
     <div class="cal-title" id="calTitle">&mdash;</div>
     <button class="cal-arrow" id="calNext">&#8594;</button>
   </div>
+  <div class="calf" id="calFilter"></div>
   <div class="cal-dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
   <div class="cal-grid" id="calGrid"></div>
   <div class="key" id="calKey"></div>
@@ -1002,7 +1009,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   var SEED_PR=[{id:"p1",kind:"expense",amount:2000,type:"Other",note:"Personal spending",date:"2026-08-23"}];
 
   var S={bookings:[],costs:[],revenue:[],personal:[],leads:[],target:34000,budget:3000};
-  var calOff=0, selDay=null;
+  var calOff=0, selDay=null, calCar=null;
 
   function fmt(n){ return 'AED '+Math.round(n||0).toLocaleString('en-US'); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
@@ -1316,10 +1323,25 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
   }
 
   // ================= CALENDAR =================
-  function bookingsOn(dstr){
+  function bookingsOn(dstr,all){
     return S.bookings.filter(function(b){
-      return b.start<=dstr && dstr<=b.end && b.stage!=='potential' && b.stage!=='finished';
+      return b.start<=dstr && dstr<=b.end && b.stage!=='potential' && b.stage!=='finished'
+        && (all || !calCar || b.vehicle===calCar);
     });
+  }
+
+  function calCars(){
+    var list=CARS.slice();
+    S.bookings.forEach(function(b){ if(b.vehicle && list.indexOf(b.vehicle)<0) list.push(b.vehicle); });
+    return list;
+  }
+  function renderCalFilter(){
+    var el=document.getElementById('calFilter');
+    if(calCar && calCars().indexOf(calCar)<0) calCar=null;
+    el.innerHTML=(calCar?'<button class="calf-x" data-calcar="" aria-label="Show all cars">&times;</button>':'')+calCars().map(function(car){
+      var f=FLEET[car+'|own']||FLEET[car+'|external']||{c:'#5E7793'};
+      return '<button class="calf-btn'+(calCar===car?' on':'')+'" data-calcar="'+esc(car)+'"><span class="d" style="background:'+f.c+'"></span>'+esc(car)+'</button>';
+    }).join('');
   }
 
   function renderCal(){
@@ -1341,17 +1363,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       html+='<div class="'+cls+'" data-day="'+ds+'"><span class="cal-num">'+d+'</span>';
       on.slice(0,3).forEach(function(b){
         var f=fleet(b);
-        html+='<div class="chip" style="background:'+f.c+'">'+esc(f.s)+'</div>';
+        html+='<div class="chip" style="background:'+f.c+'">'+esc(calCar?(b.customer||f.s):f.s)+'</div>';
       });
       if(on.length>3) html+='<div class="chip-more">+'+(on.length-3)+'</div>';
       html+='</div>';
     }
     document.getElementById('calGrid').innerHTML=html;
+    renderCalFilter();
 
     // key - only cars appearing this month
     var seen={}, mStart=iso(new Date(y,m,1)), mEnd=iso(new Date(y,m,dim));
     S.bookings.forEach(function(b){
       if(b.end<mStart||b.start>mEnd) return;
+      if(calCar && b.vehicle!==calCar) return;
       var f=fleet(b);
       seen[f.s+'|'+f.c]={c:f.c,s:f.s,own:b.source!=='external'};
     });
@@ -1370,9 +1394,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('daySelLabel').textContent='Fleet status - '+lbl(ds);
     var on=bookingsOn(ds);
     var busy={};
-    on.forEach(function(b){ busy[b.vehicle]=b; });
+    bookingsOn(ds,true).forEach(function(b){ busy[b.vehicle]=b; });
 
-    document.getElementById('dayAvail').innerHTML=CARS.map(function(car){
+    document.getElementById('dayAvail').innerHTML=CARS.filter(function(car){return !calCar||car===calCar;}).map(function(car){
       var b=busy[car];
       var f=b?fleet(b):(FLEET[car+'|own']||FLEET[car+'|external']||{c:'#5E7793'});
       return '<div class="avail-row" style="border-left-color:'+f.c+'">'+
@@ -1387,7 +1411,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return '<div class="row" data-detail-id="'+b.id+'" style="cursor:pointer"><div class="row-main"><div class="row-name">'+esc(b.customer)+
         '</div><div class="row-meta" style="color:'+f.c+'">'+esc(f.s)+' · '+esc(b.type)+' · '+lbl(b.start)+' → '+lbl(b.end)+'</div></div>'+
         '<div class="row-amt">'+fmt(b.total)+(due?'<div class="row-meta" style="color:var(--amber);text-align:right">'+fmt(due)+' due</div>':'')+'</div></div>';
-    }).join(''):'<div class="empty">Nothing booked on this day.</div>';
+    }).join(''):'<div class="empty">Nothing booked'+(calCar?' for '+esc(calCar):'')+' on this day.</div>';
   }
 
   function findClashes(){
@@ -2244,6 +2268,11 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
   document.body.addEventListener('click',function(ev){
     var el;
+    if((el=ev.target.closest('[data-calcar]'))){
+      var cc=el.dataset.calcar;
+      calCar=(!cc||calCar===cc)?null:cc;
+      renderCal(); return;
+    }
     if((el=ev.target.closest('[data-day]'))){ selDay=el.dataset.day; renderCal(); return; }
     if((el=ev.target.closest('[data-eb]'))){
       var b=S.bookings.filter(function(x){return x.id===el.dataset.eb;})[0]; if(!b) return;
