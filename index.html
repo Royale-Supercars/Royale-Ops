@@ -311,6 +311,9 @@
   .row:last-child{border-bottom:0}
   .row-main{flex:1;min-width:0}
   .row-name{font-size:15px;font-weight:500;word-break:break-word}
+  .drv-grp{border:1px solid var(--hair);border-radius:12px;padding:4px 14px 2px;margin-bottom:12px}
+  .drv-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:10px 0 8px;border-bottom:1px solid var(--hair)}
+  .drv-row:last-child{border-bottom:0}
   .row-meta{font-family:'Inter',sans-serif;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:3px}
   .row-amt{font-family:'Inter',sans-serif;font-size:15px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
   .row-amt.out{color:var(--dimmer)}
@@ -558,6 +561,9 @@
       <option>Marketing / ads</option><option>Content / shoot</option><option>Maintenance</option>
       <option>Cleaning</option><option>Deposit fee</option><option>Other</option>
     </select></div>
+    <div class="field" id="cDriverWrap" style="display:none"><label>Driver name</label>
+      <input type="text" id="cDriver" list="driverList" autocomplete="off" placeholder="Who is this for?">
+      <datalist id="driverList"></datalist></div>
     <div class="field"><label>Details</label><textarea id="cNote" placeholder="What it covered, who it went to"></textarea></div>
     <button class="submit" id="saveCost">Save cost</button>
     <button class="cancel" id="cancel-saveCost">Cancel edit</button>
@@ -673,6 +679,7 @@
     <div class="cell"><span class="eyebrow">Biggest</span><div class="amount out" id="cMax">0</div></div>
   </section>
   <section class="section"><span class="eyebrow">By type &mdash; this cycle</span><div id="costByType"></div></section>
+  <section class="section"><span class="eyebrow">By driver</span><div id="costByDriver"></div></section>
   <section class="section"><span class="eyebrow">This cycle</span><div id="costList"></div></section>
   <button class="toggle-log" data-log="allCostWrap">Show all costs</button>
   <div class="logwrap" id="allCostWrap">
@@ -986,9 +993,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
         stage:r.stage||'confirmed'}; }},
     costs:{table:'costs',
       to:function(c){ return {id:c.id,amount:c.amount||0,type:c.type,note:c.note||null,
-        cost_date:c.date,linked:c.linked||null}; },
+        cost_date:c.date,linked:c.linked||null,driver:c.driver||null}; },
       from:function(r){ return {id:r.id,amount:+r.amount||0,type:r.type,note:r.note||'',
-        date:r.cost_date,linked:r.linked||null}; }},
+        date:r.cost_date,linked:r.linked||null,driver:r.driver||''}; }},
     revenue:{table:'revenue',
       to:function(r){ return {id:r.id,amount:r.amount||0,
         received:(r.received===null||r.received===undefined)?null:r.received,
@@ -1340,6 +1347,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
       return '<div class="row"><div class="row-main"><div class="row-name">'+esc(k)+'</div></div>'+
         '<div class="row-amt out">'+fmt(-byT[k])+'</div></div>';
     }).join(''):'<div class="empty">Nothing this cycle.</div>';
+    renderDriverCosts(co);
+    refreshDriverUI();
     coList('costList',co.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged this cycle.');
     coList('allCostList',S.costs.slice().sort(function(a,b){return a.date<b.date?1:-1;}),'Nothing logged.');
 
@@ -1516,11 +1525,57 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     }).join('');
   }
 
+  function isDriverType(t){ return t==='Driver salary'||t==='Driver day fee'; }
+  function driverKey(n){ return (n||'').trim().toLowerCase().replace(/\s+/g,' '); }
+  function renderDriverCosts(co){
+    var el=document.getElementById('costByDriver'); if(!el) return;
+    var allT={}, names={};
+    S.costs.forEach(function(c){
+      if(!isDriverType(c.type)) return;
+      var k=driverKey(c.driver)||'__none';
+      allT[k]=(allT[k]||0)+(+c.amount||0);
+      if(!names[k]) names[k]=(c.driver||'').trim()||'No driver named';
+    });
+    var g={};
+    co.forEach(function(c){
+      if(!isDriverType(c.type)) return;
+      var k=driverKey(c.driver)||'__none';
+      (g[k]=g[k]||[]).push(c);
+    });
+    var keys=Object.keys(g).sort(function(a,b){
+      if(a==='__none') return 1; if(b==='__none') return -1;
+      var ta=g[a].reduce(function(x,c){return x+(+c.amount||0);},0), tb=g[b].reduce(function(x,c){return x+(+c.amount||0);},0);
+      return tb-ta;
+    });
+    el.innerHTML=keys.length?keys.map(function(k){
+      var arr=g[k].slice().sort(function(a,b){return a.date<b.date?1:-1;});
+      var tot=arr.reduce(function(x,c){return x+(+c.amount||0);},0);
+      return '<div class="drv-grp"><div class="drv-head"><div><div class="row-name">'+esc(names[k])+'</div>'+
+        '<div class="row-meta">'+arr.length+' payment'+(arr.length===1?'':'s')+' this cycle · all time '+fmt(allT[k]||0)+'</div></div>'+
+        '<div class="row-amt out">'+fmt(-tot)+'</div></div>'+
+        arr.map(function(c){
+          return '<div class="row drv-row"><div class="row-main"><div class="row-name">'+esc(c.note||c.type)+
+            '</div><div class="row-meta">'+lbl(c.date)+' · '+esc(c.type)+'</div></div>'+
+            '<div class="row-amt out">'+fmt(-c.amount)+'</div>'+
+            '<button class="edit" data-ec="'+c.id+'">&#9998;</button><button class="del" data-dc="'+c.id+'">×</button></div>';
+        }).join('')+'</div>';
+    }).join(''):'<div class="empty">No driver salary or driver fee entries this cycle.</div>';
+  }
+  function refreshDriverUI(){
+    var t=V('cType'), show=isDriverType(t);
+    document.getElementById('cDriverWrap').style.display=show?'':'none';
+    var seen={}, opts='';
+    S.costs.forEach(function(c){
+      var n=(c.driver||'').trim(), k=driverKey(n);
+      if(n && !seen[k]){ seen[k]=1; opts+='<option value="'+esc(n)+'">'; }
+    });
+    document.getElementById('driverList').innerHTML=opts;
+  }
   function coList(id,arr,msg){
     var el=document.getElementById(id);
     el.innerHTML=arr.length?arr.map(function(c){
       return '<div class="row"><div class="row-main"><div class="row-name">'+esc(c.note||c.type)+
-        '</div><div class="row-meta">'+lbl(c.date)+' · '+esc(c.type)+'</div></div>'+
+        '</div><div class="row-meta">'+lbl(c.date)+' · '+esc(c.type)+(c.driver?' · '+esc(c.driver):'')+'</div></div>'+
         '<div class="row-amt out">'+fmt(-c.amount)+'</div>'+
         '<button class="edit" data-ec="'+c.id+'">&#9998;</button><button class="del" data-dc="'+c.id+'">×</button></div>';
     }).join(''):'<div class="empty">'+msg+'</div>';
@@ -1653,11 +1708,12 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     document.getElementById('bkFormTitle').textContent='New booking';
     document.getElementById('costFormTitle').textContent='New business cost';
     document.getElementById('revFormTitle').textContent='Other revenue';
-    ['bCust','bPhone','bTotal','bColl','bRecv','bCost','cAmt','cNote','rAmt','rRecv','rNote','piAmt','piNote','poAmt','poNote','bStartT'].forEach(function(i){ setV(i,''); });
+    ['bCust','bPhone','bTotal','bColl','bRecv','bCost','cAmt','cNote','cDriver','rAmt','rRecv','rNote','piAmt','piNote','poAmt','poNote','bStartT'].forEach(function(i){ setV(i,''); });
     setSel('bStage','confirmed');
     var chh=document.getElementById('custHint'); if(chh){ chh.style.display='none'; chh.innerHTML=''; }
     ['bStart','bEnd','cDate','rDate','piDate','poDate'].forEach(function(i){ setV(i,today()); });
     if(typeof bkFields==='function'){ bkFields(); revReadout(); }
+    if(typeof refreshDriverUI==='function') refreshDriverUI();
   }
 
   [['btnBk','formBk'],['btnCost','formCost'],['btnRev','formRev'],['btnPIn','formPIn'],['btnPOut','formPOut']].forEach(function(p){
@@ -2112,10 +2168,14 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     closeAll(); save(); render();
   });
 
+  document.getElementById('cType').addEventListener('change',refreshDriverUI);
+  document.getElementById('btnCost').addEventListener('click',refreshDriverUI);
   document.getElementById('saveCost').addEventListener('click',function(){
     var a=parseFloat(V('cAmt'));
     if(!a||a<=0){ document.getElementById('cAmt').focus(); return; }
     var d={amount:a,type:V('cType'),note:V('cNote').trim(),date:V('cDate')||today()};
+    d.driver=isDriverType(d.type)?V('cDriver').trim().replace(/\s+/g,' '):'';
+    if(d.driver){ var kk=driverKey(d.driver); for(var i=0;i<S.costs.length;i++){ if(driverKey(S.costs[i].driver)===kk){ d.driver=S.costs[i].driver; break; } } }
     if(edit.co){ S.costs=S.costs.map(function(c){return c.id===edit.co?Object.assign({},c,d):c;}); }
     else { d.id='c'+Date.now(); S.costs.push(d); }
     closeAll(); save(); render();
@@ -2562,7 +2622,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
     if((el=ev.target.closest('[data-ec]'))){
       var c=S.costs.filter(function(x){return x.id===el.dataset.ec;})[0]; if(!c) return;
       closeAll(); goTab('dash');
-      setV('cAmt',c.amount); setSel('cType',c.type); setV('cNote',c.note); setV('cDate',c.date);
+      setV('cAmt',c.amount); setSel('cType',c.type); setV('cNote',c.note); setV('cDate',c.date); setV('cDriver',c.driver||''); refreshDriverUI();
       edit.co=c.id;
       openForm('formCost','btnCost','saveCost','costFormTitle','Editing cost');
       document.getElementById('saveCost').textContent='Update cost';
